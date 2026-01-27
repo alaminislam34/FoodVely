@@ -3,63 +3,101 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
+
 const links = [
-  {
-    name: "Home",
-    href: "/",
-  },
-  {
-    name: "Menu",
-    href: "/menu",
-  },
-  {
-    name: "Service",
-    href: "/service",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
+  { name: "Home", href: "/" },
+  { name: "Menu", href: "/menu" },
+  { name: "Service", href: "/service" },
+  { name: "Contact", href: "/contact" },
 ];
 
 function Navbar() {
+  const [isLoading, setIsLoading] = useState(true);
   const pathName: string = usePathname();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div>
-      <nav className="max-w-360 mx-auto w-11/12 py-4 flex items-center justify-between">
-        <div>
-          <Image
-            src={"/logos/foodvely.jpg"}
-            height={200}
-            width={400}
-            alt="Website logo"
-            className="h-30 w-auto object-contains"
-          />
-        </div>
-        <div>
-          <ul className="flex flex-row gap-8 items-center">
-            {links.map(({ name, href }) => (
-              <li key={href}>
+    <header className="w-full bg-white">
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <motion.div
+            key="skeleton"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <NavbarSkeleton />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="nav-content"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <nav className="max-w-360 mx-auto w-11/12 py-4 flex items-center justify-between">
+              {/* Logo */}
+              <div className="shrink-0">
+                <Image
+                  src={"/logos/foodvely.jpg"}
+                  height={200}
+                  width={400}
+                  alt="Website logo"
+                  priority // Ensures the logo loads faster
+                  className="max-h-26 w-auto object-contain"
+                />
+              </div>
+
+              {/* Navigation Links */}
+              <div className="hidden md:block">
+                <ul className="flex flex-row gap-8 items-center">
+                  {links.map(({ name, href }) => (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className={`md:text-lg font-medium transition-colors duration-300 ${
+                          pathName === href
+                            ? "text-red-500 font-semibold"
+                            : "text-black hover:text-rose-500"
+                        }`}
+                      >
+                        {name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-4">
                 <Link
-                  href={href}
-                  className={`${pathName === href ? "text-red-500" : "text-black"}`}
+                  href={"/account/signup"}
+                  className="py-2 px-6 rounded-2xl font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
                 >
-                  {name}
+                  Sign Up
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex items-center gap-4">
-          <button className="py-2 px-6 rounded-2xl border border-rose-600 bg-rose-600 text-white">
-            Sign Up
-          </button>
-          <button className="py-2 px-6 rounded-2xl border border-rose-600 text-rose-600">
-            Sign In
-          </button>
-        </div>
-      </nav>
-    </div>
+                <Link
+                  href={"/account/signin"}
+                  className="py-2 px-6 rounded-2xl font-semibold border border-rose-600 text-rose-600 hover:bg-rose-200 duration-300 hover:shadow whitespace-nowrap"
+                >
+                  Sign In
+                </Link>
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 }
 
