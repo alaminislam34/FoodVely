@@ -1,5 +1,58 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "Sofia";
+    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Sofia";
+    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
+    font-weight: 500;
+    font-style: medium;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Sofia";
+    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
+    font-weight: 600;
+    font-style: semibold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Sofia";
+    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
+    font-weight: 700;
+    font-style: bold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Sofia";
+    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
+    font-weight: 800;
+    font-style: extrabold;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("/fonts/Poppins-Regular.woff2") format("woff2");
+    font-weight: 300 950;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    --font-Sofia: "Sofia", sans-serif;
+    --font-Poppins: "Poppins", sans-serif;
+}
+
 button {
     cursor: pointer;
 }

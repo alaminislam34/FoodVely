@@ -21,7 +21,7 @@ function Navbar() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -43,19 +43,21 @@ function Navbar() {
             key="nav-content"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <nav className="max-w-360 mx-auto w-11/12 py-4 flex items-center justify-between">
               {/* Logo */}
               <div className="shrink-0">
-                <Image
-                  src={"/logos/foodvely.jpg"}
-                  height={200}
-                  width={400}
-                  alt="Website logo"
-                  priority // Ensures the logo loads faster
-                  className="max-h-26 w-auto object-contain"
-                />
+                <Link href={"/"}>
+                  <Image
+                    src={"/logos/foodvely.jpg"}
+                    height={200}
+                    width={400}
+                    alt="Website logo"
+                    priority
+                    className="max-h-26 w-auto object-contain"
+                  />
+                </Link>
               </div>
 
               {/* Navigation Links */}
@@ -65,9 +67,9 @@ function Navbar() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className={`md:text-lg font-medium transition-colors duration-300 ${
+                        className={`md:text-lg font-Sofia font-semibold transition-colors duration-300 ${
                           pathName === href
-                            ? "text-red-500 font-semibold"
+                            ? "text-red-500 font-bold"
                             : "text-black hover:text-rose-500"
                         }`}
                       >
@@ -82,13 +84,13 @@ function Navbar() {
               <div className="flex items-center gap-4">
                 <Link
                   href={"/account/signup"}
-                  className="py-2 px-6 rounded-2xl font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
+                  className="py-2 px-6 rounded-2xl font-Sofia font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
                 >
                   Sign Up
                 </Link>
                 <Link
                   href={"/account/signin"}
-                  className="py-2 px-6 rounded-2xl font-semibold border border-rose-600 text-rose-600 hover:bg-rose-200 duration-300 hover:shadow whitespace-nowrap"
+                  className="py-2 px-6 rounded-2xl font-Sofia font-semibold border border-rose-600 text-rose-600 hover:bg-rose-200 duration-300 hover:shadow whitespace-nowrap"
                 >
                   Sign In
                 </Link>
