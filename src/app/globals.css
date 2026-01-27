@@ -20,6 +20,8 @@
 @theme {
     --font-Sofia: "Sofia", sans-serif;
     --font-Poppins: "Poppins", sans-serif;
+
+    --color-cream: #fff8e1;
 }
 
 button {

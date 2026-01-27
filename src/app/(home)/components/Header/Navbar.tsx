@@ -47,7 +47,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 py-4 flex items-center justify-between">
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between">
               {/* Logo */}
               <div className="shrink-0">
                 <Link href={"/"}>
@@ -99,7 +99,7 @@ function Navbar() {
               </div>
               <div className="md:hidden">
                 <button
-                  className="py-2 px-3 rounded-2xl border border-rose-500 bg-white text-rose-600 hover:bg-rose-500 backdrop-blur-lg hover:text-white duration-300 hover:scale-105"
+                  className="py-2 px-3 rounded-2xl border border-rose-500 text-white bg-rose-500 backdrop-blur-lg duration-300 hover:scale-105"
                   onClick={() => setOpenModal(!openModal)}
                 >
                   <Menu />
