@@ -28,7 +28,7 @@ function Navbar() {
   }, []);
 
   return (
-    <header className="w-full bg-white">
+    <header className="w-full">
       <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { Component } from "react";
+import Products from "./Products";
 
 export class Banner extends Component {
   render() {
     return (
       <div>
-        <section>
+        <section className="py-12">
           <div>
-            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-Sofia font-bold leading-normal">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-Sofia font-bold leading-normal">
               Fresh, Local, <span className="text-rose-600">Delicious</span>{" "}
               <br /> The Future Table
             </h1>
@@ -30,6 +31,7 @@ export class Banner extends Component {
               </Link>
             </div>
           </div>
+          <Products />
         </section>
       </div>
     );
