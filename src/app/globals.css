@@ -3,42 +3,11 @@
 @font-face {
     font-family: "Sofia";
     src: url("/fonts/Sofia-Regular.woff2") format("woff2");
-    font-weight: 400;
+    font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 
-@font-face {
-    font-family: "Sofia";
-    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
-    font-weight: 500;
-    font-style: medium;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Sofia";
-    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
-    font-weight: 600;
-    font-style: semibold;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Sofia";
-    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
-    font-weight: 700;
-    font-style: bold;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "Sofia";
-    src: url("/fonts/Sofia-Regular.woff2") format("woff2");
-    font-weight: 800;
-    font-style: extrabold;
-    font-display: swap;
-}
 
 @font-face {
     font-family: "Poppins";
@@ -55,4 +24,8 @@
 
 button {
     cursor: pointer;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
 }

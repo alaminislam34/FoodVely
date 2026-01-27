@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
+import { Menu, Search } from "lucide-react";
 
 const links = [
   { name: "Home", href: "/" },
@@ -16,6 +17,7 @@ const links = [
 
 function Navbar() {
   const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const pathName: string = usePathname();
 
   useEffect(() => {
@@ -55,7 +57,7 @@ function Navbar() {
                     width={400}
                     alt="Website logo"
                     priority
-                    className="max-h-26 w-auto object-contain"
+                    className="max-h-20 sm:max-h-22 md:max-h-26 w-auto object-contain"
                   />
                 </Link>
               </div>
@@ -81,7 +83,7 @@ function Navbar() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-4">
                 <Link
                   href={"/account/signup"}
                   className="py-2 px-6 rounded-2xl font-Sofia font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
@@ -94,6 +96,96 @@ function Navbar() {
                 >
                   Sign In
                 </Link>
+              </div>
+              <div className="md:hidden">
+                <button className="" onClick={() => setOpenModal(!openModal)}>
+                  <Menu />
+                </button>
+              </div>
+              <div
+                className={`h-screen w-full fixed inset-0 top-0 bg-black/50 border border-black ${openModal ? "left-0" : "-left-500"}`}
+              >
+                <div className="flex flex-col justify-between gap-12 p-6 bg-white max-w-xs h-screen">
+                  <div className="flex flex-col gap-10">
+                    <div className="shrink-0 py-4 flex items-center justify-center">
+                      <Link href={"/"}>
+                        <Image
+                          src={"/logos/foodvely.jpg"}
+                          height={200}
+                          width={400}
+                          alt="Website logo"
+                          priority
+                          className="max-h-20 sm:max-h-22 md:max-h-26 w-auto object-contain"
+                        />
+                      </Link>
+                    </div>
+                    {/* Navigation Links */}
+                    <div className="py-6">
+                      <ul className="flex flex-col gap-2">
+                        {links.map(({ name, href }) => (
+                          <li key={href}>
+                            <Link
+                              href={href}
+                              className={`md:text-lg p-2 w-full inline-block font-Sofia font-semibold transition-colors duration-300 ${
+                                pathName === href
+                                  ? "text-red-500 font-bold"
+                                  : "text-black hover:text-rose-500"
+                              }`}
+                            >
+                              {name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className="flex flex-col gap-6">
+                      <div className="flex flex-row gap-2">
+                        <input
+                          type="text"
+                          placeholder="Search your menu..."
+                          className="text-sm border border-rose-500 py-2.5 px-4 rounded-2xl focus:outline-rose-500"
+                        />
+                        <button className="py-2.5 px-4 border border-rose-500 bg-rose-500 text-white hover:bg-rose-600 rounded-2xl w-full flex items-center  justify-center duration-300">
+                          <Search />
+                        </button>
+                      </div>
+                      {/* Action Buttons */}
+                      <div className="flex flex-col gap-4">
+                        <Link
+                          href={"/account/signup"}
+                          className="py-2 px-6 rounded-2xl flex items-center justify-center font-Sofia font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
+                        >
+                          Sign Up
+                        </Link>
+                        <Link
+                          href={"/account/signin"}
+                          className="py-2 px-6 rounded-2xl flex items-center justify-center font-Sofia font-semibold border border-rose-600 text-rose-600 hover:bg-rose-200 duration-300 hover:shadow whitespace-nowrap"
+                        >
+                          Sign In
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-4 py-2 px-3.5 rounded-2xl hover:bg-rose-100 hover:-translate-y-0.5 duration-300 shadow-md shadow-rose-500/10 hover:shadow-rose-500/50 bg-rose-500/5 cursor-pointer">
+                      <div>
+                        <Image
+                          src={"/logos/user.jpg"}
+                          height={200}
+                          width={200}
+                          alt="User icons"
+                          className="aspect-square max-w-8 rounded-full outline-2 outline-rose-600 shadow-md shadow-rose-600"
+                        />
+                      </div>
+                      <div className="overflow-hidden">
+                        <h3 className="text-sm font-semibold">Al Amin Islam</h3>
+                        <p className="text-[11px] truncate text-gray-400">
+                          alaminislam4122.bd@gmail.com
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </nav>
           </motion.div>
