@@ -69,7 +69,7 @@ function Navbar() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className={`md:text-lg lg:text-xl font-Sofia font-semibold transition-colors duration-300 ${
+                        className={`md:text-lg font-Sofia font-semibold transition-colors duration-300 ${
                           pathName === href
                             ? "text-red-500 font-bold"
                             : "text-black hover:text-rose-500"
@@ -106,7 +106,7 @@ function Navbar() {
                 </button>
               </div>
               <div
-                className={`h-screen w-full fixed inset-0 top-0 bg-black/50 border border-black duration-500 ease-in-out ${openModal ? "left-0" : "-left-200"}`}
+                className={`md:hidden h-screen w-full fixed inset-0 top-0 bg-black/50 border border-black duration-500 ease-in-out ${openModal ? "left-0" : "-left-200"}`}
               >
                 <div className="flex flex-col justify-between gap-12 p-6 bg-rose-50 max-w-xs h-screen relative">
                   <button
