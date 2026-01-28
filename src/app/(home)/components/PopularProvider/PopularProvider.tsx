@@ -23,7 +23,7 @@ const providers = [
     categories: ["Biriyani", "Chicken", "Rice Bowls"],
     images: {
       logo: "/images/providers/FoodVally-logo.png",
-      cover: "/images/providers/covers/FoodVallyKitchen.jpg",
+      cover: "/images/providers/covers/FoodVelyKitchen.jpg",
     },
     rating: { average: 4.6, totalReviews: 320 },
     delivery: {
