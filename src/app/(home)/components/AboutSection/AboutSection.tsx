@@ -165,7 +165,7 @@ export function AboutSection() {
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-rose-600 to-orange-600 bg-clip-text text-transparent leading-normal pl-2"
+                className="text-4xl sm:text-5xl lg:text-6xl font-Sofia font-bold bg-linear-to-r from-orange-700 via-rose-500 to-rose-400 bg-clip-text text-transparent leading-normal pl-2"
               >
                 About FoodVally
               </motion.h2>

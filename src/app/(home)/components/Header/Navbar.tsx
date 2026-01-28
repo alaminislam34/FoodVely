@@ -63,8 +63,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-screen-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 sm:py-4">
-              {/* Logo */}
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-3 sm:py-4">
               <motion.div
                 className="shrink-0"
                 whileHover={{ scale: 1.05 }}
@@ -83,7 +82,6 @@ function Navbar() {
                 </Link>
               </motion.div>
 
-              {/* Navigation Links */}
               <div className="hidden lg:block">
                 <ul className="flex flex-row gap-1 items-center">
                   {links.map(({ name, href }) => (
@@ -106,19 +104,18 @@ function Navbar() {
                 </ul>
               </div>
 
-              {/* Action Buttons */}
               <div className="hidden lg:flex items-center gap-3">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center justify-center"
+                  className="flex items-center justify-center ml-6"
                 >
                   <Link
                     href={"/account/cart"}
                     className="p-2 inline-block relative text-rose-600"
                   >
                     <ShoppingCart />{" "}
-                    <span className="absolute -top-3 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
+                    <span className="absolute text-xs -top-1 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
                       0
                     </span>
                   </Link>
