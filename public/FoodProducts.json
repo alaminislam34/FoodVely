@@ -1,6 +1,6 @@
 [
   {
-    "id": "p201",
+    "id": "food_01",
     "name": "Beef Biryani",
     "slug": "beef-biryani",
     "description": "Slow-cooked beef biryani prepared with fragrant basmati rice and rich spices.",
@@ -65,7 +65,7 @@
   },
 
   {
-    "id": "p202",
+    "id": "food_02",
     "name": "Classic Chicken Burger",
     "slug": "classic-chicken-burger",
     "description": "Grilled chicken burger with fresh lettuce, tomato, and creamy mayo.",
@@ -131,7 +131,7 @@
   },
 
   {
-    "id": "p203",
+    "id": "food_03",
     "name": "Beef Cheese Burger",
     "slug": "beef-cheese-burger",
     "description": "Beef patty topped with melted cheese and signature sauce.",
@@ -196,7 +196,7 @@
   },
 
   {
-    "id": "p204",
+    "id": "food_04",
     "name": "Chicken Supreme Pizza",
     "slug": "chicken-supreme-pizza",
     "description": "Oven-baked pizza loaded with chicken, olives, and mozzarella cheese.",
@@ -262,7 +262,7 @@
   },
 
   {
-    "id": "p205",
+    "id": "food_05",
     "name": "French Fries",
     "slug": "french-fries",
     "description": "Crispy golden french fries served hot.",
@@ -325,7 +325,7 @@
     "updatedAt": "2025-01-15T00:00:00.000Z"
   },
   {
-    "id": "p206",
+    "id": "food_06",
     "name": "Chicken Shawarma Wrap",
     "slug": "chicken-shawarma-wrap",
     "description": "Middle Eastern style chicken shawarma wrapped with garlic sauce and fresh vegetables.",
@@ -391,7 +391,7 @@
   },
 
   {
-    "id": "p207",
+    "id": "food_07",
     "name": "Chicken Fried Rice",
     "slug": "chicken-fried-rice",
     "description": "Wok-fried rice with tender chicken, vegetables, and soy sauce.",
@@ -455,7 +455,7 @@
   },
 
   {
-    "id": "p208",
+    "id": "food_08",
     "name": "Beef Kebab Platter",
     "slug": "beef-kebab-platter",
     "description": "Grilled beef kebabs served with naan and salad.",
@@ -521,7 +521,7 @@
   },
 
   {
-    "id": "p209",
+    "id": "food_09",
     "name": "Vegetable Pasta",
     "slug": "vegetable-pasta",
     "description": "Creamy pasta cooked with fresh vegetables and herbs.",
@@ -585,7 +585,7 @@
   },
 
   {
-    "id": "p210",
+    "id": "food_10",
     "name": "Mango Milkshake",
     "slug": "mango-milkshake",
     "description": "Refreshing mango milkshake made with real mango pulp.",
@@ -648,7 +648,7 @@
     "updatedAt": "2025-01-20T00:00:00.000Z"
   },
   {
-    "id": "p211",
+    "id": "food_11",
     "name": "Chicken Tikka Kebab",
     "slug": "chicken-tikka-kebab",
     "description": "Charcoal-grilled chicken tikka marinated with traditional spices.",
@@ -714,7 +714,7 @@
   },
 
   {
-    "id": "p212",
+    "id": "food_12",
     "name": "Beef Tehari",
     "slug": "beef-tehari",
     "description": "Old Dhaka style beef tehari cooked with fragrant rice and spices.",
@@ -778,7 +778,7 @@
   },
 
   {
-    "id": "p213",
+    "id": "food_13",
     "name": "Fish Fry",
     "slug": "fish-fry",
     "description": "Crispy fried fish coated with special masala.",
@@ -842,7 +842,7 @@
   },
 
   {
-    "id": "p214",
+    "id": "food_14",
     "name": "Paneer Butter Masala",
     "slug": "paneer-butter-masala",
     "description": "Soft paneer cubes cooked in rich buttery tomato gravy.",
@@ -906,7 +906,7 @@
   },
 
   {
-    "id": "p215",
+    "id": "food_15",
     "name": "Hot Cappuccino",
     "slug": "hot-cappuccino",
     "description": "Freshly brewed cappuccino with rich aroma and foam.",
@@ -970,7 +970,7 @@
   },
 
   {
-    "id": "p216",
+    "id": "food_16",
     "name": "Chocolate Lava Cake",
     "slug": "chocolate-lava-cake",
     "description": "Warm chocolate cake with molten chocolate center.",
@@ -1034,7 +1034,7 @@
   },
 
   {
-    "id": "p217",
+    "id": "food_17",
     "name": "Chicken Noodles",
     "slug": "chicken-noodles",
     "description": "Stir-fried noodles with chicken and vegetables.",
@@ -1098,7 +1098,7 @@
   },
 
   {
-    "id": "p218",
+    "id": "food_18",
     "name": "Beef Haleem",
     "slug": "beef-haleem",
     "description": "Slow-cooked beef haleem made with lentils and wheat.",
@@ -1162,7 +1162,7 @@
   },
 
   {
-    "id": "p219",
+    "id": "food_19",
     "name": "Ice Cream Sundae",
     "slug": "ice-cream-sundae",
     "description": "Vanilla ice cream topped with chocolate syrup and nuts.",
@@ -1226,7 +1226,7 @@
   },
 
   {
-    "id": "p220",
+    "id": "food_20",
     "name": "Fresh Lemonade",
     "slug": "fresh-lemonade",
     "description": "Refreshing homemade lemonade with mint.",

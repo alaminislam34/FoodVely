@@ -1,0 +1,1106 @@
+[
+  {
+    "id": "blog_001",
+    "title": "Best Burger Places in Dhaka You Must Try",
+    "slug": "best-burger-places-in-dhaka",
+    "excerpt": "Discover the most popular burger spots in Dhaka with juicy flavors and affordable prices.",
+    "content": "Dhaka has some amazing burger places that every food lover should try. From street-style burgers to premium restaurants, here are our top picks.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-29",
+    "readingTime": "5 min",
+    "tags": ["burger", "dhaka", "fast food"],
+    "relatedRestaurants": [
+      {
+        "id": "prov_101",
+        "name": "Mama's Burger House",
+        "slug": "mamas-burger-house"
+      }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_201",
+        "name": "Cheese Beef Burger",
+        "price": 280,
+        "image": "/images/foods/cheese-burger.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_002",
+    "title": "Top Spicy Chicken Items in Bangladesh",
+    "slug": "top-spicy-chicken-items",
+    "excerpt": "Spicy food lovers will enjoy these fiery chicken dishes available on FoodVely.",
+    "content": "Bangladesh loves spicy food, especially chicken. Here are the most popular spicy chicken dishes you should try.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-27",
+    "readingTime": "4 min",
+    "tags": ["chicken", "spicy", "bangladesh"],
+    "relatedRestaurants": [
+      { "id": "prov_102", "name": "Hot Wings BD", "slug": "hot-wings-bd" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_202",
+        "name": "Spicy Fried Chicken",
+        "price": 220,
+        "image": "/images/foods/spicy-chicken.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_003",
+    "title": "Best Homemade Food Providers Near You",
+    "slug": "best-homemade-food-providers",
+    "excerpt": "Looking for healthy homemade food? These providers are trusted and popular.",
+    "content": "Homemade food is healthier and closer to traditional taste. Here are the best homemade food providers on FoodVely.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-26",
+    "readingTime": "6 min",
+    "tags": ["homemade", "healthy", "local food"],
+    "relatedRestaurants": [
+      {
+        "id": "prov_103",
+        "name": "FoodVely Kitchen",
+        "slug": "foodvely-kitchen"
+      }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_203",
+        "name": "Chicken Khichuri",
+        "price": 180,
+        "image": "/images/foods/khichuri.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_004",
+    "title": "Best Budget Meals Under ৳200",
+    "slug": "best-budget-meals-under-200",
+    "excerpt": "Good food doesn’t have to be expensive. Try these meals under ৳200.",
+    "content": "If you are on a budget but still want tasty food, these items are perfect for you.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-25",
+    "readingTime": "3 min",
+    "tags": ["budget", "cheap food", "student meals"],
+    "relatedRestaurants": [
+      { "id": "prov_104", "name": "Quick Bites", "slug": "quick-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_204",
+        "name": "Chicken Roll",
+        "price": 120,
+        "image": "/images/foods/chicken-roll.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_005",
+    "title": "Meet Our Partner: Mama’s Kitchen",
+    "slug": "meet-our-partner-mamas-kitchen",
+    "excerpt": "Get to know Mama’s Kitchen and their journey with FoodVely.",
+    "content": "Mama’s Kitchen is one of our most loved partners, serving authentic homemade meals.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": {
+      "id": "prov_101",
+      "name": "Mama’s Kitchen",
+      "role": "provider"
+    },
+    "publishedAt": "2026-01-24",
+    "readingTime": "4 min",
+    "tags": ["partner", "restaurant story"],
+    "relatedRestaurants": [
+      { "id": "prov_101", "name": "Mama’s Kitchen", "slug": "mamas-kitchen" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_205",
+        "name": "Beef Curry",
+        "price": 260,
+        "image": "/images/foods/beef-curry.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_006",
+    "title": "How to Choose Healthy Food Online",
+    "slug": "how-to-choose-healthy-food-online",
+    "excerpt": "Ordering food online? Follow these tips to eat healthy.",
+    "content": "Healthy eating is possible even with online food delivery. Here are some smart tips.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_guide",
+      "name": "Food Guides",
+      "slug": "food-guides"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-23",
+    "readingTime": "5 min",
+    "tags": ["healthy", "food tips"],
+    "relatedRestaurants": [
+      { "id": "prov_105", "name": "Healthy Bites", "slug": "healthy-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_206",
+        "name": "Grilled Chicken Salad",
+        "price": 240,
+        "image": "/images/foods/chicken-salad.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_007",
+    "title": "Late Night Food Delivery Tips",
+    "slug": "late-night-food-delivery-tips",
+    "excerpt": "Hungry at midnight? These tips will help you order smart.",
+    "content": "Late night cravings are common. Here’s how to get the best food experience at night.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_guide",
+      "name": "Food Guides",
+      "slug": "food-guides"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-22",
+    "readingTime": "4 min",
+    "tags": ["late night", "delivery tips"],
+    "relatedRestaurants": [
+      { "id": "prov_106", "name": "Night Owl Foods", "slug": "night-owl-foods" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_207",
+        "name": "Chicken Shawarma",
+        "price": 190,
+        "image": "/images/foods/shawarma.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_008",
+    "title": "Why Homemade Food Is Better for Daily Meals",
+    "slug": "why-homemade-food-is-better",
+    "excerpt": "Homemade food offers health, taste, and comfort.",
+    "content": "Eating homemade food daily can improve health and save money.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-21",
+    "readingTime": "5 min",
+    "tags": ["homemade", "daily meals"],
+    "relatedRestaurants": [
+      { "id": "prov_107", "name": "HomeTaste BD", "slug": "hometaste-bd" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_208",
+        "name": "Dal Bhat Combo",
+        "price": 150,
+        "image": "/images/foods/dal-bhat.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_009",
+    "title": "How Restaurants Can Get More Orders Online",
+    "slug": "restaurants-get-more-orders-online",
+    "excerpt": "Simple tips for restaurant owners to increase online sales.",
+    "content": "Online presence is important for restaurants. Follow these strategies to boost orders.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-20",
+    "readingTime": "6 min",
+    "tags": ["restaurant tips", "business"],
+    "relatedRestaurants": [
+      { "id": "prov_108", "name": "Urban Eats", "slug": "urban-eats" }
+    ],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_010",
+    "title": "New Features Launched on FoodVely",
+    "slug": "new-features-launched-foodvely",
+    "excerpt": "Explore the latest features that make FoodVely better for everyone.",
+    "content": "We are excited to introduce new features to improve your food ordering experience.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-19",
+    "readingTime": "3 min",
+    "tags": ["update", "foodvely"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_011",
+    "title": "Best Biriyani Spots in Dhaka",
+    "slug": "best-biriyani-spots-in-dhaka",
+    "excerpt": "From Kacchi to Chicken Biriyani, explore the best biriyani places in Dhaka.",
+    "content": "Biriyani is one of the most loved dishes in Bangladesh. Here are the top places serving delicious biriyani.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-18",
+    "readingTime": "6 min",
+    "tags": ["biriyani", "dhaka", "rice"],
+    "relatedRestaurants": [
+      { "id": "prov_109", "name": "Sultan's Dine", "slug": "sultans-dine" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_209",
+        "name": "Kacchi Biriyani",
+        "price": 350,
+        "image": "/images/foods/kacchi.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_012",
+    "title": "Top Breakfast Items to Start Your Day",
+    "slug": "top-breakfast-items",
+    "excerpt": "Healthy and tasty breakfast ideas you can order online.",
+    "content": "A good breakfast boosts energy. Here are some popular breakfast items on FoodVely.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-17",
+    "readingTime": "4 min",
+    "tags": ["breakfast", "healthy"],
+    "relatedRestaurants": [
+      { "id": "prov_110", "name": "Morning Bites", "slug": "morning-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_210",
+        "name": "Egg Sandwich",
+        "price": 120,
+        "image": "/images/foods/egg-sandwich.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_013",
+    "title": "Best Fast Food for Office Lunch",
+    "slug": "best-fast-food-office-lunch",
+    "excerpt": "Quick, tasty, and affordable lunch options for busy office hours.",
+    "content": "Office workers often need fast and filling meals. These items are perfect for lunch breaks.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-16",
+    "readingTime": "5 min",
+    "tags": ["office food", "fast food"],
+    "relatedRestaurants": [
+      { "id": "prov_111", "name": "Lunch Box", "slug": "lunch-box" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_211",
+        "name": "Chicken Burger Combo",
+        "price": 260,
+        "image": "/images/foods/burger-combo.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_014",
+    "title": "Healthy Diet Tips for Busy People",
+    "slug": "healthy-diet-tips-busy-people",
+    "excerpt": "Stay healthy even with a busy schedule using these food tips.",
+    "content": "Being busy doesn’t mean you must eat unhealthy food. Here’s how to maintain balance.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_guide",
+      "name": "Food Guides",
+      "slug": "food-guides"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-15",
+    "readingTime": "6 min",
+    "tags": ["diet", "healthy lifestyle"],
+    "relatedRestaurants": [
+      { "id": "prov_112", "name": "Fit Meals BD", "slug": "fit-meals-bd" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_212",
+        "name": "Boiled Chicken Meal",
+        "price": 230,
+        "image": "/images/foods/boiled-chicken.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_015",
+    "title": "Top Street Foods Loved by Bangladeshis",
+    "slug": "top-street-foods-bangladesh",
+    "excerpt": "Explore the street foods that every Bangladeshi loves.",
+    "content": "Street food is part of our culture. Let’s explore the most popular items.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-14",
+    "readingTime": "5 min",
+    "tags": ["street food", "bangladesh"],
+    "relatedRestaurants": [
+      { "id": "prov_113", "name": "Street Bites", "slug": "street-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_213",
+        "name": "Fuchka",
+        "price": 80,
+        "image": "/images/foods/fuchka.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_016",
+    "title": "Why Customer Reviews Matter in Food Delivery",
+    "slug": "why-reviews-matter-food-delivery",
+    "excerpt": "Reviews help users choose better food and restaurants.",
+    "content": "Customer reviews build trust and improve food quality across the platform.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-13",
+    "readingTime": "4 min",
+    "tags": ["reviews", "trust"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_017",
+    "title": "Best Dinner Items for Family Meals",
+    "slug": "best-dinner-items-family",
+    "excerpt": "Perfect dinner dishes to enjoy with your family.",
+    "content": "Family dinners are special. These dishes are ideal for sharing and enjoying together.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-12",
+    "readingTime": "6 min",
+    "tags": ["dinner", "family food"],
+    "relatedRestaurants": [
+      { "id": "prov_114", "name": "Family Kitchen", "slug": "family-kitchen" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_214",
+        "name": "Chicken Roast",
+        "price": 320,
+        "image": "/images/foods/chicken-roast.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_018",
+    "title": "How FoodVely Supports Local Restaurants",
+    "slug": "foodvely-supports-local-restaurants",
+    "excerpt": "FoodVely helps local restaurants grow and reach more customers.",
+    "content": "We focus on empowering small and local food businesses across Bangladesh.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-11",
+    "readingTime": "4 min",
+    "tags": ["local business", "foodvely"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_019",
+    "title": "Best Desserts to Order After Dinner",
+    "slug": "best-desserts-after-dinner",
+    "excerpt": "Sweet dishes to complete your meal perfectly.",
+    "content": "Desserts make meals memorable. Here are the best dessert options on FoodVely.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-10",
+    "readingTime": "4 min",
+    "tags": ["dessert", "sweets"],
+    "relatedRestaurants": [
+      { "id": "prov_115", "name": "Sweet Tooth", "slug": "sweet-tooth" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_215",
+        "name": "Chocolate Cake",
+        "price": 200,
+        "image": "/images/foods/chocolate-cake.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_020",
+    "title": "How Providers Can Improve Food Quality",
+    "slug": "providers-improve-food-quality",
+    "excerpt": "Simple steps restaurant owners can take to improve food quality.",
+    "content": "Quality food leads to happy customers. Here are best practices for providers.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-09",
+    "readingTime": "6 min",
+    "tags": ["food quality", "restaurant tips"],
+    "relatedRestaurants": [
+      { "id": "prov_116", "name": "Quality Foods", "slug": "quality-foods" }
+    ],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_021",
+    "title": "Best Pizza Places to Order Online",
+    "slug": "best-pizza-places-online",
+    "excerpt": "Craving pizza? These restaurants serve the best pizzas on FoodVely.",
+    "content": "Pizza is a favorite for all ages. Here are the top pizza places you can order from online.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-08",
+    "readingTime": "5 min",
+    "tags": ["pizza", "fast food"],
+    "relatedRestaurants": [
+      { "id": "prov_117", "name": "Pizza Hub", "slug": "pizza-hub" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_216",
+        "name": "Pepperoni Pizza",
+        "price": 450,
+        "image": "/images/foods/pepperoni-pizza.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_022",
+    "title": "Top Lunch Meals for Students",
+    "slug": "top-lunch-meals-for-students",
+    "excerpt": "Affordable and filling lunch meals perfect for students.",
+    "content": "Students need budget-friendly meals. Here are some popular lunch options.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-07",
+    "readingTime": "4 min",
+    "tags": ["students", "budget meals"],
+    "relatedRestaurants": [
+      { "id": "prov_118", "name": "Campus Cafe", "slug": "campus-cafe" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_217",
+        "name": "Rice & Chicken Curry",
+        "price": 140,
+        "image": "/images/foods/rice-chicken.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_023",
+    "title": "How to Order Food Safely Online",
+    "slug": "how-to-order-food-safely-online",
+    "excerpt": "Simple safety tips everyone should follow while ordering food online.",
+    "content": "Food safety is important. Follow these guidelines for a safe delivery experience.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_guide",
+      "name": "Food Guides",
+      "slug": "food-guides"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-06",
+    "readingTime": "5 min",
+    "tags": ["food safety", "online order"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_024",
+    "title": "Best Snacks for Evening Tea Time",
+    "slug": "best-snacks-for-tea-time",
+    "excerpt": "Light snacks that go perfectly with evening tea.",
+    "content": "Evening tea is incomplete without snacks. Here are the best options.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-05",
+    "readingTime": "3 min",
+    "tags": ["snacks", "tea time"],
+    "relatedRestaurants": [
+      { "id": "prov_119", "name": "Snack Point", "slug": "snack-point" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_218",
+        "name": "Samosa",
+        "price": 30,
+        "image": "/images/foods/samosa.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_025",
+    "title": "Why Fast Delivery Matters in Food Apps",
+    "slug": "why-fast-delivery-matters",
+    "excerpt": "Speed plays a big role in customer satisfaction.",
+    "content": "Fast delivery improves customer trust and repeat orders.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-04",
+    "readingTime": "4 min",
+    "tags": ["delivery", "customer experience"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_026",
+    "title": "Top Rice Meals Loved by Bangladeshis",
+    "slug": "top-rice-meals-bangladesh",
+    "excerpt": "Rice-based meals that are popular across Bangladesh.",
+    "content": "Rice is our staple food. These rice meals are customer favorites.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-03",
+    "readingTime": "5 min",
+    "tags": ["rice", "bangladeshi food"],
+    "relatedRestaurants": [
+      { "id": "prov_120", "name": "Deshi Meals", "slug": "deshi-meals" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_219",
+        "name": "Bhuna Khichuri",
+        "price": 200,
+        "image": "/images/foods/bhuna-khichuri.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_027",
+    "title": "How Providers Can Increase Customer Trust",
+    "slug": "providers-increase-customer-trust",
+    "excerpt": "Trust leads to repeat orders. Here’s how providers can build it.",
+    "content": "Clean packaging, quality food, and honest pricing help gain trust.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-02",
+    "readingTime": "6 min",
+    "tags": ["trust", "restaurant growth"],
+    "relatedRestaurants": [
+      { "id": "prov_121", "name": "Trust Kitchen", "slug": "trust-kitchen" }
+    ],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_028",
+    "title": "Best Combo Meals to Save Money",
+    "slug": "best-combo-meals-save-money",
+    "excerpt": "Combo meals give more value for less money.",
+    "content": "If you want to save money, combo meals are the best choice.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2026-01-01",
+    "readingTime": "4 min",
+    "tags": ["combo meals", "offers"],
+    "relatedRestaurants": [
+      { "id": "prov_122", "name": "Value Bites", "slug": "value-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_220",
+        "name": "Burger Combo Meal",
+        "price": 299,
+        "image": "/images/foods/burger-combo.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_029",
+    "title": "Best Midnight Snacks to Order",
+    "slug": "best-midnight-snacks",
+    "excerpt": "Late night hunger? These snacks are perfect after midnight.",
+    "content": "Midnight cravings are real. These food items are quick and tasty.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-31",
+    "readingTime": "3 min",
+    "tags": ["midnight food", "snacks"],
+    "relatedRestaurants": [
+      { "id": "prov_123", "name": "Midnight Bites", "slug": "midnight-bites" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_221",
+        "name": "French Fries",
+        "price": 110,
+        "image": "/images/foods/fries.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_030",
+    "title": "How FoodVely Helps Customers Save Money",
+    "slug": "how-foodvely-helps-save-money",
+    "excerpt": "Discounts, offers, and smart choices help users save more.",
+    "content": "FoodVely provides budget-friendly options without compromising quality.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-30",
+    "readingTime": "4 min",
+    "tags": ["offers", "saving money"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_031",
+    "title": "Best Fish Dishes Loved by Bangladeshis",
+    "slug": "best-fish-dishes-bangladesh",
+    "excerpt": "Fish is a daily favorite in Bangladesh. These dishes are most popular.",
+    "content": "From Rui to Ilish, fish dishes are deeply rooted in Bangladeshi food culture.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-29",
+    "readingTime": "5 min",
+    "tags": ["fish", "bangladeshi food"],
+    "relatedRestaurants": [
+      { "id": "prov_124", "name": "Fish Palace", "slug": "fish-palace" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_222",
+        "name": "Rui Fish Curry",
+        "price": 240,
+        "image": "/images/foods/rui-fish.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_032",
+    "title": "Top Vegetarian Meals on FoodVely",
+    "slug": "top-vegetarian-meals-foodvely",
+    "excerpt": "Delicious vegetarian meals you can order without compromise.",
+    "content": "Vegetarian meals are healthy and tasty. Here are the top picks.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-28",
+    "readingTime": "4 min",
+    "tags": ["vegetarian", "healthy food"],
+    "relatedRestaurants": [
+      { "id": "prov_125", "name": "Green Plate", "slug": "green-plate" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_223",
+        "name": "Mixed Vegetable Curry",
+        "price": 160,
+        "image": "/images/foods/veg-curry.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_033",
+    "title": "Best Foods for Kids and Family",
+    "slug": "best-foods-for-kids-family",
+    "excerpt": "Kid-friendly and family-approved food options.",
+    "content": "Children love simple and tasty food. These meals are perfect for families.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-27",
+    "readingTime": "4 min",
+    "tags": ["kids food", "family meals"],
+    "relatedRestaurants": [
+      {
+        "id": "prov_126",
+        "name": "Happy Family Kitchen",
+        "slug": "happy-family-kitchen"
+      }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_224",
+        "name": "Chicken Nuggets",
+        "price": 180,
+        "image": "/images/foods/nuggets.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_034",
+    "title": "How to Save More Using FoodVely Offers",
+    "slug": "save-more-using-foodvely-offers",
+    "excerpt": "Smart ways to use discounts and offers on FoodVely.",
+    "content": "Using offers wisely can reduce your food cost significantly.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-26",
+    "readingTime": "3 min",
+    "tags": ["offers", "discount"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_035",
+    "title": "Best Evening Snacks Under ৳100",
+    "slug": "best-evening-snacks-under-100",
+    "excerpt": "Low-cost snacks that taste great in the evening.",
+    "content": "Even with a small budget, you can enjoy tasty snacks.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-25",
+    "readingTime": "3 min",
+    "tags": ["snacks", "budget food"],
+    "relatedRestaurants": [
+      { "id": "prov_127", "name": "Daily Snacks", "slug": "daily-snacks" }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_225",
+        "name": "Vegetable Chop",
+        "price": 50,
+        "image": "/images/foods/veg-chop.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_036",
+    "title": "Why Clean Packaging Matters in Food Delivery",
+    "slug": "clean-packaging-matters",
+    "excerpt": "Packaging plays a big role in food quality and trust.",
+    "content": "Clean and safe packaging improves customer confidence.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-24",
+    "readingTime": "5 min",
+    "tags": ["packaging", "food safety"],
+    "relatedRestaurants": [
+      { "id": "prov_128", "name": "Safe Pack Foods", "slug": "safe-pack-foods" }
+    ],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_037",
+    "title": "Best Chicken Curry Dishes to Try",
+    "slug": "best-chicken-curry-dishes",
+    "excerpt": "Chicken curry lovers, this list is for you.",
+    "content": "Chicken curry comes in many styles. These are the most ordered ones.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_food",
+      "name": "Food & Dishes",
+      "slug": "food-dishes"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-23",
+    "readingTime": "5 min",
+    "tags": ["chicken curry", "deshi food"],
+    "relatedRestaurants": [
+      {
+        "id": "prov_129",
+        "name": "Deshi Curry House",
+        "slug": "deshi-curry-house"
+      }
+    ],
+    "relatedFoods": [
+      {
+        "id": "food_226",
+        "name": "Chicken Curry & Rice",
+        "price": 220,
+        "image": "/images/foods/chicken-curry-rice.png"
+      }
+    ],
+    "status": "published"
+  },
+  {
+    "id": "blog_038",
+    "title": "How to Choose the Right Restaurant Online",
+    "slug": "choose-right-restaurant-online",
+    "excerpt": "Tips to help you select the best restaurant for your order.",
+    "content": "Reviews, ratings, and food photos help you decide better.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_guide",
+      "name": "Food Guides",
+      "slug": "food-guides"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-22",
+    "readingTime": "4 min",
+    "tags": ["restaurant tips", "ordering food"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_039",
+    "title": "Best Office Catering Options",
+    "slug": "best-office-catering-options",
+    "excerpt": "Planning office lunch? These catering options are perfect.",
+    "content": "Office catering requires quality, quantity, and timely delivery.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_restaurant",
+      "name": "Restaurants",
+      "slug": "restaurants"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-21",
+    "readingTime": "6 min",
+    "tags": ["office food", "catering"],
+    "relatedRestaurants": [
+      { "id": "prov_130", "name": "Office Meals BD", "slug": "office-meals-bd" }
+    ],
+    "relatedFoods": [],
+    "status": "published"
+  },
+  {
+    "id": "blog_040",
+    "title": "Why Food Photos Matter in Online Ordering",
+    "slug": "why-food-photos-matter",
+    "excerpt": "Good food photos increase trust and orders.",
+    "content": "Clear and real food images help customers make decisions faster.",
+    "thumbnail": "https://cdn.jwplayer.com/v2/media/1znN8BBx/thumbnails/WmRQ08C1.jpg",
+    "blog_video": "https://www.youtube.com/embed/xi1CKzeA01c?si=7o3rPOTPGpFELnh0",
+    "category": {
+      "id": "cat_update",
+      "name": "FoodVely Updates",
+      "slug": "foodvely-updates"
+    },
+    "author": { "id": "admin_01", "name": "FoodVely Team", "role": "admin" },
+    "publishedAt": "2025-12-20",
+    "readingTime": "4 min",
+    "tags": ["food photos", "user experience"],
+    "relatedRestaurants": [],
+    "relatedFoods": [],
+    "status": "published"
+  }
+]

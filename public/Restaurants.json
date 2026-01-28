@@ -1,6 +1,6 @@
 [
   {
-    "id": "prov_101",
+    "id": "rest_001",
     "name": "FoodVally Kitchen",
     "slug": "FoodVally-kitchen",
     "description": "Best homemade food with authentic Bangla taste.",
@@ -38,7 +38,7 @@
     "updatedAt": "2025-01-20T08:15:00Z"
   },
   {
-    "id": "prov_102",
+    "id": "rest_002",
     "name": "Burger Bros",
     "slug": "burger-bros",
     "description": "Juicy burgers with fresh ingredients.",
@@ -76,7 +76,7 @@
     "updatedAt": "2025-01-22T06:30:00Z"
   },
   {
-    "id": "prov_103",
+    "id": "rest_003",
     "name": "Pizza Point",
     "slug": "pizza-point",
     "description": "Hot & cheesy pizza delivered fast.",
@@ -114,7 +114,7 @@
     "updatedAt": "2025-01-19T10:10:00Z"
   },
   {
-    "id": "prov_104",
+    "id": "rest_004",
     "name": "Chinese Wok",
     "slug": "chinese-wok",
     "description": "Authentic Chinese & Thai flavors.",
@@ -152,7 +152,7 @@
     "updatedAt": "2025-01-21T09:40:00Z"
   },
   {
-    "id": "prov_105",
+    "id": "rest_005",
     "name": "Healthy Bites",
     "slug": "healthy-bites",
     "description": "Fresh, healthy & diet-friendly meals.",
@@ -190,7 +190,7 @@
     "updatedAt": "2025-01-23T08:00:00Z"
   },
   {
-    "id": "prov_106",
+    "id": "rest_006",
     "name": "Sweet Tooth",
     "slug": "sweet-tooth",
     "description": "Desserts, cakes & ice cream.",
@@ -228,7 +228,7 @@
     "updatedAt": "2025-01-24T12:00:00Z"
   },
   {
-    "id": "prov_107",
+    "id": "rest_007",
     "name": "Grill House",
     "slug": "grill-house",
     "description": "BBQ, grilled chicken & steak.",
@@ -266,7 +266,7 @@
     "updatedAt": "2025-01-18T18:20:00Z"
   },
   {
-    "id": "prov_108",
+    "id": "rest_008",
     "name": "Cafe Mocha",
     "slug": "cafe-mocha",
     "description": "Coffee, snacks & breakfast items.",
@@ -304,7 +304,7 @@
     "updatedAt": "2025-01-25T07:10:00Z"
   },
   {
-    "id": "prov_109",
+    "id": "rest_009",
     "name": "Street Khaoa",
     "slug": "street-khaoa",
     "description": "Popular Bangladeshi street food.",
@@ -342,7 +342,7 @@
     "updatedAt": "2025-01-17T19:30:00Z"
   },
   {
-    "id": "prov_110",
+    "id": "rest_010",
     "name": "Seafood Hub",
     "slug": "seafood-hub",
     "description": "Fresh fish & seafood dishes.",
@@ -381,7 +381,7 @@
   },
 
   {
-    "id": "prov_111",
+    "id": "rest_011",
     "name": "FoodVally Kitchen",
     "slug": "FoodVally-kitchen",
     "description": "Best homemade food with authentic Bangla taste.",
@@ -419,7 +419,7 @@
     "updatedAt": "2025-01-20T08:15:00Z"
   },
   {
-    "id": "prov_112",
+    "id": "rest_012",
     "name": "Burger Bros",
     "slug": "burger-bros",
     "description": "Juicy burgers with fresh ingredients.",
@@ -457,7 +457,7 @@
     "updatedAt": "2025-01-22T06:30:00Z"
   },
   {
-    "id": "prov_113",
+    "id": "rest_013",
     "name": "Pizza Point",
     "slug": "pizza-point",
     "description": "Hot & cheesy pizza delivered fast.",
@@ -495,7 +495,7 @@
     "updatedAt": "2025-01-19T10:10:00Z"
   },
   {
-    "id": "prov_114",
+    "id": "rest_014",
     "name": "Chinese Wok",
     "slug": "chinese-wok",
     "description": "Authentic Chinese & Thai flavors.",
@@ -533,7 +533,7 @@
     "updatedAt": "2025-01-21T09:40:00Z"
   },
   {
-    "id": "prov_115",
+    "id": "rest_015",
     "name": "Tandoori Flames",
     "slug": "tandoori-flames",
     "description": "Authentic tandoori dishes and Indian cuisine.",
@@ -571,7 +571,7 @@
     "updatedAt": "2025-01-27T08:00:00Z"
   },
   {
-    "id": "prov_116",
+    "id": "rest_016",
     "name": "Pasta Paradise",
     "slug": "pasta-paradise",
     "description": "Delicious pasta, lasagna and Italian delights.",
@@ -609,7 +609,7 @@
     "updatedAt": "2025-01-28T09:20:00Z"
   },
   {
-    "id": "prov_117",
+    "id": "rest_017",
     "name": "Sushi World",
     "slug": "sushi-world",
     "description": "Fresh sushi and Japanese cuisine delivered fast.",
@@ -647,7 +647,7 @@
     "updatedAt": "2025-01-29T10:30:00Z"
   },
   {
-    "id": "prov_118",
+    "id": "rest_018",
     "name": "Steak House",
     "slug": "steak-house",
     "description": "Premium grilled steaks and BBQ specialties.",
@@ -685,7 +685,7 @@
     "updatedAt": "2025-01-28T17:10:00Z"
   },
   {
-    "id": "prov_119",
+    "id": "rest_019",
     "name": "Vegan Delight",
     "slug": "vegan-delight",
     "description": "Healthy vegan and vegetarian meals.",
@@ -723,7 +723,7 @@
     "updatedAt": "2025-01-29T08:00:00Z"
   },
   {
-    "id": "prov_120",
+    "id": "rest_020",
     "name": "Boba Bubble",
     "slug": "boba-bubble",
     "description": "Refreshing bubble tea and drinks.",
@@ -761,7 +761,7 @@
     "updatedAt": "2025-01-29T10:00:00Z"
   },
   {
-    "id": "prov_121",
+    "id": "rest_021",
     "name": "Doner King",
     "slug": "doner-king",
     "description": "Middle Eastern kebabs and wraps.",
@@ -799,7 +799,7 @@
     "updatedAt": "2025-01-29T09:30:00Z"
   },
   {
-    "id": "prov_122",
+    "id": "rest_022",
     "name": "Crepe Corner",
     "slug": "crepe-corner",
     "description": "Sweet and savory crepes for all tastes.",
@@ -837,7 +837,7 @@
     "updatedAt": "2025-01-29T10:50:00Z"
   },
   {
-    "id": "prov_123",
+    "id": "rest_023",
     "name": "Grill & Chill",
     "slug": "grill-chill",
     "description": "Grilled sandwiches, paninis & snacks.",
@@ -875,7 +875,7 @@
     "updatedAt": "2025-01-29T11:30:00Z"
   },
   {
-    "id": "prov_124",
+    "id": "rest_024",
     "name": "Mediterranean Feast",
     "slug": "mediterranean-feast",
     "description": "Fresh Mediterranean cuisine with premium ingredients.",
@@ -913,7 +913,7 @@
     "updatedAt": "2025-01-29T12:00:00Z"
   },
   {
-    "id": "prov_125",
+    "id": "rest_025",
     "name": "Noodle House",
     "slug": "noodle-house",
     "description": "Asian noodles, soups & quick meals.",
@@ -951,7 +951,7 @@
     "updatedAt": "2025-01-29T12:30:00Z"
   },
   {
-    "id": "prov_126",
+    "id": "rest_026",
     "name": "Wrap & Roll",
     "slug": "wrap-roll",
     "description": "Delicious wraps, sandwiches & fast bites.",
@@ -989,7 +989,7 @@
     "updatedAt": "2025-01-29T12:45:00Z"
   },
   {
-    "id": "prov_127",
+    "id": "rest_027",
     "name": "Coffee & Co",
     "slug": "coffee-co",
     "description": "Coffee, pastries & light snacks.",
@@ -1027,7 +1027,7 @@
     "updatedAt": "2025-01-29T11:15:00Z"
   },
   {
-    "id": "prov_128",
+    "id": "rest_028",
     "name": "Mexican Fiesta",
     "slug": "mexican-fiesta",
     "description": "Tacos, burritos & authentic Mexican flavors.",
@@ -1065,7 +1065,7 @@
     "updatedAt": "2025-01-29T12:20:00Z"
   },
   {
-    "id": "prov_129",
+    "id": "rest_029",
     "name": "Ice Cream Haven",
     "slug": "ice-cream-haven",
     "description": "Ice creams, sundaes & desserts for all ages.",
@@ -1103,7 +1103,7 @@
     "updatedAt": "2025-01-29T12:35:00Z"
   },
   {
-    "id": "prov_130",
+    "id": "rest_030",
     "name": "BBQ King",
     "slug": "bbq-king",
     "description": "BBQ, grilled chicken & meat specialties.",
@@ -1141,7 +1141,7 @@
     "updatedAt": "2025-01-29T13:00:00Z"
   },
   {
-    "id": "prov_131",
+    "id": "rest_031",
     "name": "Bakery Bliss",
     "slug": "bakery-bliss",
     "description": "Freshly baked breads, cakes & pastries.",
@@ -1179,7 +1179,7 @@
     "updatedAt": "2025-01-29T12:50:00Z"
   },
   {
-    "id": "prov_132",
+    "id": "rest_032",
     "name": "Thai Treat",
     "slug": "thai-treat",
     "description": "Authentic Thai cuisine with rich flavors.",
@@ -1217,7 +1217,7 @@
     "updatedAt": "2025-01-29T13:15:00Z"
   },
   {
-    "id": "prov_133",
+    "id": "rest_033",
     "name": "Grill Express",
     "slug": "grill-express",
     "description": "Fast grilled meals, sandwiches & burgers.",
@@ -1255,7 +1255,7 @@
     "updatedAt": "2025-01-29T13:30:00Z"
   },
   {
-    "id": "prov_134",
+    "id": "rest_034",
     "name": "Mediterraneo",
     "slug": "mediterraneo",
     "description": "Fresh Mediterranean dishes and salads.",
