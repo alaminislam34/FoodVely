@@ -10,7 +10,12 @@
     "discountPrice": 370,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/beef-biryani2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/beef-biryani1.png",
 
     "category": {
@@ -23,7 +28,7 @@
       "id": "res-4",
       "name": "FoodVely Kitchen",
       "slug": "foodvely-kitchen",
-      "logo": "/images/providers/foodvely.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.7
     },
 
@@ -70,7 +75,13 @@
     "discountPrice": 220,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/burger2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/burger2.png",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/burger1.png",
 
     "category": {
@@ -83,7 +94,7 @@
       "id": "res-1",
       "name": "Burger House",
       "slug": "burger-house",
-      "logo": "/images/providers/burgerhouse.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.5
     },
 
@@ -130,7 +141,12 @@
     "discountPrice": 290,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/beef-burger1.png",
 
     "category": {
@@ -143,7 +159,7 @@
       "id": "res-1",
       "name": "Burger House",
       "slug": "burger-house",
-      "logo": "/images/providers/burgerhouse.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.6
     },
 
@@ -190,7 +206,13 @@
     "discountPrice": 500,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/pizza2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/pizza2.png",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/pizza1.png",
 
     "category": {
@@ -203,7 +225,7 @@
       "id": "res-2",
       "name": "Pizza Corner",
       "slug": "pizza-corner",
-      "logo": "/images/providers/pizzacorner.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.7
     },
 
@@ -249,7 +271,12 @@
     "price": 120,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/fries1.png",
 
     "category": {
@@ -262,7 +289,7 @@
       "id": "res-5",
       "name": "Snack Hub",
       "slug": "snack-hub",
-      "logo": "/images/providers/snackhub.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.3
     },
 
@@ -308,7 +335,13 @@
     "discountPrice": 180,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/shawarma2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/shawarma2.png",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/shawarma1.png",
 
     "category": {
@@ -321,7 +354,7 @@
       "id": "res-5",
       "name": "Arabian Bites",
       "slug": "arabian-bites",
-      "logo": "/images/providers/arabianbites.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.4
     },
 
@@ -367,7 +400,12 @@
     "price": 280,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/friedrice1.png",
 
     "category": {
@@ -380,7 +418,7 @@
       "id": "res-3",
       "name": "Asian Kitchen",
       "slug": "asian-kitchen",
-      "logo": "/images/providers/asiankitchen.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.3
     },
 
@@ -427,7 +465,13 @@
     "discountPrice": 420,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/kebab2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/kebab2.png",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/kebab1.png",
 
     "category": {
@@ -440,7 +484,7 @@
       "id": "res-7",
       "name": "Grill Master",
       "slug": "grill-master",
-      "logo": "/images/providers/grillmaster.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.6
     },
 
@@ -486,7 +530,12 @@
     "price": 300,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/pasta1.png",
 
     "category": {
@@ -499,7 +548,7 @@
       "id": "res-8",
       "name": "Italiano",
       "slug": "italiano",
-      "logo": "/images/providers/italiano.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.2
     },
 
@@ -545,7 +594,12 @@
     "price": 160,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/mango-shake1.png",
 
     "category": {
@@ -558,7 +612,7 @@
       "id": "res-6",
       "name": "Cool Drinks",
       "slug": "cool-drinks",
-      "logo": "/images/providers/cooldrinks.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.5
     },
 
@@ -604,7 +658,13 @@
     "discountPrice": 350,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg", "/images/chicken-tikka2.png"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/chicken-tikka2.png",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/chicken-tikka1.png",
 
     "category": {
@@ -617,7 +677,7 @@
       "id": "res-7",
       "name": "Grill Master",
       "slug": "grill-master",
-      "logo": "/images/providers/grillmaster.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.6
     },
 
@@ -663,7 +723,12 @@
     "price": 420,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/tehari1.png",
 
     "category": {
@@ -676,7 +741,7 @@
       "id": "res-9",
       "name": "Dhaka Delights",
       "slug": "dhaka-delights",
-      "logo": "/images/providers/dhakadelights.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.7
     },
 
@@ -722,7 +787,12 @@
     "price": 260,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/fish-fry1.png",
 
     "category": {
@@ -735,7 +805,7 @@
       "id": "res-10",
       "name": "SeaFresh",
       "slug": "seafresh",
-      "logo": "/images/providers/seafresh.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.4
     },
 
@@ -781,7 +851,12 @@
     "price": 340,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/paneer1.png",
 
     "category": {
@@ -794,7 +869,7 @@
       "id": "res-11",
       "name": "Veggie Bowl",
       "slug": "veggie-bowl",
-      "logo": "/images/providers/veggiebowl.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.3
     },
 
@@ -840,7 +915,12 @@
     "price": 180,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/cappuccino1.png",
 
     "category": {
@@ -853,7 +933,7 @@
       "id": "res-12",
       "name": "Coffee Lab",
       "slug": "coffee-lab",
-      "logo": "/images/providers/coffeelab.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.6
     },
 
@@ -899,7 +979,12 @@
     "price": 220,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/lavacake1.png",
 
     "category": {
@@ -912,7 +997,7 @@
       "id": "res-13",
       "name": "Sweet Tooth",
       "slug": "sweet-tooth",
-      "logo": "/images/providers/sweettooth.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.8
     },
 
@@ -958,7 +1043,12 @@
     "price": 260,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/noodles1.png",
 
     "category": {
@@ -971,7 +1061,7 @@
       "id": "res-3",
       "name": "Asian Kitchen",
       "slug": "asian-kitchen",
-      "logo": "/images/providers/asiankitchen.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.4
     },
 
@@ -1017,7 +1107,12 @@
     "price": 300,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/haleem1.png",
 
     "category": {
@@ -1030,7 +1125,7 @@
       "id": "res-9",
       "name": "Dhaka Delights",
       "slug": "dhaka-delights",
-      "logo": "/images/providers/dhakadelights.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.7
     },
 
@@ -1076,7 +1171,12 @@
     "price": 190,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/sundae1.png",
 
     "category": {
@@ -1089,7 +1189,7 @@
       "id": "res-13",
       "name": "Sweet Tooth",
       "slug": "sweet-tooth",
-      "logo": "/images/providers/sweettooth.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.6
     },
 
@@ -1135,7 +1235,12 @@
     "price": 120,
     "currency": "BDT",
 
-    "images": ["/images/Spaghetti.jpg"],
+    "images": [
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg",
+      "/images/Spaghetti.jpg"
+    ],
     "thumbnail": "/images/lemonade1.png",
 
     "category": {
@@ -1148,7 +1253,7 @@
       "id": "res-6",
       "name": "Cool Drinks",
       "slug": "cool-drinks",
-      "logo": "/images/providers/cooldrinks.png",
+      "logo": "/images/providers/covers/BurgerBros.jpg",
       "rating": 4.4
     },
 
