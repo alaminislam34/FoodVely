@@ -63,10 +63,11 @@ export default function Banner() {
             Fresh, Local, <span className="text-rose-600">Delicious</span>{" "}
             <br /> The Future Table
           </h1>
-          <p className="text-gray-500 py-4 md:max-w-3/4 lg:max-w-4/5 mx-auto lg:mx-0 font-Sofia">
+          <p className="text-gray-500 py-4 md:max-w-3/4 lg:max-w-4/5 mx-auto lg:mx-0">
             "Taste the Local Harvest in Every Bite." We don't just cook; we
             create. Our chefs hand-pick fresh, seasonal produce from local
-            growers.
+            growers. Get the latest updates, exclusive offers, and delicious
+            recipes delivered to your inbox.
           </p>
           <div className="flex flex-row gap-4 items-center justify-center lg:justify-start my-6">
             <Link

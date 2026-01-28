@@ -37,17 +37,17 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-linear-to-b from-cream to-white/80 backdrop-blur-sm py-16 md:py-20 relative mt-50 shadow-md
+      className="bg-linear-to-b from-white/80 to-white/80 backdrop-blur-sm py-16 md:py-20 relative mt-50 shadow-md
     "
     >
       {/* Newsletter Section */}
       <motion.div
         variants={itemVariants}
-        className="max-w-360 mx-auto w-11/12 bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-6 md:p-8 mb-8 shadow-md absolute -top-24 left-1/2 -translate-x-1/2"
+        className="max-w-360 mx-auto w-11/12 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 md:p-8 mb-8 shadow-md absolute -top-40 left-1/2 -translate-x-1/2"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h4 className="font-Sofia font-bold text-gray-900 text-xl mb-2">
+        <div className="flex flex-col gap-8 items-center">
+          <div className="flex flex-col gap-4 items-center">
+            <h4 className="font-Sofia font-bold text-gray-900 text-xl md:text-2xl lg:text-3xl mb-2">
               Subscribe to Our Newsletter
             </h4>
             <p className="text-gray-600 text-sm">
@@ -55,11 +55,11 @@ export default function Footer() {
               delivered to your inbox.
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 max-w-2xl w-full">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm"
+              className="flex-1 px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm w-full"
             />
             <button className="px-6 py-3 rounded-2xl bg-rose-500 text-white font-Sofia font-semibold hover:bg-rose-600 transition-all duration-300 hover:scale-105 shadow-lg shadow-rose-200">
               Subscribe
@@ -79,7 +79,7 @@ export default function Footer() {
         <div className="flex flex-wrap items-start gap-8 mb-12">
           {/* Brand Section */}
           <motion.div variants={itemVariants} className="space-y-4 max-w-md">
-            <h3 className="text-2xl font-Sofia font-bold text-gray-900">
+            <h3 className="text-2xl md:text-3xl lg:text-4xl font-Sofia font-bold text-gray-900">
               Food<span className="text-rose-500">vely</span>
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed">
