@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, Search, X, LogOut, ChefHat } from "lucide-react";
 
 const links = [
   { name: "Home", href: "/" },
@@ -19,6 +19,7 @@ function Navbar() {
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const pathName: string = usePathname();
+  const [sticky, setSticky] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -27,8 +28,23 @@ function Navbar() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const handleSticky = () => {
+      if (window.scrollY > 100) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleSticky);
+    return () => window.removeEventListener("scroll", handleSticky);
+  }, []);
+
   return (
-    <header className="w-full relative z-50">
+    <header
+      className={`w-full z-40 sticky top-0 transition-all duration-300 ${sticky ? "bg-linear-to-br from-orange-50/90 via-white/90 to-pink-50/90 backdrop-blur-xl  shadow-xl" : ""}`}
+    >
       <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
@@ -47,30 +63,43 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4">
+            <nav className="max-w-screen-2xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex items-center justify-between py-3 sm:py-4">
               {/* Logo */}
-              <div className="shrink-0">
-                <Link href={"/"}>
-                  <h3 className="text-3xl md:text-5xl font-Sofia font-bold text-gray-900">
+              <motion.div
+                className="shrink-0"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Link href="/" className="flex items-center gap-2 group">
+                  <div className="p-2.5 rounded-xl bg-linear-to-br from-rose-500 to-orange-500 text-white shadow-lg group-hover:shadow-xl transition-shadow">
+                    <ChefHat size={24} />
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent hidden sm:block">
                     Food<span className="text-rose-500">vely</span>
                   </h3>
+                  <h3 className="text-2xl font-Sofia font-bold text-gray-900 sm:hidden">
+                    FV
+                  </h3>
                 </Link>
-              </div>
+              </motion.div>
 
               {/* Navigation Links */}
-              <div className="hidden md:block">
-                <ul className="flex flex-row gap-8 items-center">
+              <div className="hidden lg:block">
+                <ul className="flex flex-row gap-1 items-center">
                   {links.map(({ name, href }) => (
                     <li key={href}>
                       <Link
                         href={href}
-                        className={`md:text-lg font-Sofia font-semibold transition-colors duration-300 ${
+                        className={`px-4 py-2.5 rounded-lg font-Sofia font-semibold transition-all duration-300 relative group ${
                           pathName === href
-                            ? "text-red-500 font-bold"
-                            : "text-black hover:text-rose-500"
+                            ? "bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-md"
+                            : "text-gray-700 hover:text-rose-600"
                         }`}
                       >
                         {name}
+                        {pathName !== href && (
+                          <span className="absolute bottom-0 left-4 w-0 h-0.5 bg-linear-to-r from-rose-500 to-orange-500 group-hover:w-8 transition-all duration-300"></span>
+                        )}
                       </Link>
                     </li>
                   ))}
@@ -78,57 +107,94 @@ function Navbar() {
               </div>
 
               {/* Action Buttons */}
-              <div className="hidden md:flex items-center gap-4">
-                <Link
-                  href={"/account/signup"}
-                  className="py-2 px-6 rounded-2xl font-Sofia font-semibold border border-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap"
+              <div className="hidden lg:flex items-center gap-3">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Sign Up
-                </Link>
-                <Link
-                  href={"/account/signin"}
-                  className="py-2 px-6 rounded-2xl font-Sofia font-semibold border border-rose-600 text-rose-600 hover:bg-rose-200 duration-300 hover:shadow whitespace-nowrap"
+                  <Link
+                    href={"/account/signin"}
+                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
+                  >
+                    Sign In
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Sign In
-                </Link>
+                  <Link
+                    href={"/account/signup"}
+                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    Sign Up
+                  </Link>
+                </motion.div>
               </div>
-              <div className="md:hidden">
-                <button
-                  className="py-2 px-3 rounded-2xl border border-rose-500 text-white bg-rose-500 backdrop-blur-lg duration-300 hover:scale-105"
+              <div className="lg:hidden">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="py-2.5 px-3.5 rounded-xl border-2 border-rose-500 text-white bg-linear-to-r from-rose-500 to-orange-500 shadow-lg hover:shadow-xl transition-shadow"
                   onClick={() => setOpenModal(!openModal)}
                 >
-                  <Menu />
-                </button>
+                  <Menu size={24} />
+                </motion.button>
               </div>
-              <div
-                className={`md:hidden h-screen w-full fixed inset-0 top-0 bg-black/50 border border-black duration-500 ease-in-out ${openModal ? "left-0" : "-left-200"}`}
-              >
-                <div className="flex flex-col justify-between gap-12 p-6 bg-rose-50 max-w-xs h-screen relative">
-                  <button
+              <AnimatePresence>
+                {openModal && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     onClick={() => setOpenModal(false)}
-                    className="p-2 rounded-2xl absolute top-2 -right-12 border border-rose-500 bg-rose-500 text-white hover:bg-white/10 backdrop-blur-lg hover:scale-95 hover:text-rose-600 duration-300"
+                    className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                  />
+                )}
+              </AnimatePresence>
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: openModal ? "0%" : "-100%" }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="lg:hidden fixed h-screen inset-y-0 left-0 max-w-xs bg-linear-to-b from-white/95 via-white/90 to-white/95 backdrop-blur-2xl border-r border-white/40 shadow-2xl z-50 overflow-y-auto"
+              >
+                <div className="flex flex-col justify-between h-screen p-6 relative">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setOpenModal(false)}
+                    className="p-2 rounded-xl absolute top-4 right-4 bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-shadow"
                   >
-                    <X />
-                  </button>
-                  <div className="flex flex-col gap-10">
-                    <div className="shrink-0 py-4 flex items-center justify-center">
-                      <Link href={"/"}>
-                        <h3 className="text-3xl md:text-5xl font-Sofia font-bold text-gray-900">
+                    <X size={20} />
+                  </motion.button>
+                  <div className="flex flex-col gap-8">
+                    {/* Mobile Logo */}
+                    <motion.div whileHover={{ scale: 1.05 }}>
+                      <Link
+                        href="/"
+                        onClick={() => setOpenModal(false)}
+                        className="flex items-center gap-3"
+                      >
+                        <div className="p-2 rounded-lg bg-linear-to-br from-rose-500 to-orange-500 text-white shadow-lg">
+                          <ChefHat size={20} />
+                        </div>
+                        <h3 className="text-2xl font-Sofia font-bold bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                           Food<span className="text-rose-500">vely</span>
                         </h3>
                       </Link>
-                    </div>
+                    </motion.div>
                     {/* Navigation Links */}
-                    <div className="py-6">
+                    <div className="border-b border-gray-200 pb-6 mt-6">
                       <ul className="flex flex-col gap-2">
                         {links.map(({ name, href }) => (
                           <li key={href}>
                             <Link
                               href={href}
-                              className={`md:text-lg lg:text-xl p-2 w-full inline-block font-Sofia font-semibold transition-colors duration-300 ${
+                              onClick={() => setOpenModal(false)}
+                              className={`px-4 py-3 rounded-lg w-full block font-Sofia font-semibold transition-all duration-300 ${
                                 pathName === href
-                                  ? "text-red-500 font-bold"
-                                  : "text-black hover:text-rose-500"
+                                  ? "bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-md"
+                                  : "text-gray-700 hover:bg-orange-100/50 hover:text-rose-600"
                               }`}
                             >
                               {name}
@@ -137,60 +203,69 @@ function Navbar() {
                         ))}
                       </ul>
                     </div>
-                    <div className="flex flex-col gap-6">
-                      <div className="flex flex-row gap-2">
-                        <input
-                          type="text"
-                          placeholder="Search your menu..."
-                          className="text-sm border border-rose-500/20 bg-white py-2.5 px-4 rounded-2xl focus:outline-rose-500"
-                        />
-                        <button className="py-2.5 px-4 border border-rose-500 bg-rose-500 text-white hover:bg-rose-600 rounded-2xl w-full flex items-center  justify-center duration-300">
-                          <Search />
-                        </button>
+                    {/* Search and Auth */}
+                    <div className="flex flex-col gap-4">
+                      {/* Search Bar */}
+                      <div className="flex flex-wrap gap-2 justify-end">
+                        <div className="w-full">
+                          <input
+                            type="text"
+                            placeholder="Search menu..."
+                            className="flex-1 text-sm border-2 border-gray-200 bg-white/50 py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all w-full"
+                          />
+                        </div>
+                        <div>
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="py-2.5 px-3 bg-linear-to-r from-rose-500 to-orange-500 text-white hover:shadow-lg transition-shadow rounded-lg"
+                          >
+                            <Search size={20} />
+                          </motion.button>
+                        </div>
                       </div>
                       {/* Action Buttons */}
-                      <div className="flex flex-row gap-4 w-full">
-                        <Link
-                          href={"/account/signup"}
-                          className="py-2 px-6 rounded-2xl flex items-center justify-center font-Sofia font-semibold outline-2 outline-rose-600 bg-rose-500 hover:bg-rose-600 duration-300 hover:shadow text-white whitespace-nowrap w-full"
+                      <div className="hidden flex-col gap-3 w-full">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          Sign Up
-                        </Link>
-                        <Link
-                          href={"/account/signin"}
-                          className="py-2 px-6 rounded-2xl flex items-center justify-center font-Sofia font-semibold outline-2 outline-rose-600 text-rose-600 hover:bg-rose-500 hover:text-white duration-300 hover:shadow whitespace-nowrap w-full"
+                          <Link
+                            href={"/account/signin"}
+                            onClick={() => setOpenModal(false)}
+                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 transition-all w-full"
+                          >
+                            Sign In
+                          </Link>
+                        </motion.div>
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          Sign In
-                        </Link>
+                          <Link
+                            href={"/account/signup"}
+                            onClick={() => setOpenModal(false)}
+                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-all w-full"
+                          >
+                            Sign Up
+                          </Link>
+                        </motion.div>
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <div className="hidden items-center gap-4 py-2 px-3.5 rounded-2xl hover:bg-rose-100 hover:-translate-y-0.5 duration-300 shadow-md shadow-rose-500/10 hover:shadow-rose-500/50 bg-rose-500/5 cursor-pointer">
-                      <div>
-                        <Image
-                          src={"/logos/user.jpg"}
-                          height={200}
-                          width={200}
-                          alt="User icons"
-                          className="aspect-square max-w-8 rounded-full outline-2 outline-rose-600 shadow-md shadow-rose-600"
-                        />
-                      </div>
-                      <div className="overflow-hidden">
-                        <h3 className="text-sm font-semibold">Al Amin Islam</h3>
-                        <p className="text-[11px] truncate text-gray-400">
-                          alaminislam4122.bd@gmail.com
-                        </p>
-                      </div>
-                    </div>
-                    <div>
-                      <button className="py-2 px-6 rounded-2xl font-Sofia font-semibold outline-2 outline-rose-600 bg-rose-50 hover:bg-rose-600/90 duration-300 hover:shadow text-rose-600 hover:text-white whitespace-nowrap w-full hover:-translate-y-0.5 shadow-md shadow-rose-500/10 hover:shadow-rose-500/50">
-                        Log out
-                      </button>
-                    </div>
+                  {/* Footer Section */}
+                  <div className="flex flex-col gap-3 border-t border-gray-200">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-50 to-orange-50 border-2 border-rose-200 text-rose-600 hover:border-rose-400 hover:bg-linear-to-r hover:from-rose-100 hover:to-orange-100 transition-all flex items-center justify-center gap-2"
+                    >
+                      <LogOut size={18} />
+                      Log out
+                    </motion.button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </nav>
           </motion.div>
         )}

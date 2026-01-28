@@ -4,7 +4,7 @@ function NavbarSkeleton() {
   return (
     <div className="w-full">
       <nav className="max-w-360 mx-auto w-11/12 py-4 flex items-center justify-between animate-pulse">
-        <div className="h-14 lg:h-26 w-46 md:h-12 md:w-40 bg-rose-400 rounded-md"></div>
+        <div className="h-14 w-46 md:h-12 md:w-40 bg-rose-400 rounded-md"></div>
 
         <div className="hidden md:block">
           <ul className="flex flex-row gap-8 items-center">
