@@ -11,7 +11,8 @@ import { Menu, Search, X, LogOut, ChefHat, ShoppingCart } from "lucide-react";
 const links = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
-  { name: "Service", href: "/service" },
+  { name: "Blog", href: "/blog" },
+  { name: "Restaurant", href: "/restaurant" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -63,7 +64,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-3 sm:py-4">
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4 lg:py-6">
               <motion.div
                 className="shrink-0"
                 whileHover={{ scale: 1.05 }}
@@ -83,7 +84,7 @@ function Navbar() {
               </motion.div>
 
               <div className="hidden lg:block">
-                <ul className="flex flex-row gap-1 items-center">
+                <ul className="flex flex-row gap-4 items-center">
                   {links.map(({ name, href }) => (
                     <li key={href}>
                       <Link
@@ -96,7 +97,7 @@ function Navbar() {
                       >
                         {name}
                         {pathName !== href && (
-                          <span className="absolute bottom-0 left-4 w-0 h-0.5 bg-linear-to-r from-rose-500 to-orange-500 group-hover:w-8 transition-all duration-300"></span>
+                          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-rose-500 to-orange-500 group-hover:w-full transition-all duration-300"></span>
                         )}
                       </Link>
                     </li>

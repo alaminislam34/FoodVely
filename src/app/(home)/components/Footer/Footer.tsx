@@ -37,13 +37,13 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-linear-to-b from-white/80 to-white/80 backdrop-blur-sm py-16 md:py-20 relative mt-50 shadow-md
+      className="bg-linear-to-br from-white to-white/80 backdrop-blur-sm py-16 md:py-20 relative mt-50 shadow-md
     "
     >
       {/* Newsletter Section */}
       <motion.div
         variants={itemVariants}
-        className="max-w-360 mx-auto w-11/12 bg-white/80 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 md:p-8 mb-8 shadow-md absolute -top-40 left-1/2 -translate-x-1/2"
+        className="max-w-3xl mx-auto w-11/12 bg-linear-to-br from-white via-orange-50 to-orange-200 backdrop-blur-2xl rounded-3xl p-6 md:p-8 mb-8 shadow-md absolute -top-40 left-1/2 -translate-x-1/2"
       >
         <div className="flex flex-col gap-8 items-center">
           <div className="flex flex-col gap-4 items-center">
@@ -76,7 +76,7 @@ export default function Footer() {
         className="max-w-screen-2xl mx-auto w-11/12 pt-10"
       >
         {/* Main Footer Content */}
-        <div className="flex flex-wrap items-start gap-8 mb-12">
+        <div className="flex flex-wrap items-start justify-between gap-8 mb-12">
           {/* Brand Section */}
           <motion.div variants={itemVariants} className="space-y-4 max-w-md">
             <h3 className="text-2xl md:text-3xl lg:text-4xl font-Sofia font-bold text-gray-900">
@@ -116,7 +116,7 @@ export default function Footer() {
           </motion.div>
 
           {/* Quick Links */}
-          <motion.div variants={itemVariants} className="space-y-4 md:min-w-xs">
+          <motion.div variants={itemVariants} className="space-y-4 md:min-w-65">
             <h4 className="font-Sofia font-bold text-gray-900 text-lg">
               Quick Links
             </h4>
@@ -141,7 +141,7 @@ export default function Footer() {
           </motion.div>
 
           {/* Categories */}
-          <motion.div variants={itemVariants} className="space-y-4 md:min-w-xs">
+          <motion.div variants={itemVariants} className="space-y-4 md:min-w-65">
             <h4 className="font-Sofia font-bold text-gray-900 text-lg">
               Categories
             </h4>
@@ -166,7 +166,7 @@ export default function Footer() {
           </motion.div>
 
           {/* Contact Info */}
-          <motion.div variants={itemVariants} className="space-y-4 md:min-w-xs">
+          <motion.div variants={itemVariants} className="space-y-4 md:min-w-65">
             <h4 className="font-Sofia font-bold text-gray-900 text-lg">
               Contact Us
             </h4>
@@ -227,26 +227,19 @@ export default function Footer() {
           </div>
 
           {/* Legal Links */}
-          <div className="flex gap-6 items-center flex-wrap justify-center">
+          <div className="flex gap-4 items-center flex-wrap justify-center">
             <Link
               href="/privacy"
-              className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium"
+              className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium hover:underline underline-offset-2"
             >
               Privacy Policy
             </Link>
-            <span className="text-gray-300">•</span>
+
             <Link
               href="/terms"
-              className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium"
+              className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium hover:underline underline-offset-2"
             >
               Terms & Conditions
-            </Link>
-            <span className="text-gray-300">•</span>
-            <Link
-              href="/faq"
-              className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium"
-            >
-              FAQ
             </Link>
           </div>
         </motion.div>

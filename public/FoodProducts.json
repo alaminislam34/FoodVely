@@ -1,0 +1,1186 @@
+[
+  {
+    "id": "p201",
+    "name": "Beef Biryani",
+    "slug": "beef-biryani",
+    "description": "Slow-cooked beef biryani prepared with fragrant basmati rice and rich spices.",
+    "shortDescription": "Rich beef biryani",
+
+    "price": 400,
+    "discountPrice": 370,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/beef-biryani2.png"],
+    "thumbnail": "/images/beef-biryani1.png",
+
+    "category": {
+      "id": "cat-biryani",
+      "name": "Biryani",
+      "slug": "biryani"
+    },
+
+    "provider": {
+      "id": "res-4",
+      "name": "FoodVely Kitchen",
+      "slug": "foodvely-kitchen",
+      "logo": "/images/providers/foodvely.png",
+      "rating": 4.7
+    },
+
+    "rating": {
+      "average": 4.7,
+      "totalReviews": 180
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": true,
+      "calories": 680,
+      "preparationTime": 35
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 40
+    },
+
+    "tags": ["biryani", "beef", "spicy"],
+    "isFeatured": false,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Beef Biryani | FoodVely",
+      "metaDescription": "Order delicious beef biryani online from FoodVely.",
+      "keywords": ["beef biryani", "bangladeshi food"]
+    },
+
+    "createdAt": "2025-01-08T00:00:00.000Z",
+    "updatedAt": "2025-01-15T00:00:00.000Z"
+  },
+
+  {
+    "id": "p202",
+    "name": "Classic Chicken Burger",
+    "slug": "classic-chicken-burger",
+    "description": "Grilled chicken burger with fresh lettuce, tomato, and creamy mayo.",
+    "shortDescription": "Juicy chicken burger",
+
+    "price": 250,
+    "discountPrice": 220,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/burger2.png"],
+    "thumbnail": "/images/burger1.png",
+
+    "category": {
+      "id": "cat-burger",
+      "name": "Burger",
+      "slug": "burger"
+    },
+
+    "provider": {
+      "id": "res-1",
+      "name": "Burger House",
+      "slug": "burger-house",
+      "logo": "/images/providers/burgerhouse.png",
+      "rating": 4.5
+    },
+
+    "rating": {
+      "average": 4.5,
+      "totalReviews": 210
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 520,
+      "preparationTime": 15
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 60
+    },
+
+    "tags": ["burger", "chicken", "fast-food"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Chicken Burger | FoodVely",
+      "metaDescription": "Order juicy chicken burger online.",
+      "keywords": ["chicken burger", "fast food"]
+    },
+
+    "createdAt": "2025-01-02T00:00:00.000Z",
+    "updatedAt": "2025-01-12T00:00:00.000Z"
+  },
+
+  {
+    "id": "p203",
+    "name": "Beef Cheese Burger",
+    "slug": "beef-cheese-burger",
+    "description": "Beef patty topped with melted cheese and signature sauce.",
+    "shortDescription": "Cheesy beef burger",
+
+    "price": 320,
+    "discountPrice": 290,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/beef-burger1.png",
+
+    "category": {
+      "id": "cat-burger",
+      "name": "Burger",
+      "slug": "burger"
+    },
+
+    "provider": {
+      "id": "res-1",
+      "name": "Burger House",
+      "slug": "burger-house",
+      "logo": "/images/providers/burgerhouse.png",
+      "rating": 4.6
+    },
+
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 160
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 600,
+      "preparationTime": 18
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 45
+    },
+
+    "tags": ["burger", "beef", "cheese"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Beef Cheese Burger | FoodVely",
+      "metaDescription": "Cheesy beef burger with premium taste.",
+      "keywords": ["beef burger", "cheese burger"]
+    },
+
+    "createdAt": "2025-01-03T00:00:00.000Z",
+    "updatedAt": "2025-01-13T00:00:00.000Z"
+  },
+
+  {
+    "id": "p204",
+    "name": "Chicken Supreme Pizza",
+    "slug": "chicken-supreme-pizza",
+    "description": "Oven-baked pizza loaded with chicken, olives, and mozzarella cheese.",
+    "shortDescription": "Cheesy chicken pizza",
+
+    "price": 550,
+    "discountPrice": 500,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/pizza2.png"],
+    "thumbnail": "/images/pizza1.png",
+
+    "category": {
+      "id": "cat-pizza",
+      "name": "Pizza",
+      "slug": "pizza"
+    },
+
+    "provider": {
+      "id": "res-2",
+      "name": "Pizza Corner",
+      "slug": "pizza-corner",
+      "logo": "/images/providers/pizzacorner.png",
+      "rating": 4.7
+    },
+
+    "rating": {
+      "average": 4.7,
+      "totalReviews": 240
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 720,
+      "preparationTime": 25
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 30
+    },
+
+    "tags": ["pizza", "chicken", "cheese"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Chicken Pizza | FoodVely",
+      "metaDescription": "Order delicious chicken pizza online.",
+      "keywords": ["chicken pizza", "cheese pizza"]
+    },
+
+    "createdAt": "2025-01-04T00:00:00.000Z",
+    "updatedAt": "2025-01-14T00:00:00.000Z"
+  },
+
+  {
+    "id": "p205",
+    "name": "French Fries",
+    "slug": "french-fries",
+    "description": "Crispy golden french fries served hot.",
+    "shortDescription": "Crispy fries",
+
+    "price": 120,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/fries1.png",
+
+    "category": {
+      "id": "cat-snacks",
+      "name": "Snacks",
+      "slug": "snacks"
+    },
+
+    "provider": {
+      "id": "res-5",
+      "name": "Snack Hub",
+      "slug": "snack-hub",
+      "logo": "/images/providers/snackhub.png",
+      "rating": 4.3
+    },
+
+    "rating": {
+      "average": 4.3,
+      "totalReviews": 300
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 420,
+      "preparationTime": 10
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 100
+    },
+
+    "tags": ["snacks", "fries", "fast-food"],
+    "isFeatured": false,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "French Fries | FoodVely",
+      "metaDescription": "Hot and crispy french fries.",
+      "keywords": ["french fries", "snacks"]
+    },
+
+    "createdAt": "2025-01-05T00:00:00.000Z",
+    "updatedAt": "2025-01-15T00:00:00.000Z"
+  },
+  {
+    "id": "p206",
+    "name": "Chicken Shawarma Wrap",
+    "slug": "chicken-shawarma-wrap",
+    "description": "Middle Eastern style chicken shawarma wrapped with garlic sauce and fresh vegetables.",
+    "shortDescription": "Juicy chicken shawarma",
+
+    "price": 200,
+    "discountPrice": 180,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/shawarma2.png"],
+    "thumbnail": "/images/shawarma1.png",
+
+    "category": {
+      "id": "cat-wrap",
+      "name": "Wrap",
+      "slug": "wrap"
+    },
+
+    "provider": {
+      "id": "res-5",
+      "name": "Arabian Bites",
+      "slug": "arabian-bites",
+      "logo": "/images/providers/arabianbites.png",
+      "rating": 4.4
+    },
+
+    "rating": {
+      "average": 4.4,
+      "totalReviews": 130
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 480,
+      "preparationTime": 12
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 55
+    },
+
+    "tags": ["shawarma", "wrap", "chicken"],
+    "isFeatured": false,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Chicken Shawarma | FoodVely",
+      "metaDescription": "Order delicious chicken shawarma wrap online.",
+      "keywords": ["chicken shawarma", "wrap"]
+    },
+
+    "createdAt": "2025-01-11T00:00:00.000Z",
+    "updatedAt": "2025-01-18T00:00:00.000Z"
+  },
+
+  {
+    "id": "p207",
+    "name": "Chicken Fried Rice",
+    "slug": "chicken-fried-rice",
+    "description": "Wok-fried rice with tender chicken, vegetables, and soy sauce.",
+    "shortDescription": "Classic chicken fried rice",
+
+    "price": 280,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/friedrice1.png",
+
+    "category": {
+      "id": "cat-rice",
+      "name": "Rice",
+      "slug": "rice"
+    },
+
+    "provider": {
+      "id": "res-3",
+      "name": "Asian Kitchen",
+      "slug": "asian-kitchen",
+      "logo": "/images/providers/asiankitchen.png",
+      "rating": 4.3
+    },
+
+    "rating": {
+      "average": 4.3,
+      "totalReviews": 95
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 560,
+      "preparationTime": 20
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 70
+    },
+
+    "tags": ["rice", "chicken", "asian"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Chicken Fried Rice | FoodVely",
+      "metaDescription": "Order tasty chicken fried rice online.",
+      "keywords": ["fried rice", "chicken rice"]
+    },
+
+    "createdAt": "2025-01-12T00:00:00.000Z",
+    "updatedAt": "2025-01-18T00:00:00.000Z"
+  },
+
+  {
+    "id": "p208",
+    "name": "Beef Kebab Platter",
+    "slug": "beef-kebab-platter",
+    "description": "Grilled beef kebabs served with naan and salad.",
+    "shortDescription": "Grilled beef kebab",
+
+    "price": 450,
+    "discountPrice": 420,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/kebab2.png"],
+    "thumbnail": "/images/kebab1.png",
+
+    "category": {
+      "id": "cat-kebab",
+      "name": "Kebab",
+      "slug": "kebab"
+    },
+
+    "provider": {
+      "id": "res-7",
+      "name": "Grill Master",
+      "slug": "grill-master",
+      "logo": "/images/providers/grillmaster.png",
+      "rating": 4.6
+    },
+
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 160
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": true,
+      "calories": 650,
+      "preparationTime": 22
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 35
+    },
+
+    "tags": ["kebab", "beef", "grill"],
+    "isFeatured": true,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Beef Kebab | FoodVely",
+      "metaDescription": "Order juicy beef kebab platter online.",
+      "keywords": ["beef kebab", "grilled food"]
+    },
+
+    "createdAt": "2025-01-13T00:00:00.000Z",
+    "updatedAt": "2025-01-19T00:00:00.000Z"
+  },
+
+  {
+    "id": "p209",
+    "name": "Vegetable Pasta",
+    "slug": "vegetable-pasta",
+    "description": "Creamy pasta cooked with fresh vegetables and herbs.",
+    "shortDescription": "Creamy veg pasta",
+
+    "price": 300,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/pasta1.png",
+
+    "category": {
+      "id": "cat-pasta",
+      "name": "Pasta",
+      "slug": "pasta"
+    },
+
+    "provider": {
+      "id": "res-8",
+      "name": "Italiano",
+      "slug": "italiano",
+      "logo": "/images/providers/italiano.png",
+      "rating": 4.2
+    },
+
+    "rating": {
+      "average": 4.2,
+      "totalReviews": 85
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 540,
+      "preparationTime": 20
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 50
+    },
+
+    "tags": ["pasta", "vegetarian", "italian"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Vegetable Pasta | FoodVely",
+      "metaDescription": "Order creamy vegetable pasta online.",
+      "keywords": ["veg pasta", "italian food"]
+    },
+
+    "createdAt": "2025-01-14T00:00:00.000Z",
+    "updatedAt": "2025-01-19T00:00:00.000Z"
+  },
+
+  {
+    "id": "p210",
+    "name": "Mango Milkshake",
+    "slug": "mango-milkshake",
+    "description": "Refreshing mango milkshake made with real mango pulp.",
+    "shortDescription": "Fresh mango shake",
+
+    "price": 160,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/mango-shake1.png",
+
+    "category": {
+      "id": "cat-drinks",
+      "name": "Drinks",
+      "slug": "drinks"
+    },
+
+    "provider": {
+      "id": "res-6",
+      "name": "Cool Drinks",
+      "slug": "cool-drinks",
+      "logo": "/images/providers/cooldrinks.png",
+      "rating": 4.5
+    },
+
+    "rating": {
+      "average": 4.5,
+      "totalReviews": 140
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 360,
+      "preparationTime": 5
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 80
+    },
+
+    "tags": ["drink", "milkshake", "mango"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Mango Milkshake | FoodVely",
+      "metaDescription": "Fresh mango milkshake available online.",
+      "keywords": ["mango milkshake", "cold drinks"]
+    },
+
+    "createdAt": "2025-01-15T00:00:00.000Z",
+    "updatedAt": "2025-01-20T00:00:00.000Z"
+  },
+  {
+    "id": "p211",
+    "name": "Chicken Tikka Kebab",
+    "slug": "chicken-tikka-kebab",
+    "description": "Charcoal-grilled chicken tikka marinated with traditional spices.",
+    "shortDescription": "Smoky chicken tikka",
+
+    "price": 380,
+    "discountPrice": 350,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg", "/images/chicken-tikka2.png"],
+    "thumbnail": "/images/chicken-tikka1.png",
+
+    "category": {
+      "id": "cat-kebab",
+      "name": "Kebab",
+      "slug": "kebab"
+    },
+
+    "provider": {
+      "id": "res-7",
+      "name": "Grill Master",
+      "slug": "grill-master",
+      "logo": "/images/providers/grillmaster.png",
+      "rating": 4.6
+    },
+
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 190
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": true,
+      "calories": 540,
+      "preparationTime": 20
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 45
+    },
+
+    "tags": ["chicken", "kebab", "grill"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Chicken Tikka Kebab | FoodVely",
+      "metaDescription": "Order smoky chicken tikka kebab online.",
+      "keywords": ["chicken tikka", "kebab"]
+    },
+
+    "createdAt": "2025-01-16T00:00:00.000Z",
+    "updatedAt": "2025-01-22T00:00:00.000Z"
+  },
+
+  {
+    "id": "p212",
+    "name": "Beef Tehari",
+    "slug": "beef-tehari",
+    "description": "Old Dhaka style beef tehari cooked with fragrant rice and spices.",
+    "shortDescription": "Authentic beef tehari",
+
+    "price": 420,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/tehari1.png",
+
+    "category": {
+      "id": "cat-rice",
+      "name": "Rice",
+      "slug": "rice"
+    },
+
+    "provider": {
+      "id": "res-9",
+      "name": "Dhaka Delights",
+      "slug": "dhaka-delights",
+      "logo": "/images/providers/dhakadelights.png",
+      "rating": 4.7
+    },
+
+    "rating": {
+      "average": 4.7,
+      "totalReviews": 210
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": true,
+      "calories": 700,
+      "preparationTime": 35
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 30
+    },
+
+    "tags": ["tehari", "beef", "bangladeshi"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Beef Tehari | FoodVely",
+      "metaDescription": "Order Old Dhaka style beef tehari online.",
+      "keywords": ["beef tehari", "bangladeshi food"]
+    },
+
+    "createdAt": "2025-01-16T00:00:00.000Z",
+    "updatedAt": "2025-01-22T00:00:00.000Z"
+  },
+
+  {
+    "id": "p213",
+    "name": "Fish Fry",
+    "slug": "fish-fry",
+    "description": "Crispy fried fish coated with special masala.",
+    "shortDescription": "Crispy fish fry",
+
+    "price": 260,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/fish-fry1.png",
+
+    "category": {
+      "id": "cat-seafood",
+      "name": "Seafood",
+      "slug": "seafood"
+    },
+
+    "provider": {
+      "id": "res-10",
+      "name": "SeaFresh",
+      "slug": "seafresh",
+      "logo": "/images/providers/seafresh.png",
+      "rating": 4.4
+    },
+
+    "rating": {
+      "average": 4.4,
+      "totalReviews": 125
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 480,
+      "preparationTime": 15
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 60
+    },
+
+    "tags": ["fish", "seafood", "fried"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Fish Fry | FoodVely",
+      "metaDescription": "Crispy fried fish available online.",
+      "keywords": ["fish fry", "seafood"]
+    },
+
+    "createdAt": "2025-01-17T00:00:00.000Z",
+    "updatedAt": "2025-01-23T00:00:00.000Z"
+  },
+
+  {
+    "id": "p214",
+    "name": "Paneer Butter Masala",
+    "slug": "paneer-butter-masala",
+    "description": "Soft paneer cubes cooked in rich buttery tomato gravy.",
+    "shortDescription": "Creamy paneer curry",
+
+    "price": 340,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/paneer1.png",
+
+    "category": {
+      "id": "cat-curry",
+      "name": "Curry",
+      "slug": "curry"
+    },
+
+    "provider": {
+      "id": "res-11",
+      "name": "Veggie Bowl",
+      "slug": "veggie-bowl",
+      "logo": "/images/providers/veggiebowl.png",
+      "rating": 4.3
+    },
+
+    "rating": {
+      "average": 4.3,
+      "totalReviews": 140
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 560,
+      "preparationTime": 25
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 40
+    },
+
+    "tags": ["paneer", "vegetarian", "curry"],
+    "isFeatured": false,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Paneer Butter Masala | FoodVely",
+      "metaDescription": "Order creamy paneer butter masala online.",
+      "keywords": ["paneer curry", "vegetarian food"]
+    },
+
+    "createdAt": "2025-01-17T00:00:00.000Z",
+    "updatedAt": "2025-01-23T00:00:00.000Z"
+  },
+
+  {
+    "id": "p215",
+    "name": "Hot Cappuccino",
+    "slug": "hot-cappuccino",
+    "description": "Freshly brewed cappuccino with rich aroma and foam.",
+    "shortDescription": "Hot cappuccino",
+
+    "price": 180,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/cappuccino1.png",
+
+    "category": {
+      "id": "cat-coffee",
+      "name": "Coffee",
+      "slug": "coffee"
+    },
+
+    "provider": {
+      "id": "res-12",
+      "name": "Coffee Lab",
+      "slug": "coffee-lab",
+      "logo": "/images/providers/coffeelab.png",
+      "rating": 4.6
+    },
+
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 175
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 120,
+      "preparationTime": 5
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 90
+    },
+
+    "tags": ["coffee", "hot-drink"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Hot Cappuccino | FoodVely",
+      "metaDescription": "Enjoy freshly brewed cappuccino online.",
+      "keywords": ["cappuccino", "coffee"]
+    },
+
+    "createdAt": "2025-01-18T00:00:00.000Z",
+    "updatedAt": "2025-01-24T00:00:00.000Z"
+  },
+
+  {
+    "id": "p216",
+    "name": "Chocolate Lava Cake",
+    "slug": "chocolate-lava-cake",
+    "description": "Warm chocolate cake with molten chocolate center.",
+    "shortDescription": "Molten chocolate cake",
+
+    "price": 220,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/lavacake1.png",
+
+    "category": {
+      "id": "cat-dessert",
+      "name": "Dessert",
+      "slug": "dessert"
+    },
+
+    "provider": {
+      "id": "res-13",
+      "name": "Sweet Tooth",
+      "slug": "sweet-tooth",
+      "logo": "/images/providers/sweettooth.png",
+      "rating": 4.8
+    },
+
+    "rating": {
+      "average": 4.8,
+      "totalReviews": 260
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 430,
+      "preparationTime": 12
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 50
+    },
+
+    "tags": ["dessert", "chocolate"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Chocolate Lava Cake | FoodVely",
+      "metaDescription": "Order delicious chocolate lava cake online.",
+      "keywords": ["lava cake", "chocolate dessert"]
+    },
+
+    "createdAt": "2025-01-18T00:00:00.000Z",
+    "updatedAt": "2025-01-24T00:00:00.000Z"
+  },
+
+  {
+    "id": "p217",
+    "name": "Chicken Noodles",
+    "slug": "chicken-noodles",
+    "description": "Stir-fried noodles with chicken and vegetables.",
+    "shortDescription": "Classic chicken noodles",
+
+    "price": 260,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/noodles1.png",
+
+    "category": {
+      "id": "cat-noodles",
+      "name": "Noodles",
+      "slug": "noodles"
+    },
+
+    "provider": {
+      "id": "res-3",
+      "name": "Asian Kitchen",
+      "slug": "asian-kitchen",
+      "logo": "/images/providers/asiankitchen.png",
+      "rating": 4.4
+    },
+
+    "rating": {
+      "average": 4.4,
+      "totalReviews": 155
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": false,
+      "calories": 580,
+      "preparationTime": 18
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 65
+    },
+
+    "tags": ["noodles", "chicken", "asian"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Chicken Noodles | FoodVely",
+      "metaDescription": "Order tasty chicken noodles online.",
+      "keywords": ["chicken noodles", "asian food"]
+    },
+
+    "createdAt": "2025-01-19T00:00:00.000Z",
+    "updatedAt": "2025-01-25T00:00:00.000Z"
+  },
+
+  {
+    "id": "p218",
+    "name": "Beef Haleem",
+    "slug": "beef-haleem",
+    "description": "Slow-cooked beef haleem made with lentils and wheat.",
+    "shortDescription": "Traditional beef haleem",
+
+    "price": 300,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/haleem1.png",
+
+    "category": {
+      "id": "cat-haleem",
+      "name": "Haleem",
+      "slug": "haleem"
+    },
+
+    "provider": {
+      "id": "res-9",
+      "name": "Dhaka Delights",
+      "slug": "dhaka-delights",
+      "logo": "/images/providers/dhakadelights.png",
+      "rating": 4.7
+    },
+
+    "rating": {
+      "average": 4.7,
+      "totalReviews": 230
+    },
+
+    "foodInfo": {
+      "isVeg": false,
+      "isSpicy": true,
+      "calories": 640,
+      "preparationTime": 40
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 35
+    },
+
+    "tags": ["haleem", "beef", "traditional"],
+    "isFeatured": true,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Beef Haleem | FoodVely",
+      "metaDescription": "Order traditional beef haleem online.",
+      "keywords": ["beef haleem", "traditional food"]
+    },
+
+    "createdAt": "2025-01-19T00:00:00.000Z",
+    "updatedAt": "2025-01-25T00:00:00.000Z"
+  },
+
+  {
+    "id": "p219",
+    "name": "Ice Cream Sundae",
+    "slug": "ice-cream-sundae",
+    "description": "Vanilla ice cream topped with chocolate syrup and nuts.",
+    "shortDescription": "Classic ice cream sundae",
+
+    "price": 190,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/sundae1.png",
+
+    "category": {
+      "id": "cat-dessert",
+      "name": "Dessert",
+      "slug": "dessert"
+    },
+
+    "provider": {
+      "id": "res-13",
+      "name": "Sweet Tooth",
+      "slug": "sweet-tooth",
+      "logo": "/images/providers/sweettooth.png",
+      "rating": 4.6
+    },
+
+    "rating": {
+      "average": 4.6,
+      "totalReviews": 200
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 390,
+      "preparationTime": 5
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 70
+    },
+
+    "tags": ["dessert", "ice-cream"],
+    "isFeatured": false,
+    "isBestSeller": true,
+
+    "seo": {
+      "metaTitle": "Ice Cream Sundae | FoodVely",
+      "metaDescription": "Order ice cream sundae online.",
+      "keywords": ["ice cream sundae", "dessert"]
+    },
+
+    "createdAt": "2025-01-20T00:00:00.000Z",
+    "updatedAt": "2025-01-26T00:00:00.000Z"
+  },
+
+  {
+    "id": "p220",
+    "name": "Fresh Lemonade",
+    "slug": "fresh-lemonade",
+    "description": "Refreshing homemade lemonade with mint.",
+    "shortDescription": "Cool fresh lemonade",
+
+    "price": 120,
+    "currency": "BDT",
+
+    "images": ["/images/Spaghetti.jpg"],
+    "thumbnail": "/images/lemonade1.png",
+
+    "category": {
+      "id": "cat-drinks",
+      "name": "Drinks",
+      "slug": "drinks"
+    },
+
+    "provider": {
+      "id": "res-6",
+      "name": "Cool Drinks",
+      "slug": "cool-drinks",
+      "logo": "/images/providers/cooldrinks.png",
+      "rating": 4.4
+    },
+
+    "rating": {
+      "average": 4.4,
+      "totalReviews": 160
+    },
+
+    "foodInfo": {
+      "isVeg": true,
+      "isSpicy": false,
+      "calories": 110,
+      "preparationTime": 4
+    },
+
+    "availability": {
+      "status": "active",
+      "isAvailable": true,
+      "stock": 100
+    },
+
+    "tags": ["drink", "lemonade"],
+    "isFeatured": false,
+    "isBestSeller": false,
+
+    "seo": {
+      "metaTitle": "Fresh Lemonade | FoodVely",
+      "metaDescription": "Order refreshing lemonade online.",
+      "keywords": ["lemonade", "cold drinks"]
+    },
+
+    "createdAt": "2025-01-20T00:00:00.000Z",
+    "updatedAt": "2025-01-26T00:00:00.000Z"
+  }
+]

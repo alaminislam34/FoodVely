@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 
 const foodCategories = [
   {
@@ -76,8 +77,10 @@ interface Category {
 }
 
 const CategoryCard = ({ category }: { category: Category }) => {
+  const route = useRouter();
   return (
     <motion.div
+      onClick={() => route.push(`/menu?slug=${category.slug}`)}
       variants={cardVariants}
       className="group relative flex flex-col items-center justify-center bg-white/40 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/20 shadow-xl hover:shadow-rose-200/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer"
     >

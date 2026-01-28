@@ -268,7 +268,7 @@ export default function Banner() {
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl xl:text-8xl font-Sofia font-bold text-slate-900 leading-normal">
+            <h1 className="text-5xl md:text-7xl xl:text-8xl font-Sofia font-bold text-slate-900 leading-[1.1]">
               Fresh, Local, <br />
               <span className="text-transparent bg-clip-text bg-linear-to-r from-rose-600 to-orange-500 px-2">
                 Delicious
@@ -287,14 +287,14 @@ export default function Banner() {
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start mt-4">
               <Link
                 href="/account/signup"
-                className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                className="py-2.5 px-6 rounded-xl font-Sofia ring-2 ring-rose-600 font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl duration-300"
               >
                 <span className="relative">Order Now</span>
               </Link>
 
               <Link
                 href="/account/signin"
-                className="py-2.5 px-6 rounded-xl font-Sofia font-semibold border-2 bg-clip-border border-transparent bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 bg-transparent text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 bg-transparent text-transparent bg-clip-text ring-2 ring-rose-600 shadow-lg hover:shadow-xl duration-300"
               >
                 Explore More
               </Link>
