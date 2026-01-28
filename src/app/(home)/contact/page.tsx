@@ -53,7 +53,7 @@ export default function Contact() {
     {
       icon: Mail,
       label: "Email",
-      value: "support@foodvely.com",
+      value: "support@FoodVally.com",
       color: "bg-blue-500",
     },
     {

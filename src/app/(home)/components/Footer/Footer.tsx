@@ -80,7 +80,7 @@ export default function Footer() {
           {/* Brand Section */}
           <motion.div variants={itemVariants} className="space-y-4 max-w-md">
             <h3 className="text-2xl md:text-3xl lg:text-4xl font-Sofia font-bold text-gray-900">
-              Food<span className="text-rose-500">vely</span>
+              Food<span className="text-rose-500">Vally</span>
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed">
               Taste the Local Harvest in Every Bite. Fresh, local, and delicious
@@ -191,10 +191,10 @@ export default function Footer() {
               <div className="flex gap-3 items-center">
                 <Mail size={20} className="text-rose-500 shrink-0" />
                 <a
-                  href="mailto:info@foodvely.com"
+                  href="mailto:info@FoodVally.com"
                   className="text-gray-600 hover:text-rose-500 transition-colors text-sm font-medium"
                 >
-                  info@foodvely.com
+                  info@FoodVally.com
                 </a>
               </div>
               <div className="flex gap-3 items-center">
@@ -220,7 +220,7 @@ export default function Footer() {
         >
           <div className="text-center md:text-left">
             <p className="text-gray-600 text-sm flex items-center justify-center md:justify-start gap-2">
-              &copy; {currentYear} Foodvely. Made with{" "}
+              &copy; {currentYear} FoodVally. Made with{" "}
               <Heart size={16} className="text-rose-500 fill-rose-500" /> for
               food lovers.
             </p>

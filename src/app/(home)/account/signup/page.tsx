@@ -157,7 +157,7 @@ export default function SignUp() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
-              Join Foodvely
+              Join FoodVally
             </h1>
             <p className="text-gray-600 font-Sofia">
               Create your account to get started

@@ -75,7 +75,7 @@ function Navbar() {
                     <ChefHat size={24} />
                   </div>
                   <h3 className="text-2xl sm:text-3xl lg:text-4xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent hidden sm:block">
-                    Food<span className="text-rose-500">vely</span>
+                    Food<span className="text-rose-500">Vally</span>
                   </h3>
                   <h3 className="text-2xl font-Sofia font-bold text-gray-900 sm:hidden">
                     FV
@@ -194,7 +194,7 @@ function Navbar() {
                           <ChefHat size={20} />
                         </div>
                         <h3 className="text-2xl font-Sofia font-bold bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                          Food<span className="text-rose-500">vely</span>
+                          Food<span className="text-rose-500">Vally</span>
                         </h3>
                       </Link>
                     </motion.div>

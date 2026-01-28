@@ -6,13 +6,13 @@ import RestaurantCard from "@/app/ui/ProviderCard";
 const providers = [
   {
     id: "prov_101",
-    name: "FoodVely Kitchen",
-    slug: "foodvely-kitchen",
+    name: "FoodVally Kitchen",
+    slug: "FoodVally-kitchen",
     description: "Best homemade food with authentic Bangla taste.",
     owner: {
       name: "Rahim Uddin",
       phone: "017XXXXXXXX",
-      email: "foodvely@gmail.com",
+      email: "FoodVally@gmail.com",
     },
     location: {
       address: "Dhanmondi 27, Dhaka",
@@ -22,8 +22,8 @@ const providers = [
     },
     categories: ["Biriyani", "Chicken", "Rice Bowls"],
     images: {
-      logo: "/images/providers/foodvely-logo.png",
-      cover: "/images/providers/covers/FoodVelyKitchen.jpg",
+      logo: "/images/providers/FoodVally-logo.png",
+      cover: "/images/providers/covers/FoodVallyKitchen.jpg",
     },
     rating: { average: 4.6, totalReviews: 320 },
     delivery: {

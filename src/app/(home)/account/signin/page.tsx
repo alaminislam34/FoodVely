@@ -91,7 +91,7 @@ export default function SignIn() {
               Welcome Back
             </h1>
             <p className="text-gray-600 font-Sofia">
-              Sign in to your Foodvely account
+              Sign in to your FoodVally account
             </p>
           </div>
 

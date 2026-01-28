@@ -80,7 +80,7 @@ export function AboutSection() {
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-rose-600 to-orange-600 bg-clip-text text-transparent leading-normal pl-2"
               >
-                About FoodVely
+                About FoodVally
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
@@ -88,7 +88,7 @@ export function AboutSection() {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="text-lg text-gray-600 leading-relaxed"
               >
-                At FoodVely, we serve the most delicious and crispy fried
+                At FoodVally, we serve the most delicious and crispy fried
                 chicken that you'll ever taste. Our recipes are crafted with
                 love and perfection, bringing people together over great food!
               </motion.p>
