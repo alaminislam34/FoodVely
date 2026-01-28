@@ -204,17 +204,18 @@ export default function RestaurantDetails({
   ] as string[];
 
   return (
-    <section className="min-h-screen bg-white pb-16">
+    <section className="min-h-screen pb-16 max-w-360 mx-auto w-11/12">
       {/* --- HERO SECTION --- */}
-      <div className="relative w-full h-80 md:h-96 overflow-hidden">
+      <div className="relative w-full h-80 md:h-96 overflow-hidden rounded-b-4xl">
         {/* Cover Image */}
         <Image
           src={restaurant.images.cover}
           alt={restaurant.name}
-          fill
-          className="object-cover"
+          width={2000}
+          height={1000}
+          className="object-cover bg-bottom rounded-b-4xl"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
+        <div className="absolute rounded-b-4xl inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
 
         {/* Restaurant Info Overlay */}
         <motion.div
@@ -226,10 +227,11 @@ export default function RestaurantDetails({
             {/* Logo */}
             <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden bg-white shadow-lg shrink-0 -mb-12">
               <Image
-                src={restaurant.images.logo}
+                // src={restaurant.images.logo}
+                src={"/images/providers/covers/GrillHouse.jpg"}
                 alt={restaurant.name}
-                width={128}
-                height={128}
+                width={500}
+                height={500}
                 className="w-full h-full object-cover"
               />
             </div>
