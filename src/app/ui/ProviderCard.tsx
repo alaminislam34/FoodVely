@@ -8,7 +8,12 @@ import { Provider } from "@/types/provider";
 // Animation Variants
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  visible: {
+    once: true,
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
 };
 
 export const RestaurantCard = ({ provider }: { provider: Provider }) => {

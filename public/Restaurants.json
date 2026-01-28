@@ -1,0 +1,1295 @@
+[
+  {
+    "id": "prov_101",
+    "name": "FoodVally Kitchen",
+    "slug": "FoodVally-kitchen",
+    "description": "Best homemade food with authentic Bangla taste.",
+    "owner": {
+      "name": "Rahim Uddin",
+      "phone": "017XXXXXXXX",
+      "email": "FoodVally@gmail.com"
+    },
+    "location": {
+      "address": "Dhanmondi 27, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7465,
+      "lng": 90.376
+    },
+    "categories": ["Biriyani", "Chicken", "Rice Bowls"],
+    "images": {
+      "logo": "/images/providers/FoodVally-logo.png",
+      "cover": "/images/providers/covers/FoodVelyKitchen.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 320 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 48, "totalOrders": 1250 },
+    "createdAt": "2025-01-12T10:30:00Z",
+    "updatedAt": "2025-01-20T08:15:00Z"
+  },
+  {
+    "id": "prov_102",
+    "name": "Burger Bros",
+    "slug": "burger-bros",
+    "description": "Juicy burgers with fresh ingredients.",
+    "owner": {
+      "name": "Tanvir Hasan",
+      "phone": "018XXXXXXXX",
+      "email": "burgerbros@gmail.com"
+    },
+    "location": {
+      "address": "Mirpur 10, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8069,
+      "lng": 90.3687
+    },
+    "categories": ["Burgers", "Fries"],
+    "images": {
+      "logo": "/images/providers/burgerbros-logo.png",
+      "cover": "/images/providers/covers/GrillHouse.jpg"
+    },
+    "rating": { "average": 4.4, "totalReviews": 210 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-35 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "12:00 AM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 22, "totalOrders": 860 },
+    "createdAt": "2025-01-05T09:00:00Z",
+    "updatedAt": "2025-01-22T06:30:00Z"
+  },
+  {
+    "id": "prov_103",
+    "name": "Pizza Point",
+    "slug": "pizza-point",
+    "description": "Hot & cheesy pizza delivered fast.",
+    "owner": {
+      "name": "Sabbir Ahmed",
+      "phone": "019XXXXXXXX",
+      "email": "pizzapoint@gmail.com"
+    },
+    "location": {
+      "address": "Banani 11, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7936,
+      "lng": 90.4043
+    },
+    "categories": ["Pizza", "Pasta"],
+    "images": {
+      "logo": "/images/providers/pizzapoint-logo.png",
+      "cover": "/images/providers/covers/PizzaPoint.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 410 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-40 min",
+      "deliveryFee": 70,
+      "minimumOrder": 400
+    },
+    "openingHours": {
+      "open": "12:00 PM",
+      "close": "11:30 PM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 30, "totalOrders": 1540 },
+    "createdAt": "2024-12-18T11:20:00Z",
+    "updatedAt": "2025-01-19T10:10:00Z"
+  },
+  {
+    "id": "prov_104",
+    "name": "Chinese Wok",
+    "slug": "chinese-wok",
+    "description": "Authentic Chinese & Thai flavors.",
+    "owner": {
+      "name": "Li Wong",
+      "phone": "016XXXXXXXX",
+      "email": "chinesewok@gmail.com"
+    },
+    "location": {
+      "address": "Uttara Sector 7, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8738,
+      "lng": 90.3983
+    },
+    "categories": ["Chinese", "Thai"],
+    "images": {
+      "logo": "/images/providers/chinesewok-logo.png",
+      "cover": "/images/providers/covers/SweetTooth.jpg"
+    },
+    "rating": { "average": 4.3, "totalReviews": 190 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "35-50 min",
+      "deliveryFee": 80,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:30 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 40, "totalOrders": 720 },
+    "createdAt": "2025-01-02T14:00:00Z",
+    "updatedAt": "2025-01-21T09:40:00Z"
+  },
+  {
+    "id": "prov_105",
+    "name": "Healthy Bites",
+    "slug": "healthy-bites",
+    "description": "Fresh, healthy & diet-friendly meals.",
+    "owner": {
+      "name": "Nusrat Jahan",
+      "phone": "015XXXXXXXX",
+      "email": "healthybites@gmail.com"
+    },
+    "location": {
+      "address": "Gulshan 2, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7925,
+      "lng": 90.4078
+    },
+    "categories": ["Healthy", "Salads", "Vegan"],
+    "images": {
+      "logo": "/images/providers/healthybites-logo.png",
+      "cover": "/images/providers/covers/BurgerBros.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 150 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "8:00 AM",
+      "close": "9:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 18, "totalOrders": 540 },
+    "createdAt": "2025-01-10T07:45:00Z",
+    "updatedAt": "2025-01-23T08:00:00Z"
+  },
+  {
+    "id": "prov_106",
+    "name": "Sweet Tooth",
+    "slug": "sweet-tooth",
+    "description": "Desserts, cakes & ice cream.",
+    "owner": {
+      "name": "Farhana Islam",
+      "phone": "014XXXXXXXX",
+      "email": "sweettooth@gmail.com"
+    },
+    "location": {
+      "address": "Mohammadpur, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.759,
+      "lng": 90.3612
+    },
+    "categories": ["Desserts", "Cakes", "Ice Cream"],
+    "images": {
+      "logo": "/images/providers/sweettooth-logo.png",
+      "cover": "/images/providers/covers/CafeMocha.png"
+    },
+    "rating": { "average": 4.8, "totalReviews": 500 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-30 min",
+      "deliveryFee": 40,
+      "minimumOrder": 200
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 35, "totalOrders": 2100 },
+    "createdAt": "2024-12-01T09:30:00Z",
+    "updatedAt": "2025-01-24T12:00:00Z"
+  },
+  {
+    "id": "prov_107",
+    "name": "Grill House",
+    "slug": "grill-house",
+    "description": "BBQ, grilled chicken & steak.",
+    "owner": {
+      "name": "Imran Khan",
+      "phone": "013XXXXXXXX",
+      "email": "grillhouse@gmail.com"
+    },
+    "location": {
+      "address": "Bashundhara R/A, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8151,
+      "lng": 90.4285
+    },
+    "categories": ["Grill", "BBQ", "Steak"],
+    "images": {
+      "logo": "/images/providers/grillhouse-logo.png",
+      "cover": "/images/providers/covers/ChineseWok.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 260 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "40-55 min",
+      "deliveryFee": 90,
+      "minimumOrder": 500
+    },
+    "openingHours": {
+      "open": "4:00 PM",
+      "close": "12:00 AM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 26, "totalOrders": 680 },
+    "createdAt": "2024-11-20T16:00:00Z",
+    "updatedAt": "2025-01-18T18:20:00Z"
+  },
+  {
+    "id": "prov_108",
+    "name": "Cafe Mocha",
+    "slug": "cafe-mocha",
+    "description": "Coffee, snacks & breakfast items.",
+    "owner": {
+      "name": "Samiul Karim",
+      "phone": "012XXXXXXXX",
+      "email": "cafemocha@gmail.com"
+    },
+    "location": {
+      "address": "Baily Road, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7356,
+      "lng": 90.3993
+    },
+    "categories": ["Coffee", "Snacks", "Breakfast"],
+    "images": {
+      "logo": "/images/providers/cafemocha-logo.png",
+      "cover": "/images/providers/covers/HealthyBites.jpg"
+    },
+    "rating": { "average": 4.2, "totalReviews": 180 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-30 min",
+      "deliveryFee": 40,
+      "minimumOrder": 200
+    },
+    "openingHours": {
+      "open": "7:30 AM",
+      "close": "9:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 20, "totalOrders": 430 },
+    "createdAt": "2025-01-08T06:30:00Z",
+    "updatedAt": "2025-01-25T07:10:00Z"
+  },
+  {
+    "id": "prov_109",
+    "name": "Street Khaoa",
+    "slug": "street-khaoa",
+    "description": "Popular Bangladeshi street food.",
+    "owner": {
+      "name": "Kamal Mia",
+      "phone": "011XXXXXXXX",
+      "email": "streetkhaoa@gmail.com"
+    },
+    "location": {
+      "address": "Old Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7182,
+      "lng": 90.3885
+    },
+    "categories": ["Street Food", "Snacks"],
+    "images": {
+      "logo": "/images/providers/streetkhaoa-logo.png",
+      "cover": "/images/providers/covers/CafeMocha.jpg"
+    },
+    "rating": { "average": 4.1, "totalReviews": 300 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "35-45 min",
+      "deliveryFee": 50,
+      "minimumOrder": 150
+    },
+    "openingHours": {
+      "open": "5:00 PM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": false, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 15, "totalOrders": 980 },
+    "createdAt": "2024-10-15T17:00:00Z",
+    "updatedAt": "2025-01-17T19:30:00Z"
+  },
+  {
+    "id": "prov_110",
+    "name": "Seafood Hub",
+    "slug": "seafood-hub",
+    "description": "Fresh fish & seafood dishes.",
+    "owner": {
+      "name": "Abdul Jalil",
+      "phone": "010XXXXXXXX",
+      "email": "seafoodhub@gmail.com"
+    },
+    "location": {
+      "address": "Chittagong Road, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.685,
+      "lng": 90.5076
+    },
+    "categories": ["Seafood", "Fish"],
+    "images": {
+      "logo": "/images/providers/seafoodhub-logo.png",
+      "cover": "/images/providers/covers/CafeMocha.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 140 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "45-60 min",
+      "deliveryFee": 100,
+      "minimumOrder": 600
+    },
+    "openingHours": {
+      "open": "12:00 PM",
+      "close": "10:00 PM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 24, "totalOrders": 390 },
+    "createdAt": "2024-12-28T12:15:00Z",
+    "updatedAt": "2025-01-26T11:45:00Z"
+  },
+
+  {
+    "id": "prov_111",
+    "name": "FoodVally Kitchen",
+    "slug": "FoodVally-kitchen",
+    "description": "Best homemade food with authentic Bangla taste.",
+    "owner": {
+      "name": "Rahim Uddin",
+      "phone": "017XXXXXXXX",
+      "email": "FoodVally@gmail.com"
+    },
+    "location": {
+      "address": "Dhanmondi 27, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7465,
+      "lng": 90.376
+    },
+    "categories": ["Biriyani", "Chicken", "Rice Bowls"],
+    "images": {
+      "logo": "/images/providers/FoodVally-logo.png",
+      "cover": "/images/providers/covers/FoodVelyKitchen.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 320 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 48, "totalOrders": 1250 },
+    "createdAt": "2025-01-12T10:30:00Z",
+    "updatedAt": "2025-01-20T08:15:00Z"
+  },
+  {
+    "id": "prov_112",
+    "name": "Burger Bros",
+    "slug": "burger-bros",
+    "description": "Juicy burgers with fresh ingredients.",
+    "owner": {
+      "name": "Tanvir Hasan",
+      "phone": "018XXXXXXXX",
+      "email": "burgerbros@gmail.com"
+    },
+    "location": {
+      "address": "Mirpur 10, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8069,
+      "lng": 90.3687
+    },
+    "categories": ["Burgers", "Fries"],
+    "images": {
+      "logo": "/images/providers/burgerbros-logo.png",
+      "cover": "/images/providers/covers/GrillHouse.jpg"
+    },
+    "rating": { "average": 4.4, "totalReviews": 210 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-35 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "12:00 AM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 22, "totalOrders": 860 },
+    "createdAt": "2025-01-05T09:00:00Z",
+    "updatedAt": "2025-01-22T06:30:00Z"
+  },
+  {
+    "id": "prov_113",
+    "name": "Pizza Point",
+    "slug": "pizza-point",
+    "description": "Hot & cheesy pizza delivered fast.",
+    "owner": {
+      "name": "Sabbir Ahmed",
+      "phone": "019XXXXXXXX",
+      "email": "pizzapoint@gmail.com"
+    },
+    "location": {
+      "address": "Banani 11, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7936,
+      "lng": 90.4043
+    },
+    "categories": ["Pizza", "Pasta"],
+    "images": {
+      "logo": "/images/providers/pizzapoint-logo.png",
+      "cover": "/images/providers/covers/PizzaPoint.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 410 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-40 min",
+      "deliveryFee": 70,
+      "minimumOrder": 400
+    },
+    "openingHours": {
+      "open": "12:00 PM",
+      "close": "11:30 PM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 30, "totalOrders": 1540 },
+    "createdAt": "2024-12-18T11:20:00Z",
+    "updatedAt": "2025-01-19T10:10:00Z"
+  },
+  {
+    "id": "prov_114",
+    "name": "Chinese Wok",
+    "slug": "chinese-wok",
+    "description": "Authentic Chinese & Thai flavors.",
+    "owner": {
+      "name": "Li Wong",
+      "phone": "016XXXXXXXX",
+      "email": "chinesewok@gmail.com"
+    },
+    "location": {
+      "address": "Uttara Sector 7, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8738,
+      "lng": 90.3983
+    },
+    "categories": ["Chinese", "Thai"],
+    "images": {
+      "logo": "/images/providers/chinesewok-logo.png",
+      "cover": "/images/providers/covers/SweetTooth.jpg"
+    },
+    "rating": { "average": 4.3, "totalReviews": 190 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "35-50 min",
+      "deliveryFee": 80,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:30 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 40, "totalOrders": 720 },
+    "createdAt": "2025-01-02T14:00:00Z",
+    "updatedAt": "2025-01-21T09:40:00Z"
+  },
+  {
+    "id": "prov_115",
+    "name": "Tandoori Flames",
+    "slug": "tandoori-flames",
+    "description": "Authentic tandoori dishes and Indian cuisine.",
+    "owner": {
+      "name": "Arif Chowdhury",
+      "phone": "017XXXXXXXX",
+      "email": "tandooriflames@gmail.com"
+    },
+    "location": {
+      "address": "Gulshan 1, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7928,
+      "lng": 90.4075
+    },
+    "categories": ["Tandoori", "Indian", "Curry"],
+    "images": {
+      "logo": "/images/providers/tandooriflames-logo.png",
+      "cover": "/images/providers/covers/TandooriFlames.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 290 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "35-50 min",
+      "deliveryFee": 70,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 32, "totalOrders": 980 },
+    "createdAt": "2025-01-18T09:30:00Z",
+    "updatedAt": "2025-01-27T08:00:00Z"
+  },
+  {
+    "id": "prov_116",
+    "name": "Pasta Paradise",
+    "slug": "pasta-paradise",
+    "description": "Delicious pasta, lasagna and Italian delights.",
+    "owner": {
+      "name": "Mithun Rafiq",
+      "phone": "018XXXXXXXX",
+      "email": "pastaparadise@gmail.com"
+    },
+    "location": {
+      "address": "Banani 10, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7945,
+      "lng": 90.4041
+    },
+    "categories": ["Italian", "Pasta", "Pizza"],
+    "images": {
+      "logo": "/images/providers/pastaparadise-logo.png",
+      "cover": "/images/providers/covers/PastaParadise.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 230 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-40 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "12:00 PM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 28, "totalOrders": 780 },
+    "createdAt": "2025-01-19T10:00:00Z",
+    "updatedAt": "2025-01-28T09:20:00Z"
+  },
+  {
+    "id": "prov_117",
+    "name": "Sushi World",
+    "slug": "sushi-world",
+    "description": "Fresh sushi and Japanese cuisine delivered fast.",
+    "owner": {
+      "name": "Keiko Tanaka",
+      "phone": "019XXXXXXXX",
+      "email": "sushiworld@gmail.com"
+    },
+    "location": {
+      "address": "Uttara Sector 9, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.875,
+      "lng": 90.3989
+    },
+    "categories": ["Japanese", "Sushi", "Seafood"],
+    "images": {
+      "logo": "/images/providers/sushiworld-logo.png",
+      "cover": "/images/providers/covers/SushiWorld.jpg"
+    },
+    "rating": { "average": 4.8, "totalReviews": 320 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 80,
+      "minimumOrder": 400
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 40, "totalOrders": 1120 },
+    "createdAt": "2025-01-20T11:00:00Z",
+    "updatedAt": "2025-01-29T10:30:00Z"
+  },
+  {
+    "id": "prov_118",
+    "name": "Steak House",
+    "slug": "steak-house",
+    "description": "Premium grilled steaks and BBQ specialties.",
+    "owner": {
+      "name": "Rashed Khan",
+      "phone": "016XXXXXXXX",
+      "email": "steakhouse@gmail.com"
+    },
+    "location": {
+      "address": "Bashundhara R/A, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8153,
+      "lng": 90.428
+    },
+    "categories": ["Steak", "BBQ", "Grill"],
+    "images": {
+      "logo": "/images/providers/steakhouse-logo.png",
+      "cover": "/images/providers/covers/SteakHouse.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 200 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "40-55 min",
+      "deliveryFee": 90,
+      "minimumOrder": 500
+    },
+    "openingHours": {
+      "open": "4:00 PM",
+      "close": "12:00 AM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 25, "totalOrders": 640 },
+    "createdAt": "2025-01-21T16:00:00Z",
+    "updatedAt": "2025-01-28T17:10:00Z"
+  },
+  {
+    "id": "prov_119",
+    "name": "Vegan Delight",
+    "slug": "vegan-delight",
+    "description": "Healthy vegan and vegetarian meals.",
+    "owner": {
+      "name": "Nabila Rahman",
+      "phone": "015XXXXXXXX",
+      "email": "vegandelight@gmail.com"
+    },
+    "location": {
+      "address": "Gulshan 1, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.793,
+      "lng": 90.407
+    },
+    "categories": ["Vegan", "Salads", "Healthy"],
+    "images": {
+      "logo": "/images/providers/vegandelight-logo.png",
+      "cover": "/images/providers/covers/VeganDelight.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 180 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-40 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "8:00 AM",
+      "close": "9:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 20, "totalOrders": 500 },
+    "createdAt": "2025-01-22T07:30:00Z",
+    "updatedAt": "2025-01-29T08:00:00Z"
+  },
+  {
+    "id": "prov_120",
+    "name": "Boba Bubble",
+    "slug": "boba-bubble",
+    "description": "Refreshing bubble tea and drinks.",
+    "owner": {
+      "name": "Jannat Karim",
+      "phone": "014XXXXXXXX",
+      "email": "bobabubble@gmail.com"
+    },
+    "location": {
+      "address": "Mohammadpur, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7585,
+      "lng": 90.3608
+    },
+    "categories": ["Beverages", "Tea", "Bubble Tea"],
+    "images": {
+      "logo": "/images/providers/bobabubble-logo.png",
+      "cover": "/images/providers/covers/BobaBubble.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 150 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-30 min",
+      "deliveryFee": 40,
+      "minimumOrder": 200
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 18, "totalOrders": 420 },
+    "createdAt": "2025-01-23T09:00:00Z",
+    "updatedAt": "2025-01-29T10:00:00Z"
+  },
+  {
+    "id": "prov_121",
+    "name": "Doner King",
+    "slug": "doner-king",
+    "description": "Middle Eastern kebabs and wraps.",
+    "owner": {
+      "name": "Omar Faruk",
+      "phone": "013XXXXXXXX",
+      "email": "donerking@gmail.com"
+    },
+    "location": {
+      "address": "Mirpur 12, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.81,
+      "lng": 90.368
+    },
+    "categories": ["Kebab", "Wraps", "Middle Eastern"],
+    "images": {
+      "logo": "/images/providers/donerking-logo.png",
+      "cover": "/images/providers/covers/DonerKing.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 240 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 30, "totalOrders": 800 },
+    "createdAt": "2025-01-24T08:15:00Z",
+    "updatedAt": "2025-01-29T09:30:00Z"
+  },
+  {
+    "id": "prov_122",
+    "name": "Crepe Corner",
+    "slug": "crepe-corner",
+    "description": "Sweet and savory crepes for all tastes.",
+    "owner": {
+      "name": "Sadia Hossain",
+      "phone": "012XXXXXXXX",
+      "email": "crepecorner@gmail.com"
+    },
+    "location": {
+      "address": "Baily Road, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7355,
+      "lng": 90.399
+    },
+    "categories": ["Desserts", "Crepes", "Snacks"],
+    "images": {
+      "logo": "/images/providers/crepecorner-logo.png",
+      "cover": "/images/providers/covers/CrepeCorner.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 200 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-35 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "9:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 25, "totalOrders": 600 },
+    "createdAt": "2025-01-25T09:45:00Z",
+    "updatedAt": "2025-01-29T10:50:00Z"
+  },
+  {
+    "id": "prov_123",
+    "name": "Grill & Chill",
+    "slug": "grill-chill",
+    "description": "Grilled sandwiches, paninis & snacks.",
+    "owner": {
+      "name": "Rina Akter",
+      "phone": "011XXXXXXXX",
+      "email": "grillchill@gmail.com"
+    },
+    "location": {
+      "address": "Dhanmondi 32, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7475,
+      "lng": 90.377
+    },
+    "categories": ["Grill", "Sandwiches", "Snacks"],
+    "images": {
+      "logo": "/images/providers/grillchill-logo.png",
+      "cover": "/images/providers/covers/GrillChill.jpg"
+    },
+    "rating": { "average": 4.4, "totalReviews": 180 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-40 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 22, "totalOrders": 500 },
+    "createdAt": "2025-01-26T10:30:00Z",
+    "updatedAt": "2025-01-29T11:30:00Z"
+  },
+  {
+    "id": "prov_124",
+    "name": "Mediterranean Feast",
+    "slug": "mediterranean-feast",
+    "description": "Fresh Mediterranean cuisine with premium ingredients.",
+    "owner": {
+      "name": "Farid Ahmed",
+      "phone": "010XXXXXXXX",
+      "email": "medfeast@gmail.com"
+    },
+    "location": {
+      "address": "Banani 5, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.794,
+      "lng": 90.403
+    },
+    "categories": ["Mediterranean", "Salads", "Seafood"],
+    "images": {
+      "logo": "/images/providers/medfeast-logo.png",
+      "cover": "/images/providers/covers/MediterraneanFeast.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 220 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 70,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 30, "totalOrders": 750 },
+    "createdAt": "2025-01-27T08:30:00Z",
+    "updatedAt": "2025-01-29T12:00:00Z"
+  },
+  {
+    "id": "prov_125",
+    "name": "Noodle House",
+    "slug": "noodle-house",
+    "description": "Asian noodles, soups & quick meals.",
+    "owner": {
+      "name": "Sakib Hossain",
+      "phone": "017XXXXXXXX",
+      "email": "noodlehouse@gmail.com"
+    },
+    "location": {
+      "address": "Uttara Sector 10, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8755,
+      "lng": 90.3995
+    },
+    "categories": ["Noodles", "Asian", "Soups"],
+    "images": {
+      "logo": "/images/providers/noodlehouse-logo.png",
+      "cover": "/images/providers/covers/NoodleHouse.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 210 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 27, "totalOrders": 750 },
+    "createdAt": "2025-01-28T10:00:00Z",
+    "updatedAt": "2025-01-29T12:30:00Z"
+  },
+  {
+    "id": "prov_126",
+    "name": "Wrap & Roll",
+    "slug": "wrap-roll",
+    "description": "Delicious wraps, sandwiches & fast bites.",
+    "owner": {
+      "name": "Imtiaz Rahman",
+      "phone": "018XXXXXXXX",
+      "email": "wrapnroll@gmail.com"
+    },
+    "location": {
+      "address": "Mirpur 11, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.808,
+      "lng": 90.369
+    },
+    "categories": ["Wraps", "Sandwiches", "Fast Food"],
+    "images": {
+      "logo": "/images/providers/wrapnroll-logo.png",
+      "cover": "/images/providers/covers/WrapNroll.jpg"
+    },
+    "rating": { "average": 4.4, "totalReviews": 180 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-35 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 20, "totalOrders": 600 },
+    "createdAt": "2025-01-28T11:00:00Z",
+    "updatedAt": "2025-01-29T12:45:00Z"
+  },
+  {
+    "id": "prov_127",
+    "name": "Coffee & Co",
+    "slug": "coffee-co",
+    "description": "Coffee, pastries & light snacks.",
+    "owner": {
+      "name": "Farhan Akhtar",
+      "phone": "019XXXXXXXX",
+      "email": "coffeeandco@gmail.com"
+    },
+    "location": {
+      "address": "Dhanmondi 15, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.745,
+      "lng": 90.375
+    },
+    "categories": ["Coffee", "Snacks", "Bakery"],
+    "images": {
+      "logo": "/images/providers/coffeeco-logo.png",
+      "cover": "/images/providers/covers/CoffeeCo.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 250 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-30 min",
+      "deliveryFee": 40,
+      "minimumOrder": 200
+    },
+    "openingHours": {
+      "open": "7:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 18, "totalOrders": 520 },
+    "createdAt": "2025-01-28T08:30:00Z",
+    "updatedAt": "2025-01-29T11:15:00Z"
+  },
+  {
+    "id": "prov_128",
+    "name": "Mexican Fiesta",
+    "slug": "mexican-fiesta",
+    "description": "Tacos, burritos & authentic Mexican flavors.",
+    "owner": {
+      "name": "Junaid Alam",
+      "phone": "016XXXXXXXX",
+      "email": "mexicanfiesta@gmail.com"
+    },
+    "location": {
+      "address": "Banani 7, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7935,
+      "lng": 90.4035
+    },
+    "categories": ["Mexican", "Tacos", "Burritos"],
+    "images": {
+      "logo": "/images/providers/mexicanfiesta-logo.png",
+      "cover": "/images/providers/covers/MexicanFiesta.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 210 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 70,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 28, "totalOrders": 720 },
+    "createdAt": "2025-01-28T09:00:00Z",
+    "updatedAt": "2025-01-29T12:20:00Z"
+  },
+  {
+    "id": "prov_129",
+    "name": "Ice Cream Haven",
+    "slug": "ice-cream-haven",
+    "description": "Ice creams, sundaes & desserts for all ages.",
+    "owner": {
+      "name": "Rumana Islam",
+      "phone": "015XXXXXXXX",
+      "email": "icecreamhaven@gmail.com"
+    },
+    "location": {
+      "address": "Mohammadpur, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.758,
+      "lng": 90.36
+    },
+    "categories": ["Desserts", "Ice Cream", "Cold Beverages"],
+    "images": {
+      "logo": "/images/providers/icecreamhaven-logo.png",
+      "cover": "/images/providers/covers/IceCreamHaven.jpg"
+    },
+    "rating": { "average": 4.8, "totalReviews": 300 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "20-30 min",
+      "deliveryFee": 40,
+      "minimumOrder": 200
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "10:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 20, "totalOrders": 600 },
+    "createdAt": "2025-01-28T10:15:00Z",
+    "updatedAt": "2025-01-29T12:35:00Z"
+  },
+  {
+    "id": "prov_130",
+    "name": "BBQ King",
+    "slug": "bbq-king",
+    "description": "BBQ, grilled chicken & meat specialties.",
+    "owner": {
+      "name": "Saifur Rahman",
+      "phone": "014XXXXXXXX",
+      "email": "bbqking@gmail.com"
+    },
+    "location": {
+      "address": "Bashundhara R/A, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.815,
+      "lng": 90.4283
+    },
+    "categories": ["BBQ", "Grill", "Meat"],
+    "images": {
+      "logo": "/images/providers/bbqking-logo.png",
+      "cover": "/images/providers/covers/BBQKing.jpg"
+    },
+    "rating": { "average": 4.5, "totalReviews": 220 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "35-50 min",
+      "deliveryFee": 80,
+      "minimumOrder": 400
+    },
+    "openingHours": {
+      "open": "4:00 PM",
+      "close": "12:00 AM",
+      "isOpenNow": false
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 24, "totalOrders": 700 },
+    "createdAt": "2025-01-28T11:30:00Z",
+    "updatedAt": "2025-01-29T13:00:00Z"
+  },
+  {
+    "id": "prov_131",
+    "name": "Bakery Bliss",
+    "slug": "bakery-bliss",
+    "description": "Freshly baked breads, cakes & pastries.",
+    "owner": {
+      "name": "Tanima Akter",
+      "phone": "013XXXXXXXX",
+      "email": "bakerybliss@gmail.com"
+    },
+    "location": {
+      "address": "Dhanmondi 18, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.7445,
+      "lng": 90.3765
+    },
+    "categories": ["Bakery", "Cakes", "Pastries"],
+    "images": {
+      "logo": "/images/providers/bakerybliss-logo.png",
+      "cover": "/images/providers/covers/BakeryBliss.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 180 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-35 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "8:00 AM",
+      "close": "9:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 20, "totalOrders": 520 },
+    "createdAt": "2025-01-28T09:45:00Z",
+    "updatedAt": "2025-01-29T12:50:00Z"
+  },
+  {
+    "id": "prov_132",
+    "name": "Thai Treat",
+    "slug": "thai-treat",
+    "description": "Authentic Thai cuisine with rich flavors.",
+    "owner": {
+      "name": "Piya Chowdhury",
+      "phone": "012XXXXXXXX",
+      "email": "thaitreat@gmail.com"
+    },
+    "location": {
+      "address": "Uttara Sector 6, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.8725,
+      "lng": 90.3975
+    },
+    "categories": ["Thai", "Asian", "Curry"],
+    "images": {
+      "logo": "/images/providers/thaitreat-logo.png",
+      "cover": "/images/providers/covers/ThaiTreat.jpg"
+    },
+    "rating": { "average": 4.7, "totalReviews": 190 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 60,
+      "minimumOrder": 300
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 25, "totalOrders": 600 },
+    "createdAt": "2025-01-28T10:50:00Z",
+    "updatedAt": "2025-01-29T13:15:00Z"
+  },
+  {
+    "id": "prov_133",
+    "name": "Grill Express",
+    "slug": "grill-express",
+    "description": "Fast grilled meals, sandwiches & burgers.",
+    "owner": {
+      "name": "Rafiqul Islam",
+      "phone": "011XXXXXXXX",
+      "email": "grillexpress@gmail.com"
+    },
+    "location": {
+      "address": "Mirpur 14, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.811,
+      "lng": 90.3675
+    },
+    "categories": ["Grill", "Burgers", "Sandwiches"],
+    "images": {
+      "logo": "/images/providers/grillexpress-logo.png",
+      "cover": "/images/providers/covers/GrillExpress.jpg"
+    },
+    "rating": { "average": 4.4, "totalReviews": 170 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "25-40 min",
+      "deliveryFee": 50,
+      "minimumOrder": 250
+    },
+    "openingHours": {
+      "open": "10:00 AM",
+      "close": "11:00 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 22, "totalOrders": 500 },
+    "createdAt": "2025-01-28T11:10:00Z",
+    "updatedAt": "2025-01-29T13:30:00Z"
+  },
+  {
+    "id": "prov_134",
+    "name": "Mediterraneo",
+    "slug": "mediterraneo",
+    "description": "Fresh Mediterranean dishes and salads.",
+    "owner": {
+      "name": "Farhana Rahman",
+      "phone": "010XXXXXXXX",
+      "email": "mediterraneo@gmail.com"
+    },
+    "location": {
+      "address": "Banani 3, Dhaka",
+      "city": "Dhaka",
+      "lat": 23.793,
+      "lng": 90.402
+    },
+    "categories": ["Mediterranean", "Salads", "Seafood"],
+    "images": {
+      "logo": "/images/providers/mediterraneo-logo.png",
+      "cover": "/images/providers/covers/Mediterraneo.jpg"
+    },
+    "rating": { "average": 4.6, "totalReviews": 210 },
+    "delivery": {
+      "isAvailable": true,
+      "deliveryTime": "30-45 min",
+      "deliveryFee": 70,
+      "minimumOrder": 350
+    },
+    "openingHours": {
+      "open": "11:00 AM",
+      "close": "10:30 PM",
+      "isOpenNow": true
+    },
+    "status": { "isVerified": true, "isActive": true, "isSuspended": false },
+    "stats": { "totalFoods": 27, "totalOrders": 680 },
+    "createdAt": "2025-01-28T11:45:00Z",
+    "updatedAt": "2025-01-29T13:45:00Z"
+  }
+]

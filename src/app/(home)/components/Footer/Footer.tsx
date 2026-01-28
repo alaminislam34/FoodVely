@@ -90,25 +90,25 @@ export default function Footer() {
             <div className="flex gap-4 pt-4">
               <a
                 href="#"
-                className="p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
+                className="p-3 rounded-full bg-rose-50/60 shadow-md backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Facebook size={18} />
               </a>
               <a
                 href="#"
-                className="p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
+                className="p-3 rounded-full bg-rose-50/60 shadow-md backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Instagram size={18} />
               </a>
               <a
                 href="#"
-                className="p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
+                className="p-3 rounded-full bg-rose-50/60 shadow-md backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Twitter size={18} />
               </a>
               <a
                 href="#"
-                className="p-3 rounded-full bg-white/40 backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
+                className="p-3 rounded-full bg-rose-50/60 shadow-md backdrop-blur-md border border-white/20 text-gray-700 hover:bg-rose-500 hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Linkedin size={18} />
               </a>
