@@ -18,7 +18,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
   return (
     <motion.div
       variants={cardVariants}
-      className="group relative flex flex-col bg-white/40 backdrop-blur-md p-4 rounded-[2.5rem] border border-white/20 shadow-xl hover:shadow-rose-200/40 transition-all duration-500 hover:-translate-y-2"
+      className="h-full group relative flex flex-col justify-between bg-white/40 backdrop-blur-md p-4 rounded-[2.5rem] border border-white/20 shadow-xl hover:shadow-rose-200/40 transition-all duration-500 hover:-translate-y-0.5"
     >
       {/* Image Container */}
       <div className="relative aspect-square w-full rounded-3xl overflow-hidden mb-4 bg-gray-100">
@@ -60,12 +60,14 @@ export const ProductCard = ({ product }: { product: Product }) => {
           </button>
         </div>
 
-        <div className="flex justify-between items-center mt-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-rose-500 font-bold text-sm">$</span>
-            <span className="text-2xl font-Sofia font-black text-gray-900">
-              {displayPrice}
-            </span>
+        <div className="flex justify-between items-end mt-4">
+          <div className="flex items-baseline flex-col-reverse">
+            <p>
+              <span className="text-rose-500 font-bold text-sm">$</span>
+              <span className="text-base md:text-xl font-Sofia font-black text-gray-900">
+                {displayPrice}
+              </span>
+            </p>
             {product.discountPrice && (
               <span className="text-sm text-gray-400 line-through">
                 ${product.price}
