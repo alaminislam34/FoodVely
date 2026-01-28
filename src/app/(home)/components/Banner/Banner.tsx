@@ -6,12 +6,42 @@ import { motion, AnimatePresence } from "motion/react";
 import Products from "../../../ui/Products";
 
 const foodImages = [
-  { src: "/images/food.png", alt: "Chef Spaghetti" },
-  { src: "/images/food2.png", alt: "Spicy Wings" },
-  { src: "/images/food3.png", alt: "Special Pizza" },
-  { src: "/images/food4.png", alt: "Special Pizza" },
-  { src: "/images/food5.png", alt: "Special Pizza" },
-  { src: "/images/food6.png", alt: "Special Pizza" },
+  {
+    src: "/images/food.png",
+    alt: "Chef Spaghetti",
+    badge: "Best Seller",
+    offer: "10% OFF",
+  },
+  {
+    src: "/images/food2.png",
+    alt: "Spicy Wings",
+    badge: "Hot",
+    offer: "Buy 1 Get 1",
+  },
+  {
+    src: "/images/food3.png",
+    alt: "Special Pizza",
+    badge: "New",
+    offer: "Free Drink",
+  },
+  {
+    src: "/images/food4.png",
+    alt: "Veggie Pizza",
+    badge: "Chef's Choice",
+    offer: "15% OFF",
+  },
+  {
+    src: "/images/food5.png",
+    alt: "Cheese Pizza",
+    badge: "Popular",
+    offer: "Free Delivery",
+  },
+  {
+    src: "/images/food6.png",
+    alt: "Meat Lovers Pizza",
+    badge: "Limited Time",
+    offer: "Save $5",
+  },
 ];
 
 const ImageSlider = () => {
@@ -38,7 +68,7 @@ const ImageSlider = () => {
           }}
           className="absolute w-full h-full flex items-center justify-center"
         >
-          <div className="relative w-80 h-80 md:w-120 lg:w-140 md:h-120 lg:h-140 rotate-12">
+          <div className="relative w-80 h-80 md:w-120 lg:w-140 md:h-120 lg:h-140 rotate-12 group">
             <Image
               src={foodImages[index].src}
               alt={foodImages[index].alt}
@@ -46,6 +76,40 @@ const ImageSlider = () => {
               className="object-contain"
               priority
             />
+            
+            {/* Badge */}
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.3, duration: 0.5, type: "spring", stiffness: 200 }}
+              className="absolute -top-4 -right-4 md:-top-6 md:-right-6"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-linear-to-br from-rose-500 to-orange-500 rounded-full blur-lg opacity-60"></div>
+                <div className="relative px-4 md:px-5 py-2 md:py-3 bg-linear-to-br from-rose-500 to-orange-500 rounded-full shadow-xl shadow-rose-500/50 border border-white/20 backdrop-blur-md">
+                  <p className="text-white font-Sofia font-bold text-xs md:text-sm whitespace-nowrap">
+                    {foodImages[index].badge}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Offer Tag */}
+            <motion.div
+              initial={{ scale: 0, rotate: 180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.4, duration: 0.5, type: "spring", stiffness: 200 }}
+              className="absolute -bottom-2 -left-2 md:-bottom-4 md:-left-4"
+            >
+              <div className="relative">
+                <div className="absolute inset-0 bg-linear-to-br from-yellow-400 to-orange-400 rounded-full blur-lg opacity-60"></div>
+                <div className="relative px-3 md:px-4 py-1.5 md:py-2 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full shadow-lg shadow-yellow-400/40 border border-white/20 backdrop-blur-md">
+                  <p className="text-white font-Sofia font-bold text-xs md:text-sm whitespace-nowrap">
+                    {foodImages[index].offer}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </AnimatePresence>

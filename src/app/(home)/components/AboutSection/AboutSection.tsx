@@ -55,7 +55,7 @@ export function AboutSection() {
                       src="/images/chef2.png"
                       alt="Professional Chef"
                       fill
-                      className=" absolute translate-x-2 object-contain bg-center border-2 rounded-2xl border-rose-500 drop-shadow-2xl drop-shadow-rose-300 scale-130"
+                      className=" absolute translate-x-2 object-contain bg-center border-2 rounded-2xl border-rose-500 drop-shadow-2xl drop-shadow-rose-300 max-h-180 h-full"
                       priority
                     />
                   </div>

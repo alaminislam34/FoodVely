@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
-import { Menu, Search, X, LogOut, ChefHat } from "lucide-react";
+import { Menu, Search, X, LogOut, ChefHat, ShoppingCart } from "lucide-react";
 
 const links = [
   { name: "Home", href: "/" },
@@ -108,6 +108,21 @@ function Navbar() {
 
               {/* Action Buttons */}
               <div className="hidden lg:flex items-center gap-3">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center justify-center"
+                >
+                  <Link
+                    href={"/account/cart"}
+                    className="p-2 inline-block relative text-rose-600"
+                  >
+                    <ShoppingCart />{" "}
+                    <span className="absolute -top-3 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
+                      0
+                    </span>
+                  </Link>
+                </motion.div>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
