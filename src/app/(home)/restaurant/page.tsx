@@ -14,6 +14,7 @@ import {
   ChefHat,
 } from "lucide-react";
 import RestaurantCard from "@/app/ui/ProviderCard";
+import RestaurantCardSkeleton from "@/app/ui/RestaurantCardSkeleton";
 import { Provider } from "@/types/provider";
 
 const containerVariants = {
@@ -42,8 +43,10 @@ export default function RestaurantPage() {
   useEffect(() => {
     fetch("/Restaurants.json")
       .then((res) => res.json())
-      .then((data) => setRestaurants(data));
-    setLoading(false);
+      .then((data) => {
+        setRestaurants(data);
+        setLoading(false);
+      });
   }, []);
 
   const locations = [...new Set(restaurants.map((r) => r.location.city))];
@@ -140,20 +143,114 @@ export default function RestaurantPage() {
 
   if (loading) {
     return (
-      <section className="min-h-screen bg-linear-to-br from-white via-rose-50 to-orange-50 py-8">
-        <div className="max-w-360 mx-auto w-11/12 flex items-center justify-center min-h-screen">
+      <section className="min-h-screen py-8 md:py-12">
+        <div className="max-w-360 mx-auto w-11/12 pb-16">
+          {/* Header Skeleton */}
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-rose-200 border-t-rose-500 rounded-full"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-10 text-center"
+          >
+            <motion.div
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="h-12 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg w-3/4 mx-auto mb-3"
+            />
+            <motion.div
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="h-6 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg w-1/2 mx-auto"
+            />
+          </motion.div>
+
+          {/* Mobile Filter Toggle Skeleton */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="md:hidden w-full mb-6 h-12 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg animate-pulse"
           />
+
+          <div className="flex gap-6 lg:gap-8">
+            {/* Sidebar Filter Skeleton */}
+            <motion.aside
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="hidden md:block w-full md:w-64 lg:w-72 shrink-0"
+            >
+              <div className="sticky top-20 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+                <motion.div
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="h-8 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg mb-6 w-1/2"
+                />
+
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="mb-6 pb-6 border-b border-gray-200">
+                    <motion.div
+                      animate={{ opacity: [0.6, 1, 0.6] }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.1,
+                      }}
+                      className="h-6 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg w-2/3 mb-3"
+                    />
+                    {[1, 2, 3].map((j) => (
+                      <motion.div
+                        key={j}
+                        animate={{ opacity: [0.6, 1, 0.6] }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.1 + j * 0.05,
+                        }}
+                        className="h-9 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg mb-2"
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </motion.aside>
+
+            {/* Main Content Skeleton */}
+            <div className="flex-1 w-full">
+              {/* Search & Sort Skeleton */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mb-8 flex gap-4"
+              >
+                <motion.div
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="flex-1 h-10 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg"
+                />
+                <motion.div
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
+                  className="w-32 h-10 bg-linear-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg"
+                />
+              </motion.div>
+
+              {/* Restaurant Grid Skeleton */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <RestaurantCardSkeleton key={i} />
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="min-h-screen bg-linear-to-br from-white via-rose-50 to-orange-50 py-8 md:py-12">
+    <section className="min-h-screen py-8 md:py-12">
       <div className="max-w-360 mx-auto w-11/12 pb-16">
         {/* Header */}
         <motion.div
@@ -256,7 +353,7 @@ export default function RestaurantPage() {
                 <h4 className="font-Sofia font-bold text-gray-800 mb-3 flex items-center gap-2 text-sm">
                   <ChefHat size={16} className="text-rose-500" /> Category
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-2 max-h-60 overflow-y-auto">
                   <button
                     onClick={() => setSelectedCategory("")}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all font-medium ${

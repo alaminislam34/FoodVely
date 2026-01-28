@@ -4,6 +4,7 @@ import { Heart, MapPin, Star, Store } from "lucide-react";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Provider } from "@/types/provider";
+import { useRouter } from "next/navigation";
 
 // Animation Variants
 const cardVariants = {
@@ -17,6 +18,7 @@ const cardVariants = {
 };
 
 export const RestaurantCard = ({ provider }: { provider: Provider }) => {
+  const route = useRouter();
   return (
     <motion.div
       variants={cardVariants}
@@ -91,7 +93,10 @@ export const RestaurantCard = ({ provider }: { provider: Provider }) => {
         </div>
 
         {/* Action Button */}
-        <button className="mt-3 flex items-center justify-center gap-2 bg-rose-500 text-white px-4 py-3 rounded-xl hover:bg-rose-600 transition-all shadow-md shadow-rose-200">
+        <button
+          onClick={() => route.push(`/restaurant/${provider.slug}`)}
+          className="mt-3 flex items-center justify-center gap-2 bg-rose-500 text-white px-4 py-3 rounded-xl hover:bg-rose-600 transition-all shadow-md shadow-rose-200"
+        >
           <Store size={18} />
           <span className="text-sm font-bold">View Restaurant</span>
         </button>

@@ -46,18 +46,15 @@ export default function RestaurantDetails({
   );
   const [showFilters, setShowFilters] = useState(false);
 
-  // Get slug from params
   useEffect(() => {
     params.then((p) => setSlug(p.slug));
   }, [params]);
 
-  // Fetch restaurant and products data
   useEffect(() => {
     if (!slug) return;
 
     const fetchData = async () => {
       try {
-        // Mock restaurant data - in real app, fetch by slug
         const mockRestaurant: Provider = {
           id: "prov_101",
           name: "FoodVally Kitchen",
