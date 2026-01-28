@@ -47,18 +47,13 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between pt-2">
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4">
               {/* Logo */}
               <div className="shrink-0">
                 <Link href={"/"}>
-                  <Image
-                    src={"/logos/foodvely.jpg"}
-                    height={200}
-                    width={400}
-                    alt="Website logo"
-                    priority
-                    className="max-h-20 sm:max-h-22 md:max-h-26 w-auto object-contain"
-                  />
+                  <h3 className="text-3xl md:text-5xl font-Sofia font-bold text-gray-900">
+                    Food<span className="text-rose-500">vely</span>
+                  </h3>
                 </Link>
               </div>
 
@@ -118,14 +113,9 @@ function Navbar() {
                   <div className="flex flex-col gap-10">
                     <div className="shrink-0 py-4 flex items-center justify-center">
                       <Link href={"/"}>
-                        <Image
-                          src={"/logos/foodvely.jpg"}
-                          height={200}
-                          width={400}
-                          alt="Website logo"
-                          priority
-                          className="max-h-20 sm:max-h-22 md:max-h-26 w-auto object-contain"
-                        />
+                        <h3 className="text-3xl md:text-5xl font-Sofia font-bold text-gray-900">
+                          Food<span className="text-rose-500">vely</span>
+                        </h3>
                       </Link>
                     </div>
                     {/* Navigation Links */}
