@@ -38,7 +38,7 @@ const ImageSlider = () => {
           }}
           className="absolute w-full h-full flex items-center justify-center"
         >
-          <div className="relative w-72 h-72 md:w-140 md:h-140 rotate-12">
+          <div className="relative w-80 h-80 md:w-120 lg:w-140 md:h-120 lg:h-140 rotate-12">
             <Image
               src={foodImages[index].src}
               alt={foodImages[index].alt}
@@ -55,10 +55,10 @@ const ImageSlider = () => {
 
 export default function Banner() {
   return (
-    <div className="relative py-8 md:py-14 lg:py-16 min-h-180">
+    <div className="relative py-12 md:py-14 lg:py-16 min-h-180">
       <section className=" flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
         {/* Left Content (Text Area) */}
-        <div className="max-w-2/3 text-center lg:text-left z-20">
+        <div className="md:max-w-3/5 text-center lg:text-left z-20">
           <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-Sofia font-bold leading-normal">
             Fresh, Local, <span className="text-rose-600">Delicious</span>{" "}
             <br /> The Future Table
@@ -71,13 +71,13 @@ export default function Banner() {
           <div className="flex flex-row gap-4 items-center justify-center lg:justify-start my-6">
             <Link
               href="/account/signup"
-              className="py-3 px-8 hover:scale-105 rounded-2xl font-Sofia font-semibold bg-rose-500 hover:bg-rose-600 transition-all text-white shadow-lg shadow-rose-200"
+              className="py-3 px-8 truncate hover:scale-105 rounded-2xl font-Sofia font-semibold bg-rose-500 hover:bg-rose-600 transition-all text-white shadow-lg shadow-rose-200"
             >
               Order Now
             </Link>
             <Link
               href="/account/signin"
-              className="py-3 px-8 hover:scale-105 rounded-2xl font-Sofia font-semibold border border-rose-600 text-rose-600 hover:bg-rose-50 transition-all"
+              className="py-3 px-8 truncate hover:scale-105 rounded-2xl font-Sofia font-semibold border border-rose-600 text-rose-600 hover:bg-rose-50 transition-all"
             >
               Explore more
             </Link>
