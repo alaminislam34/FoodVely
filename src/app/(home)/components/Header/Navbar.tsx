@@ -28,7 +28,7 @@ function Navbar() {
   }, []);
 
   return (
-    <header className="w-full">
+    <header className="w-full relative z-50">
       <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
@@ -47,7 +47,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between">
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between pt-2">
               {/* Logo */}
               <div className="shrink-0">
                 <Link href={"/"}>
