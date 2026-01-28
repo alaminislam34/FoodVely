@@ -1,5 +1,6 @@
 "use client";
 
+import AboutSection from "./components/AboutSection/AboutSection";
 import Banner from "./components/Banner/Banner";
 import FoodCategory from "./components/FoodsSection/FoodCategory";
 import OurProducts from "./components/FoodsSection/OurProducts";
@@ -12,6 +13,7 @@ export default function Home() {
         <Banner />
         <FoodCategory />
         <OurProducts />
+        <AboutSection />
         <PopularProvider />
       </section>
     </div>

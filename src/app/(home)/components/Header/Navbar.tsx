@@ -43,7 +43,7 @@ function Navbar() {
 
   return (
     <header
-      className={`w-full z-40 sticky top-0 transition-all duration-300 ${sticky ? "bg-linear-to-br from-orange-50/90 via-white/90 to-pink-50/90 backdrop-blur-xl  shadow-xl" : ""}`}
+      className={`w-full sticky z-40 transition-all duration-300 ${sticky ? " top-0 bg-linear-to-br from-orange-50/90 via-white/90 to-pink-50/90 backdrop-blur-xl  shadow-xl" : ""}`}
     >
       <AnimatePresence mode="wait">
         {isLoading ? (
