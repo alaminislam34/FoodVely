@@ -137,14 +137,16 @@ export default function AdminDashboard() {
                   <stat.icon size={24} />
                 </div>
               </div>
-              <p className="text-sm font-semibold text-green-600">{stat.change}</p>
+              <p className="text-sm font-semibold text-green-600">
+                {stat.change}
+              </p>
             </Link>
           </motion.div>
         ))}
       </div>
 
       {/* Two Column Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="">
         {/* Recent Activities */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -189,43 +191,6 @@ export default function AdminDashboard() {
                 </p>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="bg-linear-to-br from-rose-500 to-orange-500 rounded-2xl p-6 md:p-8 text-white"
-        >
-          <h2 className="text-xl font-Sofia font-bold mb-6">Quick Actions</h2>
-
-          <div className="space-y-3">
-            <Link
-              href="/admin/products"
-              className="block p-4 bg-white/20 hover:bg-white/30 rounded-lg transition-colors font-semibold text-sm"
-            >
-              ➕ Add New Product
-            </Link>
-            <Link
-              href="/admin/restaurants"
-              className="block p-4 bg-white/20 hover:bg-white/30 rounded-lg transition-colors font-semibold text-sm"
-            >
-              🏪 Add Restaurant
-            </Link>
-            <Link
-              href="/admin/banners"
-              className="block p-4 bg-white/20 hover:bg-white/30 rounded-lg transition-colors font-semibold text-sm"
-            >
-              🎨 Create Banner
-            </Link>
-            <Link
-              href="/admin/coupons"
-              className="block p-4 bg-white/20 hover:bg-white/30 rounded-lg transition-colors font-semibold text-sm"
-            >
-              🎁 Create Coupon
-            </Link>
           </div>
         </motion.div>
       </div>

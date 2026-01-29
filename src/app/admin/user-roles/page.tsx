@@ -2,15 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "motion/react";
-import {
-  Shield,
-  CheckCircle,
-  XCircle,
-  Eye,
-  Trash2,
-  AlertCircle,
-  Search,
-} from "lucide-react";
+import { Shield, Eye, Search } from "lucide-react";
 
 const mockRoles = [
   {
@@ -22,17 +14,10 @@ const mockRoles = [
   },
   {
     id: 2,
-    name: "Restaurant Owner",
+    name: "Restaurant",
     description: "Can manage restaurant and products",
     permissions: 25,
     users: 87,
-  },
-  {
-    id: 3,
-    name: "Delivery Partner",
-    description: "Can accept and deliver orders",
-    permissions: 8,
-    users: 156,
   },
   {
     id: 4,
@@ -41,13 +26,6 @@ const mockRoles = [
     permissions: 50,
     users: 5,
   },
-  {
-    id: 5,
-    name: "Super Admin",
-    description: "System administrator",
-    permissions: 60,
-    users: 1,
-  },
 ];
 
 export default function UserRolesPage() {
@@ -55,7 +33,7 @@ export default function UserRolesPage() {
   const [roles, setRoles] = useState(mockRoles);
 
   const filteredRoles = roles.filter((role) =>
-    role.name.toLowerCase().includes(searchQuery.toLowerCase())
+    role.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -69,7 +47,9 @@ export default function UserRolesPage() {
         <h1 className="font-Sofia text-3xl font-bold text-gray-800">
           User Roles & Permissions
         </h1>
-        <p className="text-gray-600 mt-2">Manage system roles and access levels</p>
+        <p className="text-gray-600 mt-2">
+          Manage system roles and access levels
+        </p>
       </motion.div>
 
       {/* Search */}

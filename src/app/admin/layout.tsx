@@ -17,6 +17,7 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout({
   children,
@@ -25,6 +26,7 @@ export default function AdminLayout({
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const pathName = usePathname();
 
   const menuItems = [
     {
@@ -146,7 +148,7 @@ export default function AdminLayout({
                 <>
                   <button
                     onClick={() => toggleMenu(item.label)}
-                    className="w-full flex items-center justify-between gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all"
+                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all`}
                   >
                     <div className="flex items-center gap-3">
                       <item.icon size={18} />
@@ -179,7 +181,7 @@ export default function AdminLayout({
                         <Link
                           key={subitem.href}
                           href={subitem.href}
-                          className="block px-4 py-2 text-sm text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors"
+                          className={`block px-4 py-2 text-sm text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors ${pathName === subitem.href ? "bg-rose-50 text-rose-600 font-bold" : ""}`}
                         >
                           {subitem.label}
                         </Link>
@@ -190,7 +192,7 @@ export default function AdminLayout({
               ) : (
                 <Link
                   href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all"
+                  className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all ${pathName === item.href ? "bg-rose-50 text-rose-600 font-bold" : ""}`}
                 >
                   <item.icon size={18} />
                   <span className="font-semibold text-sm">{item.label}</span>
