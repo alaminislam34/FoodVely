@@ -1,0 +1,478 @@
+{
+  "orders": [
+    {
+      "id": 1,
+      "customerId": 101,
+      "restaurantId": 1,
+      "orderNumber": "ORD-2024-001",
+      "items": [
+        {
+          "foodId": 1,
+          "foodName": "Grilled Burger",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 2,
+          "price": 12.99,
+          "total": 25.98
+        },
+        {
+          "foodId": 2,
+          "foodName": "Caesar Salad",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 8.99,
+          "total": 8.99
+        }
+      ],
+      "subtotal": 34.97,
+      "tax": 3.50,
+      "taxPercentage": 10,
+      "deliveryCharge": 2.00,
+      "discount": 3.47,
+      "couponCode": "WELCOME10",
+      "total": 37.00,
+      "status": "delivered",
+      "paymentStatus": "completed",
+      "paymentMethod": "card",
+      "deliveryAddress": {
+        "id": 1,
+        "type": "home",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "USA",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "isDefault": true
+      },
+      "specialInstructions": "No onions please",
+      "estimatedDeliveryTime": "30 mins",
+      "actualDeliveryTime": "28 mins",
+      "rating": 5,
+      "review": "Excellent food and fast delivery!",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T10:00:00Z"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-28T10:05:00Z"
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2024-01-28T10:10:00Z"
+        },
+        {
+          "status": "ready",
+          "timestamp": "2024-01-28T10:25:00Z"
+        },
+        {
+          "status": "delivered",
+          "timestamp": "2024-01-28T10:28:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T10:00:00Z",
+      "updatedAt": "2024-01-28T10:28:00Z"
+    },
+    {
+      "id": 2,
+      "customerId": 102,
+      "restaurantId": 2,
+      "orderNumber": "ORD-2024-002",
+      "items": [
+        {
+          "foodId": 5,
+          "foodName": "Margherita Pizza",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 13.99,
+          "total": 13.99
+        }
+      ],
+      "subtotal": 13.99,
+      "tax": 1.40,
+      "taxPercentage": 10,
+      "deliveryCharge": 2.50,
+      "discount": 0,
+      "total": 17.89,
+      "status": "out_for_delivery",
+      "paymentStatus": "completed",
+      "paymentMethod": "upi",
+      "deliveryAddress": {
+        "id": 2,
+        "type": "work",
+        "street": "456 Business Ave",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10002",
+        "country": "USA",
+        "latitude": 40.7200,
+        "longitude": -74.0050,
+        "isDefault": false
+      },
+      "estimatedDeliveryTime": "35 mins",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T11:00:00Z"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-28T11:05:00Z"
+        },
+        {
+          "status": "out_for_delivery",
+          "timestamp": "2024-01-28T11:25:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T11:00:00Z",
+      "updatedAt": "2024-01-28T11:25:00Z"
+    },
+    {
+      "id": 3,
+      "customerId": 103,
+      "restaurantId": 3,
+      "orderNumber": "ORD-2024-003",
+      "items": [
+        {
+          "foodId": 8,
+          "foodName": "Spicy Ramen",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 9.99,
+          "total": 9.99
+        }
+      ],
+      "subtotal": 9.99,
+      "tax": 1.00,
+      "taxPercentage": 10,
+      "deliveryCharge": 1.50,
+      "discount": 0,
+      "total": 12.49,
+      "status": "cancelled",
+      "paymentStatus": "refunded",
+      "paymentMethod": "wallet",
+      "deliveryAddress": {
+        "id": 3,
+        "type": "home",
+        "street": "789 Residential Way",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zipCode": "90001",
+        "country": "USA",
+        "latitude": 34.0522,
+        "longitude": -118.2437,
+        "isDefault": true
+      },
+      "cancelledReason": "Customer cancelled",
+      "refundDetails": {
+        "reason": "Customer requested cancellation",
+        "amount": 12.49,
+        "status": "processed",
+        "requestedAt": "2024-01-28T14:30:00Z",
+        "processedAt": "2024-01-28T15:00:00Z",
+        "notes": "Refund processed to wallet"
+      },
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T14:00:00Z"
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2024-01-28T14:30:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T14:00:00Z",
+      "updatedAt": "2024-01-28T14:30:00Z"
+    },
+    {
+      "id": 4,
+      "customerId": 104,
+      "restaurantId": 4,
+      "orderNumber": "ORD-2024-004",
+      "items": [
+        {
+          "foodId": 12,
+          "foodName": "Grilled Salmon",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 2,
+          "price": 18.99,
+          "total": 37.98
+        }
+      ],
+      "subtotal": 37.98,
+      "tax": 3.80,
+      "taxPercentage": 10,
+      "deliveryCharge": 3.00,
+      "discount": 0,
+      "total": 44.78,
+      "status": "preparing",
+      "paymentStatus": "completed",
+      "paymentMethod": "card",
+      "deliveryAddress": {
+        "id": 4,
+        "type": "home",
+        "street": "321 Ocean View",
+        "city": "San Francisco",
+        "state": "CA",
+        "zipCode": "94102",
+        "country": "USA",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "isDefault": true
+      },
+      "estimatedDeliveryTime": "40 mins",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T17:00:00Z"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-28T17:05:00Z"
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2024-01-28T17:10:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T17:00:00Z",
+      "updatedAt": "2024-01-28T17:10:00Z"
+    },
+    {
+      "id": 5,
+      "customerId": 105,
+      "restaurantId": 5,
+      "orderNumber": "ORD-2024-005",
+      "items": [
+        {
+          "foodId": 15,
+          "foodName": "Veggie Wrap",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 7.99,
+          "total": 7.99
+        }
+      ],
+      "subtotal": 7.99,
+      "tax": 0.80,
+      "taxPercentage": 10,
+      "deliveryCharge": 0,
+      "discount": 0.80,
+      "couponCode": "VEGGIE20",
+      "total": 7.99,
+      "status": "pending",
+      "paymentStatus": "pending",
+      "paymentMethod": "cash",
+      "deliveryAddress": {
+        "id": 5,
+        "type": "home",
+        "street": "555 Garden Lane",
+        "city": "Chicago",
+        "state": "IL",
+        "zipCode": "60601",
+        "country": "USA",
+        "latitude": 41.8781,
+        "longitude": -87.6298,
+        "isDefault": true
+      },
+      "estimatedDeliveryTime": "25 mins",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T18:30:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T18:30:00Z",
+      "updatedAt": "2024-01-28T18:30:00Z"
+    },
+    {
+      "id": 6,
+      "customerId": 106,
+      "restaurantId": 1,
+      "orderNumber": "ORD-2024-006",
+      "items": [
+        {
+          "foodId": 1,
+          "foodName": "Grilled Burger",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 3,
+          "price": 12.99,
+          "total": 38.97
+        },
+        {
+          "foodId": 3,
+          "foodName": "Crispy Fries",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 2,
+          "price": 4.99,
+          "total": 9.98
+        }
+      ],
+      "subtotal": 48.95,
+      "tax": 4.90,
+      "taxPercentage": 10,
+      "deliveryCharge": 2.50,
+      "discount": 4.90,
+      "couponCode": "BURGER15",
+      "total": 51.45,
+      "status": "delivered",
+      "paymentStatus": "completed",
+      "paymentMethod": "card",
+      "deliveryAddress": {
+        "id": 1,
+        "type": "home",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "USA",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "isDefault": true
+      },
+      "specialInstructions": "Extra cheese on burgers",
+      "estimatedDeliveryTime": "30 mins",
+      "actualDeliveryTime": "32 mins",
+      "rating": 4,
+      "review": "Good food, slightly delayed but worth it",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-27T12:00:00Z"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-27T12:05:00Z"
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2024-01-27T12:10:00Z"
+        },
+        {
+          "status": "ready",
+          "timestamp": "2024-01-27T12:25:00Z"
+        },
+        {
+          "status": "delivered",
+          "timestamp": "2024-01-27T12:32:00Z"
+        }
+      ],
+      "createdAt": "2024-01-27T12:00:00Z",
+      "updatedAt": "2024-01-27T12:32:00Z"
+    },
+    {
+      "id": 7,
+      "customerId": 107,
+      "restaurantId": 2,
+      "orderNumber": "ORD-2024-007",
+      "items": [
+        {
+          "foodId": 6,
+          "foodName": "Pepperoni Pizza",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 15.99,
+          "total": 15.99
+        }
+      ],
+      "subtotal": 15.99,
+      "tax": 1.60,
+      "taxPercentage": 10,
+      "deliveryCharge": 2.50,
+      "discount": 0,
+      "total": 20.09,
+      "status": "delivered",
+      "paymentStatus": "failed",
+      "paymentMethod": "card",
+      "deliveryAddress": {
+        "id": 2,
+        "type": "work",
+        "street": "456 Business Ave",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10002",
+        "country": "USA",
+        "latitude": 40.7200,
+        "longitude": -74.0050,
+        "isDefault": false
+      },
+      "estimatedDeliveryTime": "35 mins",
+      "actualDeliveryTime": "37 mins",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-27T18:00:00Z",
+          "note": "Payment failed - card declined"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-27T18:15:00Z",
+          "note": "Customer processed payment again"
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2024-01-27T18:20:00Z"
+        },
+        {
+          "status": "delivered",
+          "timestamp": "2024-01-27T18:37:00Z"
+        }
+      ],
+      "createdAt": "2024-01-27T18:00:00Z",
+      "updatedAt": "2024-01-27T18:37:00Z"
+    },
+    {
+      "id": 8,
+      "customerId": 108,
+      "restaurantId": 3,
+      "orderNumber": "ORD-2024-008",
+      "items": [
+        {
+          "foodId": 9,
+          "foodName": "Tempura",
+          "foodImage": "https://via.placeholder.com/100",
+          "quantity": 1,
+          "price": 11.99,
+          "total": 11.99
+        }
+      ],
+      "subtotal": 11.99,
+      "tax": 1.20,
+      "taxPercentage": 10,
+      "deliveryCharge": 2.00,
+      "discount": 0,
+      "total": 15.19,
+      "status": "confirmed",
+      "paymentStatus": "completed",
+      "paymentMethod": "upi",
+      "deliveryAddress": {
+        "id": 1,
+        "type": "home",
+        "street": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "zipCode": "10001",
+        "country": "USA",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "isDefault": true
+      },
+      "estimatedDeliveryTime": "32 mins",
+      "timeline": [
+        {
+          "status": "pending",
+          "timestamp": "2024-01-28T19:00:00Z"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2024-01-28T19:05:00Z"
+        }
+      ],
+      "createdAt": "2024-01-28T19:00:00Z",
+      "updatedAt": "2024-01-28T19:05:00Z"
+    }
+  ]
+}

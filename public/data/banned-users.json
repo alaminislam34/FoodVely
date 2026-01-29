@@ -1,0 +1,49 @@
+{
+  "bannedUsers": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "reason": "Fraudulent activity",
+      "bannedDate": "2024-12-15",
+      "banDuration": "Permanent",
+      "orders": 45
+    },
+    {
+      "id": 2,
+      "name": "Sarah Smith",
+      "email": "sarah@example.com",
+      "reason": "Abusive behavior",
+      "bannedDate": "2024-12-10",
+      "banDuration": "30 days",
+      "orders": 23
+    },
+    {
+      "id": 3,
+      "name": "Mike Johnson",
+      "email": "mike@example.com",
+      "reason": "Payment fraud",
+      "bannedDate": "2024-12-05",
+      "banDuration": "Permanent",
+      "orders": 67
+    },
+    {
+      "id": 4,
+      "name": "Lisa Brown",
+      "email": "lisa@example.com",
+      "reason": "Spam complaints",
+      "bannedDate": "2024-11-28",
+      "banDuration": "14 days",
+      "orders": 12
+    },
+    {
+      "id": 5,
+      "name": "David Wilson",
+      "email": "david@example.com",
+      "reason": "Harassing drivers",
+      "bannedDate": "2024-11-20",
+      "banDuration": "7 days",
+      "orders": 34
+    }
+  ]
+}

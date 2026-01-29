@@ -1,0 +1,91 @@
+{
+  "analytics": {
+    "kpis": [
+      {
+        "label": "Total Revenue",
+        "value": "$127,450",
+        "growth": "+18%",
+        "trend": "up"
+      },
+      {
+        "label": "Total Orders",
+        "value": "18,542",
+        "growth": "+22%",
+        "trend": "up"
+      },
+      {
+        "label": "Total Users",
+        "value": "12,458",
+        "growth": "+15%",
+        "trend": "up"
+      },
+      {
+        "label": "Total Products",
+        "value": "3,241",
+        "growth": "+8%",
+        "trend": "up"
+      }
+    ],
+    "revenueChart": [
+      { "month": "Jul", "revenue": 8500, "orders": 1250 },
+      { "month": "Aug", "revenue": 10200, "orders": 1450 },
+      { "month": "Sep", "revenue": 12400, "orders": 1680 },
+      { "month": "Oct", "revenue": 15800, "orders": 2100 },
+      { "month": "Nov", "revenue": 18600, "orders": 2420 },
+      { "month": "Dec", "revenue": 22450, "orders": 2890 }
+    ],
+    "topPerformers": [
+      {
+        "rank": 1,
+        "name": "Margherita Pizza",
+        "type": "Product",
+        "revenue": "$18,900",
+        "growth": "+31%"
+      },
+      {
+        "rank": 2,
+        "name": "Spicy Chicken Burger",
+        "type": "Product",
+        "revenue": "$12,450",
+        "growth": "+23%"
+      },
+      {
+        "rank": 3,
+        "name": "Pizzeria Italia",
+        "type": "Restaurant",
+        "revenue": "$45,200",
+        "growth": "+28%"
+      },
+      {
+        "rank": 4,
+        "name": "Burger King",
+        "type": "Restaurant",
+        "revenue": "$38,900",
+        "growth": "+19%"
+      }
+    ],
+    "growthMetrics": [
+      { "label": "User Growth", "percentage": 68 },
+      { "label": "Revenue Growth", "percentage": 85 },
+      { "label": "Order Growth", "percentage": 72 },
+      { "label": "Partner Growth", "percentage": 45 }
+    ],
+    "additionalStats": [
+      {
+        "label": "Average Order Value",
+        "value": "$28.50",
+        "icon": "💰"
+      },
+      {
+        "label": "Customer Retention",
+        "value": "78.5%",
+        "icon": "📊"
+      },
+      {
+        "label": "Platform Rating",
+        "value": "4.7⭐",
+        "icon": "⭐"
+      }
+    ]
+  }
+}

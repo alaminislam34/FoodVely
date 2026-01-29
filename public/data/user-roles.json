@@ -1,0 +1,39 @@
+{
+  "userRoles": [
+    {
+      "id": 1,
+      "name": "Customer",
+      "description": "Regular user can order food",
+      "permissions": 12,
+      "users": 1234
+    },
+    {
+      "id": 2,
+      "name": "Restaurant Owner",
+      "description": "Can manage restaurant and products",
+      "permissions": 25,
+      "users": 87
+    },
+    {
+      "id": 3,
+      "name": "Delivery Partner",
+      "description": "Can accept and deliver orders",
+      "permissions": 8,
+      "users": 156
+    },
+    {
+      "id": 4,
+      "name": "Admin",
+      "description": "Full platform access",
+      "permissions": 50,
+      "users": 5
+    },
+    {
+      "id": 5,
+      "name": "Super Admin",
+      "description": "System administrator",
+      "permissions": 60,
+      "users": 1
+    }
+  ]
+}

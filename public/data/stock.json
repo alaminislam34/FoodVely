@@ -1,0 +1,54 @@
+{
+  "outOfStock": [
+    {
+      "id": 1,
+      "name": "Spicy Chicken Burger",
+      "restaurant": "Burger King",
+      "sku": "SKU-001",
+      "lastOrdered": "2024-12-28",
+      "daysOutOfStock": 2,
+      "demandedBy": 156,
+      "image": "🍔"
+    },
+    {
+      "id": 2,
+      "name": "Classic Pepperoni Pizza",
+      "restaurant": "Pizzeria Italia",
+      "sku": "SKU-002",
+      "lastOrdered": "2024-12-27",
+      "daysOutOfStock": 3,
+      "demandedBy": 234,
+      "image": "🍕"
+    },
+    {
+      "id": 3,
+      "name": "Dragon Roll Sushi",
+      "restaurant": "Sushi Palace",
+      "sku": "SKU-003",
+      "lastOrdered": "2024-12-26",
+      "daysOutOfStock": 4,
+      "demandedBy": 89,
+      "image": "🍣"
+    },
+    {
+      "id": 4,
+      "name": "Black Forest Cake",
+      "restaurant": "Sweet Dreams",
+      "sku": "SKU-004",
+      "lastOrdered": "2024-12-25",
+      "daysOutOfStock": 5,
+      "demandedBy": 145,
+      "image": "🍰"
+    },
+    {
+      "id": 5,
+      "name": "Grilled Salmon Salad",
+      "restaurant": "Salad Bar",
+      "sku": "SKU-005",
+      "lastOrdered": "2024-12-24",
+      "daysOutOfStock": 6,
+      "demandedBy": 67,
+      "image": "🥗"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "bestSellers": [
+    {
+      "id": 1,
+      "name": "Spicy Chicken Burger",
+      "restaurant": "Burger King",
+      "rating": 4.8,
+      "reviews": 2450,
+      "orders": 15680,
+      "revenue": "$78,400",
+      "image": "🍔",
+      "trend": "+23%"
+    },
+    {
+      "id": 2,
+      "name": "Margherita Pizza",
+      "restaurant": "Pizzeria Italia",
+      "rating": 4.9,
+      "reviews": 3120,
+      "orders": 18950,
+      "revenue": "$94,750",
+      "image": "🍕",
+      "trend": "+31%"
+    },
+    {
+      "id": 3,
+      "name": "Salmon Sushi Roll",
+      "restaurant": "Sushi Palace",
+      "rating": 4.7,
+      "reviews": 1890,
+      "orders": 9320,
+      "revenue": "$46,600",
+      "image": "🍣",
+      "trend": "+18%"
+    },
+    {
+      "id": 4,
+      "name": "Chocolate Cake",
+      "restaurant": "Sweet Dreams",
+      "rating": 4.9,
+      "reviews": 2670,
+      "orders": 14200,
+      "revenue": "$35,500",
+      "image": "🍰",
+      "trend": "+42%"
+    },
+    {
+      "id": 5,
+      "name": "Caesar Salad",
+      "restaurant": "Salad Bar",
+      "rating": 4.6,
+      "reviews": 1450,
+      "orders": 7890,
+      "revenue": "$23,670",
+      "image": "🥗",
+      "trend": "+12%"
+    },
+    {
+      "id": 6,
+      "name": "Iced Coffee",
+      "restaurant": "Coffee House",
+      "rating": 4.8,
+      "reviews": 3450,
+      "orders": 21340,
+      "revenue": "$32,010",
+      "image": "🥤",
+      "trend": "+35%"
+    }
+  ]
+}

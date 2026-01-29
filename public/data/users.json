@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role": "customer",
+      "status": "active",
+      "joinDate": "2024-01-15",
+      "orders": 45,
+      "verified": true,
+      "image": "👤"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Smith",
+      "email": "sarah@example.com",
+      "role": "restaurant",
+      "status": "active",
+      "joinDate": "2024-02-20",
+      "orders": 890,
+      "verified": true,
+      "image": "🏪"
+    },
+    {
+      "id": 3,
+      "name": "Mike Johnson",
+      "email": "mike@example.com",
+      "role": "customer",
+      "status": "suspended",
+      "joinDate": "2024-03-10",
+      "orders": 23,
+      "verified": false,
+      "image": "👤"
+    },
+    {
+      "id": 4,
+      "name": "Lisa Brown",
+      "email": "lisa@example.com",
+      "role": "delivery",
+      "status": "active",
+      "joinDate": "2024-04-05",
+      "orders": 156,
+      "verified": true,
+      "image": "🚴"
+    },
+    {
+      "id": 5,
+      "name": "David Wilson",
+      "email": "david@example.com",
+      "role": "customer",
+      "status": "banned",
+      "joinDate": "2024-05-12",
+      "orders": 12,
+      "verified": false,
+      "image": "👤"
+    }
+  ]
+}

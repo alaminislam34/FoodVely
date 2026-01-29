@@ -1,0 +1,58 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Burgers",
+      "slug": "burgers",
+      "products": 156,
+      "image": "🍔",
+      "trending": true,
+      "revenue": "$12,450"
+    },
+    {
+      "id": 2,
+      "name": "Pizza",
+      "slug": "pizza",
+      "products": 98,
+      "image": "🍕",
+      "trending": true,
+      "revenue": "$18,900"
+    },
+    {
+      "id": 3,
+      "name": "Sushi",
+      "slug": "sushi",
+      "products": 67,
+      "image": "🍣",
+      "trending": false,
+      "revenue": "$9,200"
+    },
+    {
+      "id": 4,
+      "name": "Desserts",
+      "slug": "desserts",
+      "products": 112,
+      "image": "🍰",
+      "trending": true,
+      "revenue": "$7,600"
+    },
+    {
+      "id": 5,
+      "name": "Beverages",
+      "slug": "beverages",
+      "products": 45,
+      "image": "🥤",
+      "trending": false,
+      "revenue": "$4,300"
+    },
+    {
+      "id": 6,
+      "name": "Salads",
+      "slug": "salads",
+      "products": 78,
+      "image": "🥗",
+      "trending": true,
+      "revenue": "$5,800"
+    }
+  ]
+}

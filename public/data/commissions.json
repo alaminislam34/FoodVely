@@ -1,0 +1,196 @@
+{
+  "commissions": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "commissionRate": 15,
+      "minOrderAmount": 0,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-01-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "restaurantId": 2,
+      "commissionRate": 12,
+      "minOrderAmount": 0,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-01-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    },
+    {
+      "id": 3,
+      "restaurantId": 3,
+      "commissionRate": 18,
+      "minOrderAmount": 10,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-01-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    },
+    {
+      "id": 4,
+      "restaurantId": 4,
+      "commissionRate": 20,
+      "minOrderAmount": 0,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-01-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    },
+    {
+      "id": 5,
+      "restaurantId": 5,
+      "commissionRate": 10,
+      "minOrderAmount": 5,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-01-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    },
+    {
+      "id": 6,
+      "restaurantId": 1,
+      "commissionRate": 12,
+      "minOrderAmount": 50,
+      "maxOrderAmount": null,
+      "effectiveFrom": "2024-02-01",
+      "effectiveUntil": null,
+      "createdBy": 1,
+      "createdAt": "2024-01-15T00:00:00Z",
+      "updatedAt": "2024-01-28T00:00:00Z"
+    }
+  ],
+  "payouts": [
+    {
+      "id": 1,
+      "restaurantId": 1,
+      "amount": 1250.00,
+      "netAmount": 1062.50,
+      "ordersCount": 45,
+      "commissionsDeducted": 187.50,
+      "taxDeducted": 125.00,
+      "otherCharges": 0,
+      "status": "completed",
+      "bankTransferId": "TXN-2024-001",
+      "transferredAt": "2024-01-27T10:30:00Z",
+      "period": {
+        "startDate": "2024-01-01",
+        "endDate": "2024-01-31"
+      },
+      "createdAt": "2024-01-27T09:00:00Z",
+      "updatedAt": "2024-01-27T10:30:00Z",
+      "approvedBy": 1,
+      "approvedAt": "2024-01-27T09:15:00Z"
+    },
+    {
+      "id": 2,
+      "restaurantId": 2,
+      "amount": 890.00,
+      "netAmount": 780.80,
+      "ordersCount": 32,
+      "commissionsDeducted": 106.80,
+      "taxDeducted": 89.00,
+      "otherCharges": 0,
+      "status": "completed",
+      "bankTransferId": "TXN-2024-002",
+      "transferredAt": "2024-01-27T10:45:00Z",
+      "period": {
+        "startDate": "2024-01-01",
+        "endDate": "2024-01-31"
+      },
+      "createdAt": "2024-01-27T09:00:00Z",
+      "updatedAt": "2024-01-27T10:45:00Z",
+      "approvedBy": 1,
+      "approvedAt": "2024-01-27T09:15:00Z"
+    },
+    {
+      "id": 3,
+      "restaurantId": 3,
+      "amount": 1450.00,
+      "netAmount": 1131.00,
+      "ordersCount": 52,
+      "commissionsDeducted": 261.00,
+      "taxDeducted": 145.00,
+      "otherCharges": 0,
+      "status": "completed",
+      "bankTransferId": "TXN-2024-003",
+      "transferredAt": "2024-01-27T11:00:00Z",
+      "period": {
+        "startDate": "2024-01-01",
+        "endDate": "2024-01-31"
+      },
+      "createdAt": "2024-01-27T09:00:00Z",
+      "updatedAt": "2024-01-27T11:00:00Z",
+      "approvedBy": 1,
+      "approvedAt": "2024-01-27T09:15:00Z"
+    },
+    {
+      "id": 4,
+      "restaurantId": 4,
+      "amount": 2100.00,
+      "netAmount": 1596.00,
+      "ordersCount": 68,
+      "commissionsDeducted": 420.00,
+      "taxDeducted": 210.00,
+      "otherCharges": 0,
+      "status": "processing",
+      "period": {
+        "startDate": "2024-01-01",
+        "endDate": "2024-01-31"
+      },
+      "createdAt": "2024-01-27T09:00:00Z",
+      "updatedAt": "2024-01-28T08:00:00Z",
+      "approvedBy": 1,
+      "approvedAt": "2024-01-27T09:30:00Z"
+    },
+    {
+      "id": 5,
+      "restaurantId": 5,
+      "amount": 750.00,
+      "netAmount": 712.50,
+      "ordersCount": 28,
+      "commissionsDeducted": 75.00,
+      "taxDeducted": 75.00,
+      "otherCharges": 0,
+      "status": "approved",
+      "period": {
+        "startDate": "2024-01-01",
+        "endDate": "2024-01-31"
+      },
+      "createdAt": "2024-01-27T09:00:00Z",
+      "updatedAt": "2024-01-27T09:45:00Z",
+      "approvedBy": 1,
+      "approvedAt": "2024-01-27T09:45:00Z"
+    },
+    {
+      "id": 6,
+      "restaurantId": 1,
+      "amount": 1500.00,
+      "netAmount": 1350.00,
+      "ordersCount": 52,
+      "commissionsDeducted": 150.00,
+      "taxDeducted": 0,
+      "otherCharges": 0,
+      "status": "pending",
+      "period": {
+        "startDate": "2024-02-01",
+        "endDate": "2024-02-28"
+      },
+      "createdAt": "2024-02-01T00:00:00Z",
+      "updatedAt": "2024-02-01T00:00:00Z"
+    }
+  ]
+}

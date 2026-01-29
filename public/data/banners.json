@@ -1,0 +1,43 @@
+{
+  "banners": [
+    {
+      "id": 1,
+      "title": "Holiday Special - 30% Off",
+      "description": "Get 30% discount on all orders this holiday season",
+      "image": "/images/banners/holiday.jpg",
+      "position": "top",
+      "status": "active",
+      "clicks": 5420,
+      "validFrom": "2024-12-01",
+      "validUntil": "2024-12-31",
+      "cta": "Shop Now",
+      "emoji": "🎄"
+    },
+    {
+      "id": 2,
+      "title": "New Year Celebration",
+      "description": "Welcome 2025 with special deals and offers",
+      "image": "/images/banners/newyear.jpg",
+      "position": "middle",
+      "status": "active",
+      "clicks": 3240,
+      "validFrom": "2024-12-20",
+      "validUntil": "2025-01-31",
+      "cta": "Explore",
+      "emoji": "🎉"
+    },
+    {
+      "id": 3,
+      "title": "Free Delivery on First Order",
+      "description": "New customers get free delivery on their first order",
+      "image": "/images/banners/freedeliver.jpg",
+      "position": "bottom",
+      "status": "inactive",
+      "clicks": 1230,
+      "validFrom": "2024-01-01",
+      "validUntil": "2024-12-15",
+      "cta": "Order Now",
+      "emoji": "🚚"
+    }
+  ]
+}

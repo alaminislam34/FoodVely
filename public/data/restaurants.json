@@ -1,0 +1,69 @@
+{
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "Italian Kitchen",
+      "city": "New York",
+      "phone": "+1-800-123-4567",
+      "rating": 4.8,
+      "status": "active",
+      "verified": true,
+      "orders": 2450,
+      "openingHours": "10:00 AM - 11:00 PM",
+      "cuisine": "Italian",
+      "image": "🍝"
+    },
+    {
+      "id": 2,
+      "name": "Green Leaf",
+      "city": "Los Angeles",
+      "phone": "+1-800-234-5678",
+      "rating": 4.6,
+      "status": "active",
+      "verified": true,
+      "orders": 1890,
+      "openingHours": "8:00 AM - 10:00 PM",
+      "cuisine": "Healthy",
+      "image": "🥗"
+    },
+    {
+      "id": 3,
+      "name": "Burger House",
+      "city": "Chicago",
+      "phone": "+1-800-345-6789",
+      "rating": 4.7,
+      "status": "pending",
+      "verified": false,
+      "orders": 1320,
+      "openingHours": "11:00 AM - 12:00 AM",
+      "cuisine": "American",
+      "image": "🍔"
+    },
+    {
+      "id": 4,
+      "name": "Sushi Palace",
+      "city": "San Francisco",
+      "phone": "+1-800-456-7890",
+      "rating": 4.9,
+      "status": "active",
+      "verified": true,
+      "orders": 2120,
+      "openingHours": "12:00 PM - 11:00 PM",
+      "cuisine": "Japanese",
+      "image": "🍣"
+    },
+    {
+      "id": 5,
+      "name": "Taco Fiesta",
+      "city": "Miami",
+      "phone": "+1-800-567-8901",
+      "rating": 4.5,
+      "status": "suspended",
+      "verified": true,
+      "orders": 890,
+      "openingHours": "12:00 PM - 10:00 PM",
+      "cuisine": "Mexican",
+      "image": "🌮"
+    }
+  ]
+}

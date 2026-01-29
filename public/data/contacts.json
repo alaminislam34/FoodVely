@@ -1,0 +1,48 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "senderName": "Alice Johnson",
+      "senderEmail": "alice@example.com",
+      "subject": "Complaint about delivery",
+      "message": "My order was delivered 2 hours late and the food was cold. Please refund immediately!",
+      "status": "new",
+      "priority": "high",
+      "date": "2024-12-29",
+      "response": null
+    },
+    {
+      "id": 2,
+      "senderName": "Bob Smith",
+      "senderEmail": "bob@example.com",
+      "subject": "Feature request - Subscription meals",
+      "message": "Would love to see a weekly meal subscription service. This would be very convenient!",
+      "status": "read",
+      "priority": "low",
+      "date": "2024-12-28",
+      "response": null
+    },
+    {
+      "id": 3,
+      "senderName": "Carol Davis",
+      "senderEmail": "carol@example.com",
+      "subject": "Partnership inquiry",
+      "message": "I own a catering business and would like to partner with your platform.",
+      "status": "replied",
+      "priority": "high",
+      "date": "2024-12-27",
+      "response": "Thank you for your interest. We will get in touch soon."
+    },
+    {
+      "id": 4,
+      "senderName": "David Lee",
+      "senderEmail": "david@example.com",
+      "subject": "Bug report - App crashes",
+      "message": "The app crashes when I try to checkout with multiple items.",
+      "status": "new",
+      "priority": "high",
+      "date": "2024-12-26",
+      "response": null
+    }
+  ]
+}

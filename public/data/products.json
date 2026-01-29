@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Margherita Pizza",
+      "image": "/images/products/pizza.jpg",
+      "price": 12.99,
+      "category": "Pizza",
+      "restaurant": "Italian Kitchen",
+      "stock": 45,
+      "orders": 1250,
+      "rating": 4.8,
+      "emoji": "🍕"
+    },
+    {
+      "id": 2,
+      "name": "Caesar Salad",
+      "image": "/images/products/salad.jpg",
+      "price": 8.99,
+      "category": "Salads",
+      "restaurant": "Green Leaf",
+      "stock": 32,
+      "orders": 945,
+      "rating": 4.6,
+      "emoji": "🥗"
+    },
+    {
+      "id": 3,
+      "name": "Grilled Chicken Burger",
+      "image": "/images/products/burger.jpg",
+      "price": 10.99,
+      "category": "Burgers",
+      "restaurant": "Burger House",
+      "stock": 0,
+      "orders": 832,
+      "rating": 4.7,
+      "emoji": "🍔"
+    },
+    {
+      "id": 4,
+      "name": "Pasta Carbonara",
+      "image": "/images/products/pasta.jpg",
+      "price": 13.99,
+      "category": "Pasta",
+      "restaurant": "Italian Kitchen",
+      "stock": 28,
+      "orders": 756,
+      "rating": 4.9,
+      "emoji": "🍝"
+    }
+  ]
+}

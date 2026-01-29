@@ -1,0 +1,52 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "productName": "Margherita Pizza",
+      "authorName": "John Doe",
+      "rating": 5,
+      "helpfulCount": 234,
+      "comment": "Absolutely delicious! Fresh ingredients and perfect crust. Will order again!",
+      "date": "2024-12-20",
+      "reported": false,
+      "status": "published",
+      "image": "🍕"
+    },
+    {
+      "id": 2,
+      "productName": "Caesar Salad",
+      "authorName": "Jane Smith",
+      "rating": 3,
+      "helpfulCount": 45,
+      "comment": "Good but a bit pricey for the portion size. Would be better with more dressing options.",
+      "date": "2024-12-18",
+      "reported": false,
+      "status": "published",
+      "image": "🥗"
+    },
+    {
+      "id": 3,
+      "productName": "Grilled Chicken Burger",
+      "authorName": "Mike Wilson",
+      "rating": 1,
+      "helpfulCount": 123,
+      "comment": "This is completely inappropriate and offensive. Worst experience ever. Should be removed!",
+      "date": "2024-12-15",
+      "reported": true,
+      "status": "flagged",
+      "image": "🍔"
+    },
+    {
+      "id": 4,
+      "productName": "Pasta Carbonara",
+      "authorName": "Lisa Anderson",
+      "rating": 4,
+      "helpfulCount": 89,
+      "comment": "Very tasty! Authentic Italian flavor. Delivery was fast and food arrived hot.",
+      "date": "2024-12-10",
+      "reported": false,
+      "status": "published",
+      "image": "🍝"
+    }
+  ]
+}
