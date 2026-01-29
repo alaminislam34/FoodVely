@@ -134,7 +134,9 @@ export default function AdminLayout({
               <span className="text-white font-Sofia font-bold">F</span>
             </div>
             <div>
-              <h2 className="font-Sofia font-bold text-gray-800">FoodVely</h2>
+              <h2 className=" text-xl md:text-2xl font-Sofia font-bold text-gray-800">
+                FoodVally
+              </h2>
               <p className="text-xs text-gray-600">Admin Panel</p>
             </div>
           </Link>
