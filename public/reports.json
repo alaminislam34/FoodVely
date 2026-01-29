@@ -1,0 +1,920 @@
+[
+  {
+    "id": "report_4001",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_045",
+      "name": "Al Amin Islam",
+      "avatar": "/images/users/alamin.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_20",
+        "name": "Fresh Lemonade",
+        "category": "Drinks"
+      },
+      "restaurant": {
+        "id": "rest_034",
+        "name": "Mediterraneo"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "The drink tasted sour and was not fresh.",
+      "tags": ["bad-taste", "quality-issue"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/lemonade_issue_1.jpg"],
+      "note": "Smell was unusual and packaging was loose."
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-05T18:30:00Z",
+    "updatedAt": "2025-02-05T18:30:00Z"
+  },
+  {
+    "id": "report_4002",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_078",
+      "name": "Nusrat Jahan",
+      "avatar": "/images/users/nusrat.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": {
+        "id": "rest_034",
+        "name": "Mediterraneo"
+      }
+    },
+    "issue": {
+      "type": "hygiene",
+      "reason": "Food packaging was dirty and leaking.",
+      "tags": ["hygiene", "poor-packaging"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/dirty_package.jpg"]
+    },
+    "status": {
+      "current": "under_review",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-06T12:15:00Z",
+    "updatedAt": "2025-02-06T12:15:00Z"
+  },
+  {
+    "id": "report_4003",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_034",
+      "name": "Mediterraneo",
+      "logo": "/images/providers/mediterraneo-logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_312",
+        "name": "Farzana Akter",
+        "avatar": "/images/users/farzana.png"
+      }
+    },
+    "issue": {
+      "type": "fake_review",
+      "reason": "Customer gave 1-star rating without ordering the product.",
+      "tags": ["fake-review", "no-order-history"]
+    },
+    "relatedData": {
+      "reviewId": "review_1017",
+      "orderId": null
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-07T10:20:00Z",
+    "updatedAt": "2025-02-07T10:20:00Z"
+  },
+  {
+    "id": "report_4004",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_034",
+      "name": "Mediterraneo",
+      "logo": "/images/providers/mediterraneo-logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_219",
+        "name": "Imran Hossain",
+        "avatar": "/images/users/imran.png"
+      }
+    },
+    "issue": {
+      "type": "abusive_behavior",
+      "reason": "Customer used offensive language in review comment.",
+      "tags": ["abuse", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": "review_1010"
+    },
+    "status": {
+      "current": "action_taken",
+      "action": "review_removed",
+      "isResolved": true
+    },
+    "createdAt": "2025-02-07T16:40:00Z",
+    "updatedAt": "2025-02-08T09:00:00Z"
+  },
+  {
+    "id": "report_4005",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_091",
+      "name": "Rafi Hasan",
+      "avatar": "/images/users/rafi.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_21",
+        "name": "Spicy Wings",
+        "category": "Fast Food"
+      },
+      "restaurant": {
+        "id": "rest_035",
+        "name": "Wing Factory"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Wings were undercooked and oily.",
+      "tags": ["undercooked", "oily", "bad-quality"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/spicywings_issue_1.jpg"]
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-08T14:25:00Z",
+    "updatedAt": "2025-02-08T14:25:00Z"
+  },
+  {
+    "id": "report_4006",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_035",
+      "name": "Wing Factory",
+      "logo": "/images/providers/wingfactory-logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_275",
+        "name": "Arif Hossain",
+        "avatar": "/images/users/arif.png"
+      }
+    },
+    "issue": {
+      "type": "spam",
+      "reason": "Customer repeatedly posted spam reviews.",
+      "tags": ["spam", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": null,
+      "orderId": null
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-09T11:30:00Z",
+    "updatedAt": "2025-02-09T11:30:00Z"
+  },
+  {
+    "id": "report_4007",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_203",
+      "name": "Nabila Sultana",
+      "avatar": "/images/users/nabila.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_22",
+        "name": "Cheesy Pizza",
+        "category": "Fast Food"
+      },
+      "restaurant": {
+        "id": "rest_036",
+        "name": "Pizza Palace"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Cheese was burnt and dough was raw inside.",
+      "tags": ["undercooked", "burnt", "bad-quality"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/pizza_issue1.jpg"]
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-10T12:10:00Z",
+    "updatedAt": "2025-02-10T12:10:00Z"
+  },
+  {
+    "id": "report_4008",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_219",
+      "name": "Imran Hossain",
+      "avatar": "/images/users/imran.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": {
+        "id": "rest_036",
+        "name": "Pizza Palace"
+      }
+    },
+    "issue": {
+      "type": "hygiene",
+      "reason": "Restaurant kitchen smelled bad when delivery person picked up order.",
+      "tags": ["hygiene", "kitchen"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/pizza_kitchen.jpg"]
+    },
+    "status": {
+      "current": "under_review",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-10T14:20:00Z",
+    "updatedAt": "2025-02-10T14:20:00Z"
+  },
+  {
+    "id": "report_4009",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_036",
+      "name": "Pizza Palace",
+      "logo": "/images/providers/pizza_palace_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_263",
+        "name": "Tania Akter",
+        "avatar": "/images/users/tania.png"
+      }
+    },
+    "issue": {
+      "type": "abusive_behavior",
+      "reason": "Customer used offensive words in review.",
+      "tags": ["abuse", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": "review_1022"
+    },
+    "status": {
+      "current": "action_taken",
+      "action": "review_removed",
+      "isResolved": true
+    },
+    "createdAt": "2025-02-11T09:50:00Z",
+    "updatedAt": "2025-02-11T10:10:00Z"
+  },
+  {
+    "id": "report_4010",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_036",
+      "name": "Pizza Palace",
+      "logo": "/images/providers/pizza_palace_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_301",
+        "name": "Rasheda Akhter",
+        "avatar": "/images/users/rasheda.png"
+      }
+    },
+    "issue": {
+      "type": "fake_review",
+      "reason": "Customer claimed discount but did not actually order.",
+      "tags": ["fake-review", "no-order-history"]
+    },
+    "relatedData": {
+      "reviewId": "review_1016"
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-11T11:20:00Z",
+    "updatedAt": "2025-02-11T11:20:00Z"
+  },
+  {
+    "id": "report_4011",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_275",
+      "name": "Arif Hossain",
+      "avatar": "/images/users/arif.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_23",
+        "name": "Chocolate Cake",
+        "category": "Desserts"
+      },
+      "restaurant": {
+        "id": "rest_037",
+        "name": "Sweet Treats"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Cake was stale and frosting tasted weird.",
+      "tags": ["stale", "bad-taste"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/cake_issue1.jpg"]
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-12T10:15:00Z",
+    "updatedAt": "2025-02-12T10:15:00Z"
+  },
+  {
+    "id": "report_4012",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_362",
+      "name": "Rafiq Islam",
+      "avatar": "/images/users/rafiq.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_24",
+        "name": "Veggie Burger",
+        "category": "Fast Food"
+      },
+      "restaurant": {
+        "id": "rest_038",
+        "name": "Burger Town"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Burger was cold and bun was soggy.",
+      "tags": ["cold-food", "bad-quality"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/burger_issue1.jpg"],
+      "note": "Not fresh, delivery delayed."
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-12T14:20:00Z",
+    "updatedAt": "2025-02-12T14:20:00Z"
+  },
+  {
+    "id": "report_4013",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_349",
+      "name": "Nusrat Jahan",
+      "avatar": "/images/users/nusrat2.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": {
+        "id": "rest_038",
+        "name": "Burger Town"
+      }
+    },
+    "issue": {
+      "type": "late_delivery",
+      "reason": "Delivery took 90 minutes instead of 45.",
+      "tags": ["late-delivery", "service"]
+    },
+    "evidence": {
+      "images": []
+    },
+    "status": {
+      "current": "under_review",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-12T15:45:00Z",
+    "updatedAt": "2025-02-12T15:45:00Z"
+  },
+  {
+    "id": "report_4014",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_038",
+      "name": "Burger Town",
+      "logo": "/images/providers/burger_town_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_373",
+        "name": "Mahin Chowdhury",
+        "avatar": "/images/users/mahin.png"
+      }
+    },
+    "issue": {
+      "type": "spam",
+      "reason": "Repeatedly posting fake complaints to get discounts.",
+      "tags": ["spam", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": null,
+      "orderId": null
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-13T10:30:00Z",
+    "updatedAt": "2025-02-13T10:30:00Z"
+  },
+  {
+    "id": "report_4015",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_398",
+      "name": "Imtiaz Hossain",
+      "avatar": "/images/users/imtiaz.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_25",
+        "name": "Spaghetti Carbonara",
+        "category": "Italian"
+      },
+      "restaurant": {
+        "id": "rest_039",
+        "name": "Pasta Corner"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Pasta was overcooked and sauce was too salty.",
+      "tags": ["overcooked", "salty", "bad-quality"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/spaghetti_issue1.jpg"]
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-13T12:15:00Z",
+    "updatedAt": "2025-02-13T12:15:00Z"
+  },
+  {
+    "id": "report_4016",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_410",
+      "name": "Shabnam Rahman",
+      "avatar": "/images/users/shabnam.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": {
+        "id": "rest_039",
+        "name": "Pasta Corner"
+      }
+    },
+    "issue": {
+      "type": "hygiene",
+      "reason": "Restaurant had bad smell and dirty tableware.",
+      "tags": ["hygiene", "dirty-tableware"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/pasta_hygiene.jpg"]
+    },
+    "status": {
+      "current": "under_review",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-13T13:50:00Z",
+    "updatedAt": "2025-02-13T13:50:00Z"
+  },
+  {
+    "id": "report_4017",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_039",
+      "name": "Pasta Corner",
+      "logo": "/images/providers/pasta_corner_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_385",
+        "name": "Rumana Akter",
+        "avatar": "/images/users/rumana2.png"
+      }
+    },
+    "issue": {
+      "type": "fake_review",
+      "reason": "Customer claimed discount without ordering.",
+      "tags": ["fake-review", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": "review_1023"
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-14T09:40:00Z",
+    "updatedAt": "2025-02-14T09:40:00Z"
+  },
+  {
+    "id": "report_4018",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_039",
+      "name": "Pasta Corner",
+      "logo": "/images/providers/pasta_corner_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_460",
+        "name": "Shahriar Ahmed",
+        "avatar": "/images/users/shahriar2.png"
+      }
+    },
+    "issue": {
+      "type": "abusive_behavior",
+      "reason": "Customer left offensive comment on review.",
+      "tags": ["abuse", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": "review_1029"
+    },
+    "status": {
+      "current": "action_taken",
+      "action": "review_removed",
+      "isResolved": true
+    },
+    "createdAt": "2025-02-14T11:15:00Z",
+    "updatedAt": "2025-02-14T12:00:00Z"
+  },
+  {
+    "id": "report_4019",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_472",
+      "name": "Mahbub Hasan",
+      "avatar": "/images/users/mahbub.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_26",
+        "name": "Chocolate Muffin",
+        "category": "Desserts"
+      },
+      "restaurant": {
+        "id": "rest_040",
+        "name": "Sweet Cravings"
+      }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Muffin was stale and dry.",
+      "tags": ["stale", "dry", "bad-quality"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/muffin_issue1.jpg"]
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-14T13:40:00Z",
+    "updatedAt": "2025-02-14T13:40:00Z"
+  },
+  {
+    "id": "report_4020",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_472",
+      "name": "Mahbub Hasan",
+      "avatar": "/images/users/mahbub.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": {
+        "id": "rest_040",
+        "name": "Sweet Cravings"
+      }
+    },
+    "issue": {
+      "type": "late_delivery",
+      "reason": "Delivery came 60 mins late, ice cream melted.",
+      "tags": ["late-delivery", "service"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/icecream_melted.jpg"]
+    },
+    "status": {
+      "current": "under_review",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-14T15:10:00Z",
+    "updatedAt": "2025-02-14T15:10:00Z"
+  },
+  {
+    "id": "report_4021",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_040",
+      "name": "Sweet Cravings",
+      "logo": "/images/providers/sweet_cravings_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_410",
+        "name": "Shabnam Rahman",
+        "avatar": "/images/users/shabnam.png"
+      }
+    },
+    "issue": {
+      "type": "spam",
+      "reason": "Customer repeatedly reports minor issues for discounts.",
+      "tags": ["spam", "policy-violation"]
+    },
+    "relatedData": {
+      "reviewId": null
+    },
+    "status": {
+      "current": "pending",
+      "isResolved": false
+    },
+    "createdAt": "2025-02-15T10:20:00Z",
+    "updatedAt": "2025-02-15T10:20:00Z"
+  },
+  {
+    "id": "report_4022",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_501",
+      "name": "Sadia Noor",
+      "avatar": "/images/users/sadia.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_27",
+        "name": "Chicken Biryani",
+        "category": "Rice"
+      },
+      "restaurant": { "id": "rest_041", "name": "Royal Biryani" }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Rice was undercooked and chicken dry.",
+      "tags": ["undercooked", "dry"]
+    },
+    "evidence": {
+      "images": ["/uploads/reports/biryani_issue1.jpg"],
+      "note": "Delivery took 90 mins."
+    },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-16T10:15:00Z",
+    "updatedAt": "2025-02-16T10:15:00Z"
+  },
+  {
+    "id": "report_4023",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_502",
+      "name": "Rasheda Khan",
+      "avatar": "/images/users/rasheda2.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": { "id": "rest_041", "name": "Royal Biryani" }
+    },
+    "issue": {
+      "type": "hygiene",
+      "reason": "Packaging dirty and smell bad.",
+      "tags": ["hygiene", "dirty"]
+    },
+    "evidence": { "images": ["/uploads/reports/biryani_hygiene1.jpg"] },
+    "status": { "current": "under_review", "isResolved": false },
+    "createdAt": "2025-02-16T11:20:00Z",
+    "updatedAt": "2025-02-16T11:20:00Z"
+  },
+  {
+    "id": "report_4024",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_041",
+      "name": "Royal Biryani",
+      "logo": "/images/providers/royal_biryani_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_503",
+        "name": "Imran Ali",
+        "avatar": "/images/users/imran2.png"
+      }
+    },
+    "issue": {
+      "type": "fake_review",
+      "reason": "Customer gave 1-star without ordering.",
+      "tags": ["fake-review"]
+    },
+    "relatedData": { "reviewId": "review_1050" },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-16T12:30:00Z",
+    "updatedAt": "2025-02-16T12:30:00Z"
+  },
+  {
+    "id": "report_4025",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_041",
+      "name": "Royal Biryani",
+      "logo": "/images/providers/royal_biryani_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_504",
+        "name": "Tania Rahman",
+        "avatar": "/images/users/tania2.png"
+      }
+    },
+    "issue": {
+      "type": "abusive_behavior",
+      "reason": "Offensive words in review.",
+      "tags": ["abuse"]
+    },
+    "relatedData": { "reviewId": "review_1047" },
+    "status": {
+      "current": "action_taken",
+      "action": "review_removed",
+      "isResolved": true
+    },
+    "createdAt": "2025-02-16T13:10:00Z",
+    "updatedAt": "2025-02-16T13:45:00Z"
+  },
+  {
+    "id": "report_4026",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_505",
+      "name": "Sohail Hossain",
+      "avatar": "/images/users/sohail.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_28",
+        "name": "Paneer Tikka",
+        "category": "Indian"
+      },
+      "restaurant": { "id": "rest_042", "name": "Tandoori Flames" }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Paneer was hard and overcooked.",
+      "tags": ["overcooked", "hard"]
+    },
+    "evidence": { "images": ["/uploads/reports/paneer_issue1.jpg"] },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-17T10:00:00Z",
+    "updatedAt": "2025-02-17T10:00:00Z"
+  },
+  {
+    "id": "report_4027",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_506",
+      "name": "Nusrat Jahan",
+      "avatar": "/images/users/nusrat3.png"
+    },
+    "target": {
+      "type": "restaurant",
+      "restaurant": { "id": "rest_042", "name": "Tandoori Flames" }
+    },
+    "issue": {
+      "type": "late_delivery",
+      "reason": "Delivery delayed by 50 mins.",
+      "tags": ["late-delivery"]
+    },
+    "evidence": { "images": [] },
+    "status": { "current": "under_review", "isResolved": false },
+    "createdAt": "2025-02-17T11:20:00Z",
+    "updatedAt": "2025-02-17T11:20:00Z"
+  },
+  {
+    "id": "report_4028",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_042",
+      "name": "Tandoori Flames",
+      "logo": "/images/providers/tandoori_flames_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_507",
+        "name": "Rafiq Ahmed",
+        "avatar": "/images/users/rafiq3.png"
+      }
+    },
+    "issue": {
+      "type": "spam",
+      "reason": "Repeated minor issue reports to get discounts.",
+      "tags": ["spam"]
+    },
+    "relatedData": { "reviewId": null },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-17T12:40:00Z",
+    "updatedAt": "2025-02-17T12:40:00Z"
+  },
+  {
+    "id": "report_4029",
+    "reportedBy": {
+      "role": "restaurant",
+      "id": "rest_042",
+      "name": "Tandoori Flames",
+      "logo": "/images/providers/tandoori_flames_logo.png"
+    },
+    "target": {
+      "type": "customer",
+      "customer": {
+        "id": "cust_508",
+        "name": "Shahriar Ahmed",
+        "avatar": "/images/users/shahriar3.png"
+      }
+    },
+    "issue": {
+      "type": "fake_review",
+      "reason": "1-star rating without order.",
+      "tags": ["fake-review"]
+    },
+    "relatedData": { "reviewId": "review_1052" },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-17T13:30:00Z",
+    "updatedAt": "2025-02-17T13:30:00Z"
+  },
+  {
+    "id": "report_4030",
+    "reportedBy": {
+      "role": "customer",
+      "id": "cust_509",
+      "name": "Shabnam Rahman",
+      "avatar": "/images/users/shabnam2.png"
+    },
+    "target": {
+      "type": "product",
+      "product": {
+        "id": "food_29",
+        "name": "Chocolate Donut",
+        "category": "Desserts"
+      },
+      "restaurant": { "id": "rest_043", "name": "Donut World" }
+    },
+    "issue": {
+      "type": "food_quality",
+      "reason": "Donut was stale and hard.",
+      "tags": ["stale", "hard"]
+    },
+    "evidence": { "images": ["/uploads/reports/donut_issue1.jpg"] },
+    "status": { "current": "pending", "isResolved": false },
+    "createdAt": "2025-02-18T10:10:00Z",
+    "updatedAt": "2025-02-18T10:10:00Z"
+  }
+]

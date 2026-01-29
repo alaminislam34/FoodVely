@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -24,9 +24,22 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // শুরুতে মোবাইল ডিভাইসে সাইডবার বন্ধ রাখার জন্য false রাখা ভালো
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const pathName = usePathname();
+
+  // স্ক্রিন সাইজ বড় হলে সাইডবার অটোমেটিক ওপেন করার জন্য (ঐচ্ছিক)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const menuItems = [
     {
@@ -67,8 +80,7 @@ export default function AdminLayout({
       icon: MessageCircle,
       submenu: [
         { label: "Customer Reviews", href: "/admin/reviews" },
-        { label: "Contact Messages", href: "/admin/contacts" },
-        { label: "Reported Content", href: "/admin/reported" },
+        { label: "Report Manage", href: "/admin/reports" },
       ],
     },
     {
@@ -120,18 +132,27 @@ export default function AdminLayout({
       {/* Sidebar */}
       <motion.div
         initial={false}
-        animate={{ x: sidebarOpen ? 0 : "-100%" }}
-        transition={{ duration: 0.3 }}
-        className="fixed md:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 md:translate-x-0"
+        animate={{
+          x:
+            typeof window !== "undefined" && window.innerWidth >= 768
+              ? 0
+              : sidebarOpen
+                ? 0
+                : "-100%",
+        }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`fixed md:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} 
+          transition-none md:transition-all`}
       >
-        {/* Logo */}
+        {/* Logo Section */}
         <div className="p-6 border-b border-gray-200">
           <Link href="/admin" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-Sofia font-bold">F</span>
+              <span className="text-white font-bold">F</span>
             </div>
             <div>
-              <h2 className=" text-xl md:text-2xl font-Sofia font-bold text-gray-800">
+              <h2 className="text-xl md:text-2xl font-bold font-Sofia text-gray-800">
                 FoodVally
               </h2>
               <p className="text-xs text-gray-600">Admin Panel</p>
@@ -139,7 +160,7 @@ export default function AdminLayout({
           </Link>
         </div>
 
-        {/* Menu */}
+        {/* Navigation Menu */}
         <nav className="p-4 space-y-2">
           {menuItems.map((item) => (
             <div key={item.label}>
@@ -147,11 +168,11 @@ export default function AdminLayout({
                 <>
                   <button
                     onClick={() => toggleMenu(item.label)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all`}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all"
                   >
                     <div className="flex items-center gap-3">
                       <item.icon size={18} />
-                      <span className="font-semibold truncate overflow-hidden text-sm">
+                      <span className="font-semibold text-sm">
                         {item.label}
                       </span>
                     </div>
@@ -159,20 +180,17 @@ export default function AdminLayout({
                       animate={{
                         rotate: expandedMenu === item.label ? 180 : 0,
                       }}
-                      transition={{ duration: 0.2 }}
                     >
                       <ChevronDown size={18} />
                     </motion.div>
                   </button>
 
-                  {/* Submenu */}
                   <motion.div
                     initial={false}
                     animate={{
                       height: expandedMenu === item.label ? "auto" : 0,
                       opacity: expandedMenu === item.label ? 1 : 0,
                     }}
-                    transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
                     <div className="pl-6 space-y-1 py-2">
@@ -180,7 +198,11 @@ export default function AdminLayout({
                         <Link
                           key={subitem.href}
                           href={subitem.href}
-                          className={`block px-4 py-2 text-sm text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors ${pathName === subitem.href ? "bg-rose-50 text-rose-600 font-bold" : ""}`}
+                          className={`block px-4 py-2 text-sm text-gray-600 hover:text-rose-600 hover:bg-rose-50 rounded transition-colors ${
+                            pathName === subitem.href
+                              ? "bg-rose-50 text-rose-600 font-bold"
+                              : ""
+                          }`}
                         >
                           {subitem.label}
                         </Link>
@@ -190,8 +212,12 @@ export default function AdminLayout({
                 </>
               ) : (
                 <Link
-                  href={item.href}
-                  className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all ${pathName === item.href ? "bg-rose-50 text-rose-600 font-bold" : ""}`}
+                  href={item.href || "#"}
+                  className={`flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-rose-50 rounded-lg transition-all ${
+                    pathName === item.href
+                      ? "bg-rose-50 text-rose-600 font-bold"
+                      : ""
+                  }`}
                 >
                   <item.icon size={18} />
                   <span className="font-semibold text-sm">{item.label}</span>
@@ -201,8 +227,8 @@ export default function AdminLayout({
           ))}
         </nav>
 
-        {/* Logout */}
-        <div className="p-4">
+        {/* Logout Button */}
+        <div className="p-4 mt-auto">
           <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-rose-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow">
             <LogOut size={18} />
             Logout
@@ -218,12 +244,13 @@ export default function AdminLayout({
         />
       )}
 
-      {/* Main Content */}
-      <div className="flex-1 w-full">
-        {/* Top Bar */}
+      {/* Main Content Area */}
+      <div className="flex-1 w-full min-w-0">
+        {" "}
+        {/* min-w-0 avoids layout breaking */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
           <div className="px-4 md:px-8 py-4 flex items-center justify-between">
-            <h1 className="font-Sofia font-bold text-gray-800 text-xl hidden sm:block">
+            <h1 className="font-bold text-gray-800 text-xl hidden sm:block">
               Admin Dashboard
             </h1>
             <div className="flex items-center gap-4">
@@ -235,9 +262,7 @@ export default function AdminLayout({
             </div>
           </div>
         </div>
-
-        {/* Content */}
-        <main className="p-4 md:p-8">{children}</main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   );
