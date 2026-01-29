@@ -1,0 +1,602 @@
+[
+  {
+    "id": "review_1001",
+    "rating": { "value": 4.5, "outOf": 5 },
+    "comment": "Amazing taste and super refreshing!",
+    "customer": {
+      "id": "cust_045",
+      "name": "Al Amin Islam",
+      "avatar": "/images/users/alamin.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-27T18:10:00Z"
+  },
+  {
+    "id": "review_1002",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Best lemonade I’ve had in a long time.",
+    "customer": {
+      "id": "cust_078",
+      "name": "Nusrat Jahan",
+      "avatar": "/images/users/nusrat.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-28T12:45:00Z"
+  },
+  {
+    "id": "review_1003",
+    "rating": { "value": 4, "outOf": 5 },
+    "comment": "Nice flavor, could be a bit colder but overall good.",
+    "customer": {
+      "id": "cust_091",
+      "name": "Rafi Hasan",
+      "avatar": "/images/users/rafi.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-28T19:30:00Z"
+  },
+  {
+    "id": "review_1004",
+    "rating": { "value": 4.8, "outOf": 5 },
+    "comment": "Very refreshing and well balanced sweetness. Loved it!",
+    "customer": {
+      "id": "cust_112",
+      "name": "Sadia Rahman",
+      "avatar": "/images/users/sadia.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-29T09:15:00Z"
+  },
+  {
+    "id": "review_1005",
+    "rating": { "value": 3.5, "outOf": 5 },
+    "comment": "Taste was okay, but delivery took longer than expected.",
+    "customer": {
+      "id": "cust_134",
+      "name": "Tanvir Ahmed",
+      "avatar": "/images/users/tanvir.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-29T14:50:00Z"
+  },
+  {
+    "id": "review_1006",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Perfect drink for summer. Will definitely order again!",
+    "customer": {
+      "id": "cust_156",
+      "name": "Mehedi Hasan",
+      "avatar": "/images/users/mehedi.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-30T11:05:00Z"
+  },
+  {
+    "id": "review_1007",
+    "rating": { "value": 4.2, "outOf": 5 },
+    "comment": "Good taste and fresh ingredients. Packaging was decent.",
+    "customer": {
+      "id": "cust_167",
+      "name": "Ayon Chowdhury",
+      "avatar": "/images/users/ayon.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-30T16:20:00Z"
+  },
+  {
+    "id": "review_1008",
+    "rating": { "value": 3.8, "outOf": 5 },
+    "comment": "Taste was fine but a bit too sweet for me.",
+    "customer": {
+      "id": "cust_181",
+      "name": "Shahriar Kabir",
+      "avatar": "/images/users/shahriar.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-31T10:40:00Z"
+  },
+  {
+    "id": "review_1009",
+    "rating": { "value": 4.9, "outOf": 5 },
+    "comment": "Extremely refreshing! Perfect balance of lemon and mint.",
+    "customer": {
+      "id": "cust_203",
+      "name": "Nabila Sultana",
+      "avatar": "/images/users/nabila.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-01-31T15:55:00Z"
+  },
+  {
+    "id": "review_1010",
+    "rating": { "value": 2.9, "outOf": 5 },
+    "comment": "Average taste. Expected it to be colder on delivery.",
+    "customer": {
+      "id": "cust_219",
+      "name": "Imran Hossain",
+      "avatar": "/images/users/imran.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-01T12:10:00Z"
+  },
+  {
+    "id": "review_1011",
+    "rating": { "value": 4.6, "outOf": 5 },
+    "comment": "Loved the freshness. Would recommend to others.",
+    "customer": {
+      "id": "cust_237",
+      "name": "Farhan Mahmud",
+      "avatar": "/images/users/farhan.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-01T18:35:00Z"
+  },
+  {
+    "id": "review_1012",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Absolutely perfect! This is my go-to summer drink now.",
+    "customer": {
+      "id": "cust_251",
+      "name": "Rumana Akter",
+      "avatar": "/images/users/rumana.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-02T13:00:00Z"
+  },
+  {
+    "id": "review_1013",
+    "rating": { "value": 4.7, "outOf": 5 },
+    "comment": "Really refreshing! Loved the mint flavor.",
+    "customer": {
+      "id": "cust_263",
+      "name": "Tania Akter",
+      "avatar": "/images/users/tania.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-02T15:20:00Z"
+  },
+  {
+    "id": "review_1014",
+    "rating": { "value": 3.9, "outOf": 5 },
+    "comment": "Taste is good but slightly sweet for my liking.",
+    "customer": {
+      "id": "cust_275",
+      "name": "Arif Hossain",
+      "avatar": "/images/users/arif.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-03T10:15:00Z"
+  },
+  {
+    "id": "review_1015",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Absolutely perfect for hot weather. Highly recommend!",
+    "customer": {
+      "id": "cust_289",
+      "name": "Sabrina Noor",
+      "avatar": "/images/users/sabrina.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-03T13:50:00Z"
+  },
+  {
+    "id": "review_1016",
+    "rating": { "value": 4.3, "outOf": 5 },
+    "comment": "Good flavor and fast delivery, but a little expensive.",
+    "customer": {
+      "id": "cust_301",
+      "name": "Rasheda Akhter",
+      "avatar": "/images/users/rasheda.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-04T09:40:00Z"
+  },
+  {
+    "id": "review_1017",
+    "rating": { "value": 3.5, "outOf": 5 },
+    "comment": "Taste was okay, packaging could be better.",
+    "customer": {
+      "id": "cust_312",
+      "name": "Farzana Akter",
+      "avatar": "/images/users/farzana.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-04T12:30:00Z"
+  },
+  {
+    "id": "review_1018",
+    "rating": { "value": 4.9, "outOf": 5 },
+    "comment": "Extremely refreshing! Perfect for a hot day.",
+    "customer": {
+      "id": "cust_325",
+      "name": "Imran Khan",
+      "avatar": "/images/users/imran2.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-05T11:15:00Z"
+  },
+  {
+    "id": "review_1019",
+    "rating": { "value": 4.0, "outOf": 5 },
+    "comment": "Taste is good but I wish it was served colder.",
+    "customer": {
+      "id": "cust_338",
+      "name": "Salman Ahmed",
+      "avatar": "/images/users/salman.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-05T15:00:00Z"
+  },
+  {
+    "id": "review_1020",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Perfect balance of lemon and sweetness. Loved it!",
+    "customer": {
+      "id": "cust_349",
+      "name": "Nusrat Jahan",
+      "avatar": "/images/users/nusrat2.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-06T09:45:00Z"
+  },
+  {
+    "id": "review_1021",
+    "rating": { "value": 4.6, "outOf": 5 },
+    "comment": "Super fresh and tasty! Will order again.",
+    "customer": {
+      "id": "cust_362",
+      "name": "Rafiq Islam",
+      "avatar": "/images/users/rafiq.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-06T13:20:00Z"
+  },
+  {
+    "id": "review_1022",
+    "rating": { "value": 4.1, "outOf": 5 },
+    "comment": "Good taste, but a little too sweet for me.",
+    "customer": {
+      "id": "cust_373",
+      "name": "Mahin Chowdhury",
+      "avatar": "/images/users/mahin.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-06T15:40:00Z"
+  },
+  {
+    "id": "review_1023",
+    "rating": { "value": 4.8, "outOf": 5 },
+    "comment": "Refreshing and perfectly sweetened. Loved it!",
+    "customer": {
+      "id": "cust_385",
+      "name": "Rumana Akter",
+      "avatar": "/images/users/rumana2.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-07T09:30:00Z"
+  },
+  {
+    "id": "review_1024",
+    "rating": { "value": 3.7, "outOf": 5 },
+    "comment": "Taste is okay, but delivery took a bit longer.",
+    "customer": {
+      "id": "cust_398",
+      "name": "Imtiaz Hossain",
+      "avatar": "/images/users/imtiaz.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-07T13:55:00Z"
+  },
+  {
+    "id": "review_1025",
+    "rating": { "value": 4.9, "outOf": 5 },
+    "comment": "Best lemonade ever! Will order again for sure.",
+    "customer": {
+      "id": "cust_410",
+      "name": "Shabnam Rahman",
+      "avatar": "/images/users/shabnam.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-08T10:15:00Z"
+  },
+  {
+    "id": "review_1026",
+    "rating": { "value": 4.4, "outOf": 5 },
+    "comment": "Refreshing and tasty. Just the right sweetness.",
+    "customer": {
+      "id": "cust_423",
+      "name": "Rafiq Ahmed",
+      "avatar": "/images/users/rafiq2.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-08T12:45:00Z"
+  },
+  {
+    "id": "review_1027",
+    "rating": { "value": 3.9, "outOf": 5 },
+    "comment": "Taste is good, but not as cold as expected.",
+    "customer": {
+      "id": "cust_435",
+      "name": "Tasnim Sultana",
+      "avatar": "/images/users/tasnim.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-08T15:20:00Z"
+  },
+  {
+    "id": "review_1028",
+    "rating": { "value": 5, "outOf": 5 },
+    "comment": "Absolutely loved it! Fresh and delicious.",
+    "customer": {
+      "id": "cust_448",
+      "name": "Nazmul Hassan",
+      "avatar": "/images/users/nazmul.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-09T09:55:00Z"
+  },
+  {
+    "id": "review_1029",
+    "rating": { "value": 4.6, "outOf": 5 },
+    "comment": "Perfect summer drink! Fresh and well balanced.",
+    "customer": {
+      "id": "cust_460",
+      "name": "Shahriar Ahmed",
+      "avatar": "/images/users/shahriar2.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-09T12:30:00Z"
+  },
+  {
+    "id": "review_1030",
+    "rating": { "value": 4.2, "outOf": 5 },
+    "comment": "Nice flavor but packaging could be improved.",
+    "customer": {
+      "id": "cust_472",
+      "name": "Mahbub Hasan",
+      "avatar": "/images/users/mahbub.png"
+    },
+    "restaurant": {
+      "id": "rest_034",
+      "name": "Mediterraneo"
+    },
+    "product": {
+      "id": "food_20",
+      "name": "Fresh Lemonade",
+      "category": "Drinks"
+    },
+    "createdAt": "2025-02-09T15:50:00Z"
+  }
+]

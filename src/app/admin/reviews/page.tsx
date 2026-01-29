@@ -1,270 +1,359 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useState, useMemo } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
-  Trash2,
-  Flag,
-  Eye,
-  MessageCircle,
   Star,
-  ThumbsUp,
-  ThumbsDown,
+  Trash2,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  ArrowUpDown,
+  Utensils,
+  Calendar,
+  Clock,
+  Loader2,
+  MessageSquare,
 } from "lucide-react";
 
-interface Review {
+interface ReviewData {
   id: string;
-  product: string;
-  restaurant: string;
-  author: string;
-  rating: number;
+  rating: { value: number; outOf: number };
   comment: string;
-  date: string;
-  helpful: number;
-  reported: boolean;
+  customer: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+  restaurant: {
+    id: string;
+    name: string;
+  };
+  product: {
+    id: string;
+    name: string;
+    category: string;
+  };
+  createdAt: string;
 }
 
 export default function ReviewsManagement() {
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterRating, setFilterRating] = useState("all");
-  const [filterReported, setFilterReported] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("newest");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-  const reviews: Review[] = [
-    {
-      id: "1",
-      product: "Margherita Pizza",
-      restaurant: "Italian Kitchen",
-      author: "John Doe",
-      rating: 5,
-      comment:
-        "Absolutely delicious! The pizza is fresh and perfectly cooked. Highly recommended!",
-      date: "2024-01-25",
-      helpful: 24,
-      reported: false,
-    },
-    {
-      id: "2",
-      product: "Caesar Salad",
-      restaurant: "Green Leaf Cafe",
-      author: "Sarah Smith",
-      rating: 4,
-      comment:
-        "Good quality salad, but took a bit longer than expected to arrive.",
-      date: "2024-01-24",
-      helpful: 12,
-      reported: false,
-    },
-    {
-      id: "3",
-      product: "Burger",
-      restaurant: "Burger House",
-      author: "Mike Johnson",
-      rating: 2,
-      comment: "The burger was cold when it arrived. Very disappointed.",
-      date: "2024-01-23",
-      helpful: 8,
-      reported: true,
-    },
-    {
-      id: "4",
-      product: "Pasta Carbonara",
-      restaurant: "Italian Kitchen",
-      author: "Emma Wilson",
-      rating: 5,
-      comment: "Authentic Italian taste! This is how real carbonara should be.",
-      date: "2024-01-22",
-      helpful: 31,
-      reported: false,
-    },
-  ];
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const res = await fetch("/reviews.json");
+        const data = await res.json();
+        setReviews(data);
+      } catch (error) {
+        console.error("Error loading reviews:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
 
-  const filteredReviews = reviews.filter((review) => {
-    const matchSearch =
-      review.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      review.author.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchRating =
-      filterRating === "all" || review.rating === parseInt(filterRating);
-    const matchReported =
-      filterReported === "all" ||
-      (filterReported === "reported" && review.reported) ||
-      (filterReported === "normal" && !review.reported);
-    return matchSearch && matchRating && matchReported;
-  });
+  const filteredReviews = useMemo(() => {
+    let result = reviews.filter((item) => {
+      const matchesSearch =
+        item.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.restaurant.name
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        item.product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.comment.toLowerCase().includes(searchQuery.toLowerCase());
 
-  const renderStars = (rating: number) => {
-    return (
-      <div className="flex gap-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            size={16}
-            className={
-              i < rating
-                ? "fill-yellow-500 text-yellow-500"
-                : "text-gray-300"
-            }
-          />
-        ))}
-      </div>
-    );
-  };
+      const matchesRating =
+        ratingFilter === "all"
+          ? true
+          : item.rating.value >= parseFloat(ratingFilter);
+
+      return matchesSearch && matchesRating;
+    });
+
+    return result.sort((a, b) => {
+      if (sortBy === "newest")
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      if (sortBy === "oldest")
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      if (sortBy === "highest") return b.rating.value - a.rating.value;
+      if (sortBy === "lowest") return a.rating.value - b.rating.value;
+      return 0;
+    });
+  }, [reviews, searchQuery, ratingFilter, sortBy]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, ratingFilter, sortBy]);
+
+  // --- Pagination Logic ---
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredReviews.length / itemsPerPage),
+  );
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = filteredReviews.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 lg:space-y-8 min-h-screen">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
-        <h1 className="text-3xl font-Sofia font-bold text-gray-800 mb-2">
-          Reviews & Feedback
-        </h1>
-        <p className="text-gray-600">
-          Monitor customer reviews, handle reported content, and manage ratings
-        </p>
+        <div>
+          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-700">
+            Reviews & Feedback
+          </h1>
+          <p className="text-gray-500 font-medium mt-1">
+            Analyzing customer sentiment and marketplace feedback.
+          </p>
+        </div>
       </motion.div>
 
-      {/* Controls */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4"
-      >
-        <div className="relative">
+      {/* Filters Bar */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="relative flex-1">
           <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
             size={18}
-            className="absolute left-4 top-3.5 text-gray-400"
           />
           <input
             type="text"
-            placeholder="Search reviews by product or author..."
+            placeholder="Search reviews..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+            className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/60 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all backdrop-blur-md"
           />
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Rating
-            </label>
+        <div className="flex flex-wrap gap-2">
+          <div className="flex items-center gap-2 bg-white/60 px-3 rounded-2xl border border-gray-200 backdrop-blur-md">
+            <Filter size={16} className="text-gray-400" />
             <select
-              value={filterRating}
-              onChange={(e) => setFilterRating(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+              value={ratingFilter}
+              onChange={(e) => setRatingFilter(e.target.value)}
+              className="py-3 bg-transparent text-gray-600 font-medium outline-none text-sm cursor-pointer"
             >
-              <option value="all">All Ratings</option>
-              <option value="5">5 Stars</option>
-              <option value="4">4 Stars</option>
-              <option value="3">3 Stars</option>
-              <option value="2">2 Stars</option>
-              <option value="1">1 Star</option>
+              <option value="all">Min Rating</option>
+              <option value="4.5">4.5+ Stars</option>
+              <option value="4.0">4.0+ Stars</option>
+              <option value="3.0">3.0+ Stars</option>
             </select>
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Status
-            </label>
+          <div className="flex items-center gap-2 bg-white/60 px-3 rounded-2xl border border-gray-200 backdrop-blur-md">
+            <ArrowUpDown size={16} className="text-gray-400" />
             <select
-              value={filterReported}
-              onChange={(e) => setFilterReported(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="py-3 bg-transparent text-gray-600 font-medium outline-none text-sm cursor-pointer"
             >
-              <option value="all">All Reviews</option>
-              <option value="normal">Normal</option>
-              <option value="reported">Reported</option>
+              <option value="newest">Newest First</option>
+              <option value="highest">Top Rated</option>
+              <option value="lowest">Lowest Rated</option>
             </select>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Reviews List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="space-y-4"
-      >
-        {filteredReviews.map((review, index) => (
-          <motion.div
-            key={review.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            className={`bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all ${
-              review.reported ? "border-red-300 bg-red-50" : ""
-            }`}
-          >
-            {/* Header */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-2">
-                  <h3 className="font-Sofia font-bold text-gray-800">
-                    {review.product}
-                  </h3>
-                  {review.reported && (
-                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                      <Flag size={14} />
-                      Reported
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600">
-                  {review.restaurant} • By {review.author}
-                </p>
-              </div>
-              <div className="text-right text-xs text-gray-500">
-                {new Date(review.date).toLocaleDateString()}
-              </div>
-            </div>
+      {/* Table Section */}
+      <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden relative">
+        {isLoading ? (
+          <div className="py-40 flex items-center justify-center">
+            <Loader2 className="animate-spin text-rose-500" size={40} />
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-gray-50/50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+                  <th className="px-6 py-5">Customer</th>
+                  <th className="px-6 py-5">Product Info</th>
+                  <th className="px-6 py-5">Review</th>
+                  <th className="px-6 py-5">Date</th>
+                  <th className="px-6 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                <AnimatePresence mode="popLayout">
+                  {paginatedData.map((review, idx) => (
+                    <motion.tr
+                      key={review.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ delay: idx * 0.03 }}
+                      className="hover:bg-white/80 transition-colors group"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-rose-50 to-orange-50 border border-white shadow-sm flex items-center justify-center text-rose-500 font-bold overflow-hidden shrink-0">
+                            {review.customer.avatar ? (
+                              <img
+                                src={review.customer.avatar}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              review.customer.name.charAt(0)
+                            )}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-gray-700">
+                              {review.customer.name}
+                            </p>
+                            <p className="text-[10px] text-gray-400">
+                              ID: {review.customer.id.split("_")[1]}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
 
-            {/* Rating */}
-            <div className="mb-3">{renderStars(review.rating)}</div>
+                      <td className="px-6 py-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-bold text-gray-700">
+                            {review.product.name}
+                          </p>
+                          <p className="text-xs text-gray-500 flex items-center gap-1">
+                            <Utensils size={12} className="text-gray-300" />{" "}
+                            {review.restaurant.name}
+                          </p>
+                        </div>
+                      </td>
 
-            {/* Comment */}
-            <p className="text-gray-700 mb-4">{review.comment}</p>
+                      <td className="px-6 py-4">
+                        <div className="max-w-62.5 space-y-2">
+                          <div className="flex items-center bg-yellow-400/10 w-fit px-2 py-0.5 rounded-lg border border-yellow-200">
+                            <Star
+                              size={10}
+                              className="fill-yellow-500 text-yellow-500 mr-1"
+                            />
+                            <span className="text-xs font-black text-yellow-700">
+                              {review.rating.value}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-600 line-clamp-2 italic leading-relaxed">
+                            "{review.comment}"
+                          </p>
+                        </div>
+                      </td>
 
-            {/* Helpful Count & Actions */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-green-600 transition-colors">
-                  <ThumbsUp size={16} />
-                  {review.helpful}
-                </button>
-                <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-red-600 transition-colors">
-                  <ThumbsDown size={16} />
-                </button>
-              </div>
-              <div className="flex items-center gap-2">
-                <button className="p-2 hover:bg-blue-100 rounded-lg transition-colors">
-                  <Eye size={18} className="text-blue-600" />
-                </button>
-                {review.reported && (
-                  <button className="p-2 hover:bg-green-100 rounded-lg transition-colors">
-                    <MessageCircle size={18} className="text-green-600" />
-                  </button>
-                )}
-                <button className="p-2 hover:bg-red-100 rounded-lg transition-colors">
-                  <Trash2 size={18} className="text-red-600" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-[11px] text-gray-400 font-medium space-y-1">
+                          <p className="flex items-center gap-1 text-gray-600">
+                            <Calendar size={12} className="text-rose-400" />{" "}
+                            {new Date(review.createdAt).toLocaleDateString()}
+                          </p>
+                          <p className="flex items-center gap-1 opacity-60">
+                            <Clock size={12} />{" "}
+                            {new Date(review.createdAt).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                      </td>
 
-      {filteredReviews.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-12 bg-white rounded-2xl border border-gray-200"
-        >
-          <p className="text-gray-600">No reviews found</p>
-        </motion.div>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex justify-end gap-2">
+                          <button className="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-blue-500 hover:shadow-md transition-all">
+                            <ExternalLink size={16} />
+                          </button>
+                          <button className="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-rose-500 hover:shadow-md transition-all">
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* --- Pagination Footer (Updated Design) --- */}
+        <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">
+          <p className="text-sm text-gray-500 font-medium">
+            Showing{" "}
+            <span className="text-gray-800 font-bold">
+              {filteredReviews.length > 0 ? startIndex + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="text-gray-800 font-bold">
+              {Math.min(startIndex + itemsPerPage, filteredReviews.length)}
+            </span>{" "}
+            of {filteredReviews.length} items
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1 || isLoading}
+              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${
+                currentPage !== 1
+                  ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm"
+                  : "bg-transparent text-gray-300"
+              }`}
+            >
+              <ChevronLeft size={18} />
+            </button>
+
+            {/* Generated Page Numbers */}
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
+                  currentPage === i + 1
+                    ? "bg-rose-600 text-white shadow-lg shadow-rose-200"
+                    : "bg-white border border-gray-200 text-gray-500 hover:border-rose-400 hover:text-rose-600 shadow-sm"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages || isLoading}
+              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${
+                currentPage !== totalPages
+                  ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm"
+                  : "bg-transparent text-gray-300"
+              }`}
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {!isLoading && filteredReviews.length === 0 && (
+        <div className="py-20 text-center">
+          <MessageSquare className="mx-auto text-gray-200 mb-4" size={48} />
+          <p className="text-gray-400 font-medium">
+            No reviews found matching your criteria.
+          </p>
+        </div>
       )}
     </div>
   );

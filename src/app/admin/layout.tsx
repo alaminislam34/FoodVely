@@ -60,8 +60,6 @@ export default function AdminLayout({
       submenu: [
         { label: "All Restaurants", href: "/admin/restaurants" },
         { label: "Best Restaurants", href: "/admin/best-sellers" },
-        { label: "Verification Queue", href: "/admin/verification" },
-        { label: "Suspended", href: "/admin/suspended-restaurants" },
       ],
     },
     {
