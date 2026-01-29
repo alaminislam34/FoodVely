@@ -1,0 +1,64 @@
+{
+  "addresses": [
+    {
+      "id": 1,
+      "customerId": 1,
+      "type": "home",
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10001",
+      "country": "USA",
+      "landmark": "Near Central Park",
+      "latitude": 40.7128,
+      "longitude": -74.0060,
+      "isDefault": true,
+      "label": "Home"
+    },
+    {
+      "id": 2,
+      "customerId": 1,
+      "type": "work",
+      "street": "789 Corporate Blvd, Building A",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10002",
+      "country": "USA",
+      "landmark": "Near Times Square",
+      "latitude": 40.7189,
+      "longitude": -74.0050,
+      "isDefault": false,
+      "label": "Office"
+    },
+    {
+      "id": 3,
+      "customerId": 1,
+      "type": "other",
+      "street": "456 Madison Ave, Apt 5B",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10022",
+      "country": "USA",
+      "landmark": "Midtown East",
+      "latitude": 40.7535,
+      "longitude": -73.9707,
+      "isDefault": false,
+      "label": "Gym"
+    },
+    {
+      "id": 4,
+      "customerId": 1,
+      "type": "other",
+      "street": "321 Park Ave South",
+      "city": "New York",
+      "state": "NY",
+      "zipCode": "10010",
+      "country": "USA",
+      "landmark": "Flatiron District",
+      "latitude": 40.7408,
+      "longitude": -73.9896,
+      "isDefault": false,
+      "label": "Friend's Place"
+    }
+  ]
+}
