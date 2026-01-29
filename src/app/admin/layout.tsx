@@ -51,7 +51,6 @@ export default function AdminLayout({
       submenu: [
         { label: "All Products", href: "/admin/products" },
         { label: "Categories", href: "/admin/categories" },
-        { label: "Best Sellers", href: "/admin/best-sellers" },
         { label: "Out of Stock", href: "/admin/stock" },
       ],
     },
@@ -60,7 +59,7 @@ export default function AdminLayout({
       icon: UtensilsCrossed,
       submenu: [
         { label: "All Restaurants", href: "/admin/restaurants" },
-        { label: "Best Restaurants", href: "/admin/best-restaurants" },
+        { label: "Best Restaurants", href: "/admin/best-sellers" },
         { label: "Verification Queue", href: "/admin/verification" },
         { label: "Suspended", href: "/admin/suspended-restaurants" },
       ],
