@@ -308,7 +308,7 @@ export default function Banner() {
                     className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-orange-500"
                   >
                     <Image
-                      src={"/logos/customer.jpg"}
+                      src={"/logos/user.jpg"}
                       height={100}
                       width={100}
                       alt="Users icon"

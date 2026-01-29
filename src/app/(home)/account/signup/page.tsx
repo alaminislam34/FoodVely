@@ -19,7 +19,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-type UserRole = "customer" | "provider";
+type UserRole = "provider";
 
 interface FormData {
   firstName: string;
@@ -37,7 +37,7 @@ interface FormData {
 }
 
 export default function SignUp() {
-  const [role, setRole] = useState<UserRole>("customer");
+  const [role, setRole] = useState<UserRole>("provider");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

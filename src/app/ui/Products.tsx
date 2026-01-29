@@ -40,7 +40,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
             src={product.images[0] || "/images/food.png"}
             alt={product.name || "Product"}
             fill
-            className="object-contain p-4 transition-transform duration-700 group-hover:scale-110"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
             onError={(e) => {
               e.currentTarget.src = "/images/food.png";
             }}
