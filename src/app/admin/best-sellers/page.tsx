@@ -23,27 +23,39 @@ export default function BestSellersPage() {
   const [restaurants, setRestaurants] = useState<Provider[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [ratingFilter, setRatingFilter] = useState("all"); // New State
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
-  // Simulate Fetching Data
+  // Reset to page 1 when any filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, ratingFilter]);
+
   useEffect(() => {
     fetch("/Restaurants.json")
       .then((res) => res.json())
       .then((data) => setRestaurants(data));
   }, []);
 
-  // Filtering Logic
+  // Updated Filtering Logic
   const filteredRestaurants = restaurants.filter((item) => {
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.owner.name.toLowerCase().includes(searchQuery.toLowerCase());
+
     const matchesStatus =
       statusFilter === "all"
         ? true
         : item.status.isActive.toString() === statusFilter;
 
-    return matchesSearch && matchesStatus;
+    // Rating Filter Logic (Matches average >= selected value)
+    const matchesRating =
+      ratingFilter === "all"
+        ? true
+        : item.rating.average >= parseFloat(ratingFilter);
+
+    return matchesSearch && matchesStatus && matchesRating;
   });
 
   // Pagination Logic
@@ -54,7 +66,7 @@ export default function BestSellersPage() {
     startIndex + itemsPerPage,
   );
 
-  // Stats Calculations
+  // Stats
   const totalOrders = restaurants.reduce(
     (sum, r) => sum + (r.stats?.totalOrders || 0),
     0,
@@ -73,8 +85,8 @@ export default function BestSellersPage() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
-            Restaurant
+          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-700">
+            Restaurants
           </h1>
           <p className="text-gray-500 font-medium mt-1">
             Managing {restaurants.length} active vendors and their performance.
@@ -134,6 +146,7 @@ export default function BestSellersPage() {
 
       {/* Filters Bar */}
       <div className="flex flex-col md:flex-row gap-4">
+        {/* Search */}
         <div className="relative flex-1">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -141,23 +154,39 @@ export default function BestSellersPage() {
           />
           <input
             type="text"
-            placeholder="Search by restaurant or owner name..."
+            placeholder="Search by restaurant or owner..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/60 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all"
           />
         </div>
-        <div className="flex gap-2">
+
+        <div className="flex flex-wrap gap-2">
+          {/* Status Filter */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-3 rounded-2xl border border-gray-200 bg-white focus:outline-none text-gray-600 font-medium"
+            className="px-4 py-3 rounded-2xl border border-gray-200 bg-white/60 backdrop-blur-md focus:outline-none text-gray-600 font-medium cursor-pointer hover:border-rose-300 transition-colors"
           >
             <option value="all">All Status</option>
             <option value="true">Active Only</option>
             <option value="false">Inactive</option>
           </select>
-          <button className="p-3 bg-white border border-gray-200 rounded-2xl text-gray-600 hover:bg-gray-50 transition-colors">
+
+          {/* New Rating Filter */}
+          <select
+            value={ratingFilter}
+            onChange={(e) => setRatingFilter(e.target.value)}
+            className="px-4 py-3 rounded-2xl border border-gray-200 bg-white/60 backdrop-blur-md focus:outline-none text-gray-600 font-medium cursor-pointer hover:border-rose-300 transition-colors"
+          >
+            <option value="all">All Ratings</option>
+            <option value="4.5">4.5+ Stars ★</option>
+            <option value="4.0">4.0+ Stars ★</option>
+            <option value="3.5">3.5+ Stars ★</option>
+            <option value="3.0">3.0+ Stars ★</option>
+          </select>
+
+          <button className="p-3 bg-white/60 backdrop-blur-md border border-gray-200 rounded-2xl text-gray-600 hover:bg-rose-50 hover:text-rose-500 transition-colors">
             <Filter size={20} />
           </button>
         </div>
@@ -200,17 +229,13 @@ export default function BestSellersPage() {
                     transition={{ delay: idx * 0.05 }}
                     className="hover:bg-white/80 transition-colors group"
                   >
-                    {/* Restaurant Cell */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-12 rounded-2xl bg-gray-100 shrink-0 overflow-hidden border border-gray-100">
-                          {/* Replace with item.images.logo if available */}
-                          <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-rose-100 to-orange-100 text-xl font-bold text-rose-500">
-                            {item.name.charAt(0)}
-                          </div>
+                        <div className="relative w-11 h-11 rounded-2xl bg-linear-to-br from-rose-100 to-orange-100 shrink-0 flex items-center justify-center text-rose-500 font-bold border border-white shadow-sm">
+                          {item.name.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-bold text-gray-800 flex items-center gap-1">
+                          <p className="text-sm font-bold text-gray-700 flex items-center gap-1">
                             {item.name}
                             {item.status.isVerified && (
                               <CheckCircle2
@@ -219,56 +244,54 @@ export default function BestSellersPage() {
                               />
                             )}
                           </p>
-                          <p className="text-xs text-gray-500 flex items-center gap-1">
+                          <p className="text-[11px] text-gray-400 flex items-center gap-1 uppercase tracking-tight">
                             <MapPin size={10} /> {item.location.city}
                           </p>
                         </div>
                       </div>
                     </td>
 
-                    {/* Owner Cell */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <p className="text-sm font-semibold text-gray-700">
                         {item.owner.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-400">
                         {item.owner.email}
                       </p>
                     </td>
 
-                    {/* Rating Cell */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1">
-                        <Star
-                          size={14}
-                          className="fill-yellow-400 text-yellow-400"
-                        />
-                        <span className="font-bold text-gray-800">
-                          {item.rating.average}
-                        </span>
-                        <span className="text-xs text-gray-400">
+                    <td className="px-6 py-3">
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex items-center bg-yellow-50 px-2 py-1 rounded-lg border border-yellow-100">
+                          <Star
+                            size={12}
+                            className="fill-yellow-400 text-yellow-400 mr-1"
+                          />
+                          <span className="text-sm font-bold text-yellow-700">
+                            {item.rating.average}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-gray-400 font-medium">
                           ({item.rating.totalReviews})
                         </span>
                       </div>
                     </td>
 
-                    {/* Performance Cell */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <div className="space-y-1">
-                        <p className="text-sm font-bold text-gray-800">
+                        <p className="text-sm font-bold text-gray-700">
                           {item.stats?.totalOrders.toLocaleString()} Orders
                         </p>
-                        <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="w-20 h-1 bg-gray-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-green-500 rounded-full"
-                            style={{ width: "70%" }}
+                            className="h-full bg-linear-to-r from-orange-400 to-rose-500"
+                            style={{ width: "75%" }}
                           />
                         </div>
                       </div>
                     </td>
 
-                    {/* Status Cell */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-3">
                       <span
                         className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
                           item.status.isActive
@@ -280,14 +303,13 @@ export default function BestSellersPage() {
                       </span>
                     </td>
 
-                    {/* Actions */}
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded-xl text-gray-400 hover:text-rose-500 transition-colors">
-                          <ExternalLink size={18} />
+                    <td className="px-6 py-3 text-right">
+                      <div className="flex justify-end gap-1">
+                        <button className="p-2 hover:bg-rose-50 rounded-xl text-gray-400 hover:text-rose-500 transition-colors">
+                          <ExternalLink size={16} />
                         </button>
                         <button className="p-2 hover:bg-gray-100 rounded-xl text-gray-400 transition-colors">
-                          <MoreVertical size={18} />
+                          <MoreVertical size={16} />
                         </button>
                       </div>
                     </td>
@@ -313,19 +335,19 @@ export default function BestSellersPage() {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== 1 && "bg-rose-500 text-white hover:bg-rose-600"}`}
+              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== 1 ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
             >
-              <ChevronLeft size={15} />
+              <ChevronLeft size={18} />
             </button>
 
             {[...Array(totalPages)].map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentPage(i + 1)}
-                className={`w-8 h-8 rounded-xl text-sm font-bold transition-all ${
+                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
                   currentPage === i + 1
-                    ? "bg-rose-600 text-white shadow-lg"
-                    : "bg-white border border-gray-200 text-gray-600 hover:border-rose-500"
+                    ? "bg-rose-600 text-white shadow-lg shadow-rose-200"
+                    : "bg-white border border-gray-200 text-gray-500 hover:border-rose-400"
                 }`}
               >
                 {i + 1}
@@ -335,9 +357,9 @@ export default function BestSellersPage() {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== totalPages && "bg-rose-500 text-white hover:bg-rose-600"}`}
+              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== totalPages ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
             >
-              <ChevronRight size={15} />
+              <ChevronRight size={18} />
             </button>
           </div>
         </div>
