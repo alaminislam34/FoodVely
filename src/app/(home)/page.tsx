@@ -2,6 +2,7 @@
 
 import AboutSection from "./components/AboutSection/AboutSection";
 import Banner from "./components/Banner/Banner";
+import FAQManage from "./components/FAQ/FAQSection";
 import FoodCategory from "./components/FoodsSection/FoodCategory";
 import OurProducts from "./components/FoodsSection/OurProducts";
 import PopularProvider from "./components/PopularProvider/PopularProvider";
@@ -14,6 +15,7 @@ export default function Home() {
         <FoodCategory />
         <OurProducts />
         <AboutSection />
+        <FAQManage />
         <PopularProvider />
       </section>
     </div>

@@ -24,15 +24,16 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // শুরুতে মোবাইল ডিভাইসে সাইডবার বন্ধ রাখার জন্য false রাখা ভালো
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
   const pathName = usePathname();
 
-  // স্ক্রিন সাইজ বড় হলে সাইডবার অটোমেটিক ওপেন করার জন্য (ঐচ্ছিক)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      const isLargeScreen = window.innerWidth >= 768;
+      setIsDesktop(isLargeScreen);
+      if (isLargeScreen) {
         setSidebarOpen(true);
       }
     };
@@ -133,17 +134,13 @@ export default function AdminLayout({
       <motion.div
         initial={false}
         animate={{
-          x:
-            typeof window !== "undefined" && window.innerWidth >= 768
-              ? 0
-              : sidebarOpen
-                ? 0
-                : "-100%",
+          x: isDesktop ? 0 : sidebarOpen ? 0 : "-100%",
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`fixed md:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} 
           transition-none md:transition-all`}
+        suppressHydrationWarning
       >
         {/* Logo Section */}
         <div className="p-6 border-b border-gray-200">
