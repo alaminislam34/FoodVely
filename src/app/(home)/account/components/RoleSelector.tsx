@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-type UserRole = "provider";
+type UserRole = "customer" | "provider";
 
 interface RoleSelectorProps {
   role: UserRole;
@@ -20,7 +20,10 @@ export default function RoleSelector({
       className="mb-8"
     >
       <div className="flex gap-4">
-        {[{ id: "provider", label: "🏪 Provider", desc: "Sell food" }].map(
+        {[
+          { id: "customer", label: "👤 Customer", desc: "Order food" },
+          { id: "provider", label: "🏪 Provider", desc: "Sell food" },
+        ].map(
           (option) => (
             <button
               key={option.id}

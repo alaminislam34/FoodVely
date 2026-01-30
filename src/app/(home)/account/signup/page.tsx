@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import toast from "react-hot-toast";
+import { registerUser, verifyAccount } from "@/services/authService";
+import { useRouter } from "next/navigation";
 import RoleSelector from "../components/RoleSelector";
 import BasicFields from "../components/BasicFields";
 import ProviderFields from "../components/ProviderFields";
@@ -19,7 +22,7 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-type UserRole = "provider";
+type UserRole = "customer" | "provider";
 
 interface FormData {
   firstName: string;
@@ -37,12 +40,16 @@ interface FormData {
 }
 
 export default function SignUp() {
-  const [role, setRole] = useState<UserRole>("provider");
+  const router = useRouter();
+  const [role, setRole] = useState<UserRole>("customer");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [step, setStep] = useState<"register" | "verify">("register");
+  const [verifyEmail, setVerifyEmail] = useState("");
+  const [otp, setOtp] = useState("");
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -114,18 +121,139 @@ export default function SignUp() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) {
+      toast.error("Please fix the errors above");
+      return;
+    }
 
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    const loadingToast = toast.loading("Creating your account...");
 
-    console.log("Sign up:", {
-      role,
-      ...formData,
-      selectedCategories: activeCategory,
-    });
+    try {
+      await registerUser(
+        `${formData.firstName} ${formData.lastName}`,
+        formData.email,
+        formData.password,
+      );
+      setVerifyEmail(formData.email);
+      setStep("verify");
+      toast.dismiss(loadingToast);
+      toast.success("Account created! Check your email for OTP.");
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error("Registration failed. Try again.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!otp.trim()) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+
+    setIsLoading(true);
+    const loadingToast = toast.loading("Verifying account...");
+
+    try {
+      await verifyAccount(verifyEmail, otp);
+      toast.dismiss(loadingToast);
+      toast.success("Account verified! Redirecting...");
+      setTimeout(() => router.push("/account/signin"), 1000);
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error("Verification failed. Try again.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (step === "verify") {
+    return (
+      <section className="min-h-screen flex items-center justify-center py-12 px-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full max-w-md"
+        >
+          <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+            <motion.div
+              animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
+            />
+          </div>
+
+          <motion.div
+            variants={itemVariants}
+            className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
+          >
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
+                Verify Account
+              </h1>
+              <p className="text-gray-600 font-Sofia">
+                Enter the code sent to {verifyEmail}
+              </p>
+            </div>
+
+            <form onSubmit={handleOtpSubmit} className="space-y-6">
+              <motion.div variants={itemVariants} className="space-y-2">
+                <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  OTP Code
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.toUpperCase())}
+                  placeholder="000000"
+                  maxLength={6}
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
+                />
+              </motion.div>
+
+              <motion.button
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isLoading || !otp}
+                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
+              >
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Verify Account
+                    <ArrowRight size={20} />
+                  </>
+                )}
+              </motion.button>
+
+              <button
+                type="button"
+                onClick={() => setStep("register")}
+                className="w-full text-rose-500 font-Sofia font-semibold hover:underline"
+              >
+                Back to Registration
+              </button>
+            </form>
+          </motion.div>
+        </motion.div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center py-12 px-4">
@@ -135,6 +263,7 @@ export default function SignUp() {
         animate="visible"
         className="w-full max-w-2xl"
       >
+        {/* Decorative Blobs */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
           <motion.div
             animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
@@ -148,22 +277,27 @@ export default function SignUp() {
           />
         </div>
 
+        {/* Sign Up Card */}
         <motion.div
           variants={itemVariants}
           className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
         >
+          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
-              Join FoodVally
+              Join Foodvely
             </h1>
             <p className="text-gray-600 font-Sofia">
               Create your account to get started
             </p>
           </div>
 
+          {/* Role Selector Component */}
           <RoleSelector role={role} setRole={setRole} setErrors={setErrors} />
 
+          {/* Sign Up Form */}
           <form onSubmit={handleSignUp} className="space-y-4">
+            {/* Basic Fields Component */}
             <BasicFields
               formData={formData}
               errors={errors}
@@ -176,6 +310,7 @@ export default function SignUp() {
               PasswordStrengthComponent={PasswordStrength}
             />
 
+            {/* Provider Fields Component */}
             <AnimatePresence mode="wait">
               {role === "provider" && (
                 <motion.div
@@ -197,6 +332,7 @@ export default function SignUp() {
               )}
             </AnimatePresence>
 
+            {/* Sign Up Button */}
             <motion.button
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
@@ -216,6 +352,7 @@ export default function SignUp() {
             </motion.button>
           </form>
 
+          {/* Divider */}
           <motion.div variants={itemVariants} className="my-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -229,6 +366,7 @@ export default function SignUp() {
             </div>
           </motion.div>
 
+          {/* Sign In Link */}
           <motion.div variants={itemVariants}>
             <Link
               href="/account/signin"
@@ -238,6 +376,7 @@ export default function SignUp() {
             </Link>
           </motion.div>
 
+          {/* Terms */}
           <motion.p
             variants={itemVariants}
             className="text-center text-xs text-gray-600 mt-6 font-Sofia"

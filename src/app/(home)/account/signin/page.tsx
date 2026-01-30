@@ -4,6 +4,9 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import toast from "react-hot-toast";
+import { loginRequest, loginVerify } from "@/services/authService";
+import { useRouter } from "next/navigation";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -16,11 +19,14 @@ const itemVariants = {
 };
 
 export default function SignIn() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [step, setStep] = useState<"credentials" | "otp">("credentials");
+  const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {},
   );
@@ -50,13 +56,128 @@ export default function SignIn() {
     if (!validateForm()) return;
 
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    const loadingToast = toast.loading("Sending OTP to your email...");
 
-    // Handle signin logic here
-    console.log("Sign in:", { email, password, rememberMe });
+    try {
+      await loginRequest(email, password);
+      toast.dismiss(loadingToast);
+      toast.success("OTP sent! Check your email.");
+      setStep("otp");
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error("Login failed. Check your credentials.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!otp.trim()) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+
+    setIsLoading(true);
+    const loadingToast = toast.loading("Verifying OTP...");
+
+    try {
+      await loginVerify(email, otp);
+      toast.dismiss(loadingToast);
+      toast.success("Login successful!");
+      setTimeout(() => router.push("/"), 1000);
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error("Invalid OTP. Try again.");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (step === "otp") {
+    return (
+      <section className="min-h-screen flex items-center justify-center py-12 px-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="w-full max-w-md"
+        >
+          <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+            <motion.div
+              animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
+              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
+            />
+          </div>
+
+          <motion.div
+            variants={itemVariants}
+            className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
+          >
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
+                Verify OTP
+              </h1>
+              <p className="text-gray-600 font-Sofia">
+                Enter the code sent to {email}
+              </p>
+            </div>
+
+            <form onSubmit={handleOtpSubmit} className="space-y-6">
+              <motion.div variants={itemVariants} className="space-y-2">
+                <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  OTP Code
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.toUpperCase())}
+                  placeholder="000000"
+                  maxLength={6}
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
+                />
+              </motion.div>
+
+              <motion.button
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isLoading || !otp}
+                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
+              >
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    Verify & Login
+                    <ArrowRight size={20} />
+                  </>
+                )}
+              </motion.button>
+
+              <button
+                type="button"
+                onClick={() => setStep("credentials")}
+                className="w-full text-rose-500 font-Sofia font-semibold hover:underline"
+              >
+                Back to Login
+              </button>
+            </form>
+          </motion.div>
+        </motion.div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center py-12 px-4">
@@ -91,7 +212,7 @@ export default function SignIn() {
               Welcome Back
             </h1>
             <p className="text-gray-600 font-Sofia">
-              Sign in to your FoodVally account
+              Sign in to your Foodvely account
             </p>
           </div>
 

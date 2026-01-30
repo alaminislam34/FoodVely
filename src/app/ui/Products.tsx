@@ -69,7 +69,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           {/* Top Right: Rating & Sale */}
           <div className="absolute top-3 right-3 flex flex-col items-end gap-2">
             {hasDiscount && (
-              <div className="bg-rose-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-lg">
+              <div className="bg-rose-500  text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-lg">
                 Save{" "}
                 {Math.round(
                   ((product.price - product.discountPrice!) / product.price) *
@@ -101,7 +101,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
       <div className="px-2 pb-2">
         {/* Category & Prep Time */}
         <div className="flex justify-between items-center mb-1">
-          <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest font-Sofia">
+          <span className="text-[10px] font-black text-rose-500">
             {categoryName}
           </span>
           <div className="flex items-center gap-1 text-slate-400">
@@ -131,12 +131,12 @@ export const ProductCard = ({ product }: { product: Product }) => {
         <div className="flex justify-between items-center pt-2 border-t border-slate-100">
           <div className="flex flex-col">
             {hasDiscount && (
-              <span className="text-[10px] text-slate-400 line-through font-bold">
+              <span className="text-[10px] font-Sofia text-slate-400 line-through font-bold">
                 {product.currency || "BDT"} {product.price}
               </span>
             )}
             <div className="flex items-center gap-1">
-              <span className="text-lg md:text-xl font-black text-slate-900">
+              <span className="text-lg md:text-xl font-Sofia font-black text-slate-900">
                 {product.currency || "BDT"} {displayPrice}
               </span>
             </div>
