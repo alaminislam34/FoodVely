@@ -64,8 +64,8 @@ export default function RestaurantLayout({
       icon: User,
       submenu: [
         { label: "Profile Info", href: "/provider/profile" },
-        { label: "Business Details", href: "/provider/business" },
-        { label: "Verification", href: "/provider/verification" },
+        // { label: "Business Details", href: "/provider/business" },
+        // { label: "Verification", href: "/provider/verification" },
       ],
     },
 
@@ -74,7 +74,7 @@ export default function RestaurantLayout({
       icon: Package2,
       submenu: [
         { label: "All Products", href: "/provider/products" },
-        { label: "Add Product", href: "/provider/products/add" },
+        { label: "Add Product", href: "/provider/addFood" },
         { label: "Categories", href: "/provider/categories" },
         { label: "Out of Stock", href: "/provider/out-of-stock" },
       ],
