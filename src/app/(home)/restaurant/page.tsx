@@ -312,7 +312,7 @@ export default function RestaurantPage() {
                   placeholder="Search restaurants..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 placeholder:text-gray-400"
+                  className="w-full px-4 py-2 md:py-3.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 placeholder:text-gray-400"
                 />
               </div>
 

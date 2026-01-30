@@ -34,7 +34,8 @@ button {
 } */
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(120deg, #fff3cd, #ffddb0, #fff8e1);
+    background: linear-gradient(180deg, #fffdf7 0%, #fffbee 100%);
 }
+
 
 /* main className="flex-1 h-screen overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed"> */
