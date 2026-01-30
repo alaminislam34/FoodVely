@@ -1,0 +1,675 @@
+[
+  {
+    "orderId": "ord_1001",
+    "orderNumber": "FDV-20250120-0001",
+    "user": {
+      "id": "user_12",
+      "name": "Al Amin Islam",
+      "phone": "017XXXXXXXX",
+      "email": "alamin@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_01",
+        "name": "Beef Biryani",
+        "slug": "beef-biryani",
+        "thumbnail": "/images/beef-biryani1.png",
+        "provider": {
+          "id": "res-4",
+          "name": "FoodVely Kitchen"
+        },
+        "price": 400,
+        "discountPrice": 370,
+        "quantity": 2,
+        "totalPrice": 740
+      }
+    ],
+    "pricing": {
+      "subTotal": 740,
+      "deliveryFee": 50,
+      "serviceCharge": 20,
+      "discount": 30,
+      "totalAmount": 780,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "BKASH",
+      "status": "paid",
+      "transactionId": "BKASH9X8Y7Z",
+      "paidAt": "2025-01-20T14:32:00.000Z"
+    },
+    "delivery": {
+      "address": "Nikunjo-2, Khilkhet, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1229",
+      "note": "Call before delivery",
+      "estimatedTime": "40 minutes"
+    },
+    "orderStatus": "delivered",
+    "timestamps": {
+      "orderedAt": "2025-01-20T14:30:00.000Z",
+      "confirmedAt": "2025-01-20T14:31:00.000Z",
+      "deliveredAt": "2025-01-20T15:10:00.000Z"
+    }
+  },
+
+  {
+    "orderId": "ord_1002",
+    "orderNumber": "FDV-20250121-0002",
+    "user": {
+      "id": "user_18",
+      "name": "Rakib Hasan",
+      "phone": "018XXXXXXXX",
+      "email": "rakib@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_02",
+        "name": "Chicken Biryani",
+        "slug": "chicken-biryani",
+        "thumbnail": "/images/chicken-biryani.png",
+        "provider": {
+          "id": "res-4",
+          "name": "FoodVely Kitchen"
+        },
+        "price": 300,
+        "discountPrice": 280,
+        "quantity": 1,
+        "totalPrice": 280
+      },
+      {
+        "foodId": "food_03",
+        "name": "Borhani",
+        "slug": "borhani",
+        "thumbnail": "/images/borhani.png",
+        "provider": {
+          "id": "res-4",
+          "name": "FoodVely Kitchen"
+        },
+        "price": 80,
+        "discountPrice": 80,
+        "quantity": 2,
+        "totalPrice": 160
+      }
+    ],
+    "pricing": {
+      "subTotal": 440,
+      "deliveryFee": 40,
+      "serviceCharge": 15,
+      "discount": 0,
+      "totalAmount": 495,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "COD",
+      "status": "pending",
+      "transactionId": null,
+      "paidAt": null
+    },
+    "delivery": {
+      "address": "Mirpur-10, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1216",
+      "note": "",
+      "estimatedTime": "35 minutes"
+    },
+    "orderStatus": "on_the_way",
+    "timestamps": {
+      "orderedAt": "2025-01-21T13:15:00.000Z",
+      "confirmedAt": "2025-01-21T13:18:00.000Z",
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1003",
+    "orderNumber": "FDV-20250122-0003",
+    "user": {
+      "id": "user_21",
+      "name": "Sabbir Ahmed",
+      "phone": "019XXXXXXXX",
+      "email": "sabbir@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_04",
+        "name": "Beef Tehari",
+        "slug": "beef-tehari",
+        "thumbnail": "/images/beef-tehari.png",
+        "provider": {
+          "id": "res-7",
+          "name": "Tehari House"
+        },
+        "price": 350,
+        "discountPrice": 330,
+        "quantity": 1,
+        "totalPrice": 330
+      }
+    ],
+    "pricing": {
+      "subTotal": 330,
+      "deliveryFee": 60,
+      "serviceCharge": 20,
+      "discount": 0,
+      "totalAmount": 410,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "NAGAD",
+      "status": "failed",
+      "transactionId": "NGD-FAIL-7788",
+      "paidAt": "2025-01-22T19:05:00.000Z"
+    },
+    "delivery": {
+      "address": "Uttara Sector-7, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1230",
+      "note": "Leave at gate",
+      "estimatedTime": "45 minutes"
+    },
+    "orderStatus": "cancelled",
+    "timestamps": {
+      "orderedAt": "2025-01-22T19:00:00.000Z",
+      "confirmedAt": null,
+      "deliveredAt": null
+    }
+  },
+  {
+    "orderId": "ord_1004",
+    "orderNumber": "FDV-20250123-0004",
+    "user": {
+      "id": "user_25",
+      "name": "Tanvir Rahman",
+      "phone": "016XXXXXXXX",
+      "email": "tanvir@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_05",
+        "name": "Kacchi Biryani",
+        "slug": "kacchi-biryani",
+        "thumbnail": "/images/kacchi.png",
+        "provider": {
+          "id": "res-9",
+          "name": "Sultan’s Dine"
+        },
+        "price": 480,
+        "discountPrice": 450,
+        "quantity": 1,
+        "totalPrice": 450
+      }
+    ],
+    "pricing": {
+      "subTotal": 450,
+      "deliveryFee": 70,
+      "serviceCharge": 25,
+      "discount": 0,
+      "totalAmount": 545,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "BKASH",
+      "status": "paid",
+      "transactionId": "BKASH-778899",
+      "paidAt": "2025-01-23T20:45:00.000Z"
+    },
+    "delivery": {
+      "address": "Dhanmondi 32, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1209",
+      "note": "Ring the bell",
+      "estimatedTime": "50 minutes"
+    },
+    "orderStatus": "preparing",
+    "timestamps": {
+      "orderedAt": "2025-01-23T20:40:00.000Z",
+      "confirmedAt": "2025-01-23T20:42:00.000Z",
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1005",
+    "orderNumber": "FDV-20250124-0005",
+    "user": {
+      "id": "user_31",
+      "name": "Nusrat Jahan",
+      "phone": "015XXXXXXXX",
+      "email": "nusrat@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_06",
+        "name": "Vegetable Fried Rice",
+        "slug": "vegetable-fried-rice",
+        "thumbnail": "/images/fried-rice.png",
+        "provider": {
+          "id": "res-11",
+          "name": "Green Bowl"
+        },
+        "price": 220,
+        "discountPrice": 220,
+        "quantity": 2,
+        "totalPrice": 440
+      }
+    ],
+    "pricing": {
+      "subTotal": 440,
+      "deliveryFee": 40,
+      "serviceCharge": 15,
+      "discount": 20,
+      "totalAmount": 475,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "COD",
+      "status": "pending",
+      "transactionId": null,
+      "paidAt": null
+    },
+    "delivery": {
+      "address": "Mohakhali DOHS, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1212",
+      "note": "Security gate delivery",
+      "estimatedTime": "30 minutes"
+    },
+    "orderStatus": "confirmed",
+    "timestamps": {
+      "orderedAt": "2025-01-24T12:10:00.000Z",
+      "confirmedAt": "2025-01-24T12:12:00.000Z",
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1006",
+    "orderNumber": "FDV-20250124-0006",
+    "user": {
+      "id": "user_44",
+      "name": "Mahmudul Hasan",
+      "phone": "017XXXXXXXX",
+      "email": "mahmud@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_07",
+        "name": "Beef Burger",
+        "slug": "beef-burger",
+        "thumbnail": "/images/burger.png",
+        "provider": {
+          "id": "res-14",
+          "name": "Burger Bros"
+        },
+        "price": 300,
+        "discountPrice": 270,
+        "quantity": 3,
+        "totalPrice": 810
+      }
+    ],
+    "pricing": {
+      "subTotal": 810,
+      "deliveryFee": 60,
+      "serviceCharge": 30,
+      "discount": 0,
+      "totalAmount": 900,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "NAGAD",
+      "status": "paid",
+      "transactionId": "NGD-998877",
+      "paidAt": "2025-01-24T18:22:00.000Z"
+    },
+    "delivery": {
+      "address": "Banani Block C, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1213",
+      "note": "",
+      "estimatedTime": "25 minutes"
+    },
+    "orderStatus": "on_the_way",
+    "timestamps": {
+      "orderedAt": "2025-01-24T18:15:00.000Z",
+      "confirmedAt": "2025-01-24T18:17:00.000Z",
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1007",
+    "orderNumber": "FDV-20250125-0007",
+    "user": {
+      "id": "user_50",
+      "name": "Fahim Chowdhury",
+      "phone": "019XXXXXXXX",
+      "email": "fahim@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_08",
+        "name": "Chicken Shawarma",
+        "slug": "chicken-shawarma",
+        "thumbnail": "/images/shawarma.png",
+        "provider": {
+          "id": "res-18",
+          "name": "Arabian Bites"
+        },
+        "price": 260,
+        "discountPrice": 240,
+        "quantity": 1,
+        "totalPrice": 240
+      }
+    ],
+    "pricing": {
+      "subTotal": 240,
+      "deliveryFee": 50,
+      "serviceCharge": 10,
+      "discount": 0,
+      "totalAmount": 300,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "BKASH",
+      "status": "refunded",
+      "transactionId": "BKASH-REF-2233",
+      "paidAt": "2025-01-25T14:05:00.000Z"
+    },
+    "delivery": {
+      "address": "Jatrabari, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1236",
+      "note": "Order cancelled by user",
+      "estimatedTime": null
+    },
+    "orderStatus": "cancelled",
+    "timestamps": {
+      "orderedAt": "2025-01-25T14:00:00.000Z",
+      "confirmedAt": null,
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1008",
+    "orderNumber": "FDV-20250126-0008",
+    "user": {
+      "id": "user_61",
+      "name": "Sharmin Akter",
+      "phone": "018XXXXXXXX",
+      "email": "sharmin@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_09",
+        "name": "Pasta Alfredo",
+        "slug": "pasta-alfredo",
+        "thumbnail": "/images/pasta.png",
+        "provider": {
+          "id": "res-22",
+          "name": "Italiano"
+        },
+        "price": 420,
+        "discountPrice": 400,
+        "quantity": 2,
+        "totalPrice": 800
+      }
+    ],
+    "pricing": {
+      "subTotal": 800,
+      "deliveryFee": 80,
+      "serviceCharge": 35,
+      "discount": 50,
+      "totalAmount": 865,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "CARD",
+      "status": "paid",
+      "transactionId": "CARD-556677",
+      "paidAt": "2025-01-26T21:40:00.000Z"
+    },
+    "delivery": {
+      "address": "Gulshan 1, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1212",
+      "note": "Office delivery",
+      "estimatedTime": "55 minutes"
+    },
+    "orderStatus": "delivered",
+    "timestamps": {
+      "orderedAt": "2025-01-26T21:30:00.000Z",
+      "confirmedAt": "2025-01-26T21:33:00.000Z",
+      "deliveredAt": "2025-01-26T22:25:00.000Z"
+    }
+  },
+  {
+    "orderId": "ord_1009",
+    "orderNumber": "FDV-20250127-0009",
+    "user": {
+      "id": "user_70",
+      "name": "Imran Hossain",
+      "phone": "017XXXXXXXX",
+      "email": "imran@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_01",
+        "name": "Beef Biryani",
+        "slug": "beef-biryani",
+        "thumbnail": "/images/beef-biryani1.png",
+        "provider": {
+          "id": "res-4",
+          "name": "FoodVely Kitchen"
+        },
+        "price": 400,
+        "discountPrice": 370,
+        "quantity": 3,
+        "totalPrice": 1110
+      }
+    ],
+    "pricing": {
+      "subTotal": 1110,
+      "deliveryFee": 60,
+      "serviceCharge": 30,
+      "discount": 50,
+      "totalAmount": 1150,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "BKASH",
+      "status": "paid",
+      "transactionId": "BKASH-445566",
+      "paidAt": "2025-01-27T13:05:00.000Z"
+    },
+    "delivery": {
+      "address": "Khilgaon, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1219",
+      "note": "",
+      "estimatedTime": "45 minutes"
+    },
+    "orderStatus": "delivered",
+    "timestamps": {
+      "orderedAt": "2025-01-27T12:50:00.000Z",
+      "confirmedAt": "2025-01-27T12:52:00.000Z",
+      "deliveredAt": "2025-01-27T13:40:00.000Z"
+    }
+  },
+
+  {
+    "orderId": "ord_1010",
+    "orderNumber": "FDV-20250127-0010",
+    "user": {
+      "id": "user_71",
+      "name": "Ayesha Siddika",
+      "phone": "018XXXXXXXX",
+      "email": "ayesha@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_10",
+        "name": "Chicken Pizza",
+        "slug": "chicken-pizza",
+        "thumbnail": "/images/pizza.png",
+        "provider": {
+          "id": "res-30",
+          "name": "Pizza Hub"
+        },
+        "price": 550,
+        "discountPrice": 500,
+        "quantity": 1,
+        "totalPrice": 500
+      },
+      {
+        "foodId": "food_11",
+        "name": "Coke 500ml",
+        "slug": "coke-500ml",
+        "thumbnail": "/images/coke.png",
+        "provider": {
+          "id": "res-30",
+          "name": "Pizza Hub"
+        },
+        "price": 60,
+        "discountPrice": 60,
+        "quantity": 2,
+        "totalPrice": 120
+      }
+    ],
+    "pricing": {
+      "subTotal": 620,
+      "deliveryFee": 50,
+      "serviceCharge": 20,
+      "discount": 0,
+      "totalAmount": 690,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "CARD",
+      "status": "paid",
+      "transactionId": "CARD-889900",
+      "paidAt": "2025-01-27T20:10:00.000Z"
+    },
+    "delivery": {
+      "address": "Badda, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1212",
+      "note": "Call on arrival",
+      "estimatedTime": "35 minutes"
+    },
+    "orderStatus": "on_the_way",
+    "timestamps": {
+      "orderedAt": "2025-01-27T19:55:00.000Z",
+      "confirmedAt": "2025-01-27T19:58:00.000Z",
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1011",
+    "orderNumber": "FDV-20250128-0011",
+    "user": {
+      "id": "user_73",
+      "name": "Hasan Mahmud",
+      "phone": "019XXXXXXXX",
+      "email": "hasan@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_12",
+        "name": "Grilled Chicken",
+        "slug": "grilled-chicken",
+        "thumbnail": "/images/grilled-chicken.png",
+        "provider": {
+          "id": "res-33",
+          "name": "BBQ Nation"
+        },
+        "price": 650,
+        "discountPrice": 620,
+        "quantity": 1,
+        "totalPrice": 620
+      }
+    ],
+    "pricing": {
+      "subTotal": 620,
+      "deliveryFee": 70,
+      "serviceCharge": 30,
+      "discount": 0,
+      "totalAmount": 720,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "NAGAD",
+      "status": "failed",
+      "transactionId": "NGD-FAIL-1122",
+      "paidAt": "2025-01-28T21:15:00.000Z"
+    },
+    "delivery": {
+      "address": "Farmgate, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1215",
+      "note": "",
+      "estimatedTime": null
+    },
+    "orderStatus": "cancelled",
+    "timestamps": {
+      "orderedAt": "2025-01-28T21:10:00.000Z",
+      "confirmedAt": null,
+      "deliveredAt": null
+    }
+  },
+
+  {
+    "orderId": "ord_1012",
+    "orderNumber": "FDV-20250128-0012",
+    "user": {
+      "id": "user_75",
+      "name": "Rafsan Kabir",
+      "phone": "016XXXXXXXX",
+      "email": "rafsan@gmail.com"
+    },
+    "items": [
+      {
+        "foodId": "food_13",
+        "name": "Chocolate Cake",
+        "slug": "chocolate-cake",
+        "thumbnail": "/images/cake.png",
+        "provider": {
+          "id": "res-40",
+          "name": "Sweet Treats"
+        },
+        "price": 900,
+        "discountPrice": 850,
+        "quantity": 1,
+        "totalPrice": 850
+      }
+    ],
+    "pricing": {
+      "subTotal": 850,
+      "deliveryFee": 80,
+      "serviceCharge": 40,
+      "discount": 50,
+      "totalAmount": 920,
+      "currency": "BDT"
+    },
+    "payment": {
+      "method": "BKASH",
+      "status": "paid",
+      "transactionId": "BKASH-CAKE-01",
+      "paidAt": "2025-01-28T16:30:00.000Z"
+    },
+    "delivery": {
+      "address": "Wari, Dhaka",
+      "city": "Dhaka",
+      "postcode": "1203",
+      "note": "Birthday delivery",
+      "estimatedTime": "60 minutes"
+    },
+    "orderStatus": "preparing",
+    "timestamps": {
+      "orderedAt": "2025-01-28T16:20:00.000Z",
+      "confirmedAt": "2025-01-28T16:22:00.000Z",
+      "deliveredAt": null
+    }
+  }
+]

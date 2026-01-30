@@ -75,8 +75,6 @@ export default function RestaurantLayout({
       submenu: [
         { label: "All Products", href: "/provider/products" },
         { label: "Add Product", href: "/provider/addFood" },
-        { label: "Categories", href: "/provider/categories" },
-        { label: "Out of Stock", href: "/provider/out-of-stock" },
       ],
     },
 
@@ -85,21 +83,21 @@ export default function RestaurantLayout({
       icon: ShoppingBag,
       submenu: [
         { label: "All Orders", href: "/provider/orders" },
-        { label: "Pending Orders", href: "/provider/orders/pending" },
-        { label: "Completed Orders", href: "/provider/orders/completed" },
-        { label: "Cancelled Orders", href: "/provider/orders/cancelled" },
+        // { label: "Pending Orders", href: "/provider/orders/pending" },
+        // { label: "Completed Orders", href: "/provider/orders/completed" },
+        // { label: "Cancelled Orders", href: "/provider/orders/cancelled" },
       ],
     },
 
-    {
-      label: "Restaurant Manage",
-      icon: UtensilsCrossedIcon,
-      submenu: [
-        { label: "My Restaurant", href: "/provider/restaurant" },
-        { label: "Opening Hours", href: "/provider/restaurant/hours" },
-        { label: "Menu Management", href: "/provider/restaurant/menu" },
-      ],
-    },
+    // {
+    //   label: "Restaurant Manage",
+    //   icon: UtensilsCrossedIcon,
+    //   submenu: [
+    //     { label: "My Restaurant", href: "/provider/restaurant" },
+    //     { label: "Opening Hours", href: "/provider/restaurant/hours" },
+    //     { label: "Menu Management", href: "/provider/restaurant/menu" },
+    //   ],
+    // },
 
     {
       label: "Reviews & Ratings",
@@ -135,16 +133,6 @@ export default function RestaurantLayout({
       submenu: [
         { label: "Sales Report", href: "/provider/reports/sales" },
         { label: "Order Report", href: "/provider/reports/orders" },
-      ],
-    },
-
-    {
-      label: "Settings",
-      icon: Settings2,
-      submenu: [
-        { label: "Account Settings", href: "/provider/settings" },
-        { label: "Security", href: "/provider/security" },
-        { label: "Notification Settings", href: "/provider/notifications" },
       ],
     },
   ];
