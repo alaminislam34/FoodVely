@@ -240,7 +240,7 @@ const ImageSlider = () => {
 export default function Banner() {
   return (
     <div className="relative min-h-150 md:min-h-160 lg:min-h-175 flex items-center">
-      <div className="absolute top-[-10%] right-[-10%] w-125 h-125 bg-rose-50 rounded-full blur-[120px] opacity-60 z-0" />
+      <div className="absolute top-[-10%] right-[-10%] w-125 h-125 rounded-full blur-[120px] opacity-60 z-0" />
       <div className="absolute bottom-[10%] left-[-5%] w-75 h-75 bg-orange-50 rounded-full blur-[100px] opacity-50 z-0" />
 
       <motion.div
@@ -337,7 +337,7 @@ export default function Banner() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 1, duration: 0.5 }}
-              className="absolute -bottom-6 -right-6 hidden xl:block bg-white/90 backdrop-blur-xl p-4 rounded-3xl shadow-2xl border border-rose-100 z-30"
+              className="absolute -bottom-6 -right-6 hidden xl:block bg-white/40 backdrop-blur-xl p-4 rounded-3xl shadow-2xl border border-rose-100 z-30"
             >
               <div className="flex items-center gap-4">
                 <div className="relative">

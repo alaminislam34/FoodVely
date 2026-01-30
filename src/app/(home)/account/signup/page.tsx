@@ -135,7 +135,6 @@ export default function SignUp() {
         animate="visible"
         className="w-full max-w-2xl"
       >
-        {/* Decorative Blobs */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
           <motion.div
             animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
@@ -149,12 +148,10 @@ export default function SignUp() {
           />
         </div>
 
-        {/* Sign Up Card */}
         <motion.div
           variants={itemVariants}
           className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
         >
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
               Join FoodVally
@@ -164,12 +161,9 @@ export default function SignUp() {
             </p>
           </div>
 
-          {/* Role Selector Component */}
           <RoleSelector role={role} setRole={setRole} setErrors={setErrors} />
 
-          {/* Sign Up Form */}
           <form onSubmit={handleSignUp} className="space-y-4">
-            {/* Basic Fields Component */}
             <BasicFields
               formData={formData}
               errors={errors}
@@ -182,7 +176,6 @@ export default function SignUp() {
               PasswordStrengthComponent={PasswordStrength}
             />
 
-            {/* Provider Fields Component */}
             <AnimatePresence mode="wait">
               {role === "provider" && (
                 <motion.div
@@ -204,7 +197,6 @@ export default function SignUp() {
               )}
             </AnimatePresence>
 
-            {/* Sign Up Button */}
             <motion.button
               variants={itemVariants}
               whileHover={{ scale: 1.02 }}
@@ -224,7 +216,6 @@ export default function SignUp() {
             </motion.button>
           </form>
 
-          {/* Divider */}
           <motion.div variants={itemVariants} className="my-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
@@ -238,7 +229,6 @@ export default function SignUp() {
             </div>
           </motion.div>
 
-          {/* Sign In Link */}
           <motion.div variants={itemVariants}>
             <Link
               href="/account/signin"
@@ -248,7 +238,6 @@ export default function SignUp() {
             </Link>
           </motion.div>
 
-          {/* Terms */}
           <motion.p
             variants={itemVariants}
             className="text-center text-xs text-gray-600 mt-6 font-Sofia"

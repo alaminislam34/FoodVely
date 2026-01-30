@@ -28,7 +28,11 @@ button {
     cursor: pointer;
 }
 
+/* body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #fffaf0, #ffedd5);
+} */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #fff8e1;
+    background: linear-gradient(120deg, #fff3cd, #ffddb0, #fff8e1);
 }
