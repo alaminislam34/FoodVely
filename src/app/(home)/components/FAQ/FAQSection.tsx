@@ -60,12 +60,12 @@ export default function FAQSection() {
               className={`group overflow-hidden rounded-[2.5rem] transition-all duration-500 ${
                 isOpen
                   ? "bg-white shadow-2xl shadow-rose-100 border-rose-100 border"
-                  : "bg-gray-50/50 hover:bg-gray-50 border-transparent border"
+                  : "bg-gray-50/50 shadow-md hover:bg-gray-50 border-transparent border"
               }`}
             >
               <button
                 onClick={() => setOpenId(isOpen ? null : faq.id)}
-                className="w-full flex items-center justify-between shadow p-4 md:p-8 text-left outline-none"
+                className="w-full flex items-center justify-between p-4 md:p-8 text-left outline-none"
               >
                 <div className="flex items-center gap-5">
                   <div
