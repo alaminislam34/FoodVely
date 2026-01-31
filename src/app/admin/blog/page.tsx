@@ -153,7 +153,7 @@ export default function BlogManage() {
         </div>
         <button
           onClick={handleCreateNew}
-          className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-500 to-orange-500 text-white rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95"
+          className="flex items-center justify-center gap-2 px-6 py-3 bg-linear-to-r from-rose-500 to-orange-500 text-white rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95"
         >
           <Plus size={20} /> Write New Post
         </button>
@@ -215,7 +215,7 @@ export default function BlogManage() {
                   className="w-full h-full object-cover opacity-60"
                   alt=""
                 />
-                <div className="absolute inset-0 flex items-end p-8 bg-gradient-to-t from-black/90 via-transparent to-transparent">
+                <div className="absolute inset-0 flex items-end p-8 bg-linear-to-t from-black/90 via-transparent to-transparent">
                   <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight">
                     {currentBlog.title}
                   </h2>
