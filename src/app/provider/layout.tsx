@@ -110,8 +110,8 @@ export default function RestaurantLayout({
       label: "Reports",
       icon: BarChart3,
       submenu: [
-        { label: "Sales Report", href: "/provider/reports/sales" },
-        { label: "Order Report", href: "/provider/reports/orders" },
+        { label: "Sales Report", href: "/provider/sales_reports" },
+        { label: "Order Report", href: "/provider/order_reports" },
       ],
     },
   ];
