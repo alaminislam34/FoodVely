@@ -223,7 +223,7 @@ export default function AddNewFood() {
         {/* --- RIGHT: PREVIEW SECTION (COL 4) --- */}
         <div className="lg:col-span-5 xl:col-span-4">
           <div className="sticky top-6">
-            <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-4 text-center">
+            <h3 className="text-sm md:text-base font-black text-gray-600 mb-4 text-center">
               Live Preview
             </h3>
 
@@ -231,10 +231,11 @@ export default function AddNewFood() {
             <div className="max-w-[320px] mx-auto group relative flex flex-col justify-between bg-white/60 backdrop-blur-md p-3 rounded-[2.5rem] border border-white/40 shadow-xl">
               {/* Image Section */}
               <div className="relative aspect-square w-full rounded-4xl overflow-hidden mb-4 bg-slate-50">
-                <img
+                <Image
                   src={imagePreview || "/images/food.png"}
+                  fill
                   alt="Preview"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                 />
 
                 {/* Badges */}
@@ -255,31 +256,6 @@ export default function AddNewFood() {
                       />
                     </div>
                   )}
-                </div>
-
-                {/* Top Right: Rating & Sale */}
-                <div className="absolute top-3 right-3 flex flex-col items-end gap-2">
-                  {hasDiscount && (
-                    <div className="bg-rose-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-lg">
-                      Save{" "}
-                      {Math.round(
-                        ((Number(formData.basePrice) -
-                          Number(formData.discountPrice)) /
-                          Number(formData.basePrice)) *
-                          100,
-                      )}
-                      %
-                    </div>
-                  )}
-                  <div className="bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm flex items-center gap-1 border border-white">
-                    <Star
-                      size={12}
-                      className="fill-orange-400 text-orange-400"
-                    />
-                    <span className="text-[11px] font-bold text-slate-800">
-                      4.5
-                    </span>
-                  </div>
                 </div>
               </div>
 

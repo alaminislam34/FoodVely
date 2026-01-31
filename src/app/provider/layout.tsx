@@ -81,50 +81,29 @@ export default function RestaurantLayout({
     {
       label: "Orders",
       icon: ShoppingBag,
-      submenu: [
-        { label: "All Orders", href: "/provider/orders" },
-        // { label: "Pending Orders", href: "/provider/orders/pending" },
-        // { label: "Completed Orders", href: "/provider/orders/completed" },
-        // { label: "Cancelled Orders", href: "/provider/orders/cancelled" },
-      ],
+      href: "/provider/orders",
+      submenu: null,
     },
-
-    // {
-    //   label: "Restaurant Manage",
-    //   icon: UtensilsCrossedIcon,
-    //   submenu: [
-    //     { label: "My Restaurant", href: "/provider/restaurant" },
-    //     { label: "Opening Hours", href: "/provider/restaurant/hours" },
-    //     { label: "Menu Management", href: "/provider/restaurant/menu" },
-    //   ],
-    // },
 
     {
       label: "Reviews & Ratings",
       icon: MessageCircleCode,
-      submenu: [
-        { label: "Customer Reviews", href: "/provider/reviews" },
-        { label: "Reply to Reviews", href: "/provider/reviews/reply" },
-      ],
+      href: "/provider/reviews",
+      submenu: null,
     },
 
     {
       label: "Promotions",
       icon: ZapIcon,
-      submenu: [
-        { label: "My Coupons", href: "/provider/coupons" },
-        { label: "Discount Offers", href: "/provider/discounts" },
-      ],
+      href: "/provider/coupons",
+      submenu: null,
     },
 
     {
-      label: "Earnings",
+      label: "Overview",
       icon: Wallet,
-      submenu: [
-        { label: "Overview", href: "/provider/earnings" },
-        { label: "Withdraw Request", href: "/provider/withdraw" },
-        { label: "Transaction History", href: "/provider/transactions" },
-      ],
+      href: "/provider/overview",
+      submenu: null,
     },
 
     {
