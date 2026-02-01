@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import axios from "axios";
 import api from "@/api/Base_Api";
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 
@@ -13,6 +14,10 @@ export interface RegisterPayload {
 export interface EmailOtpPayload {
   email: string;
   otp: string;
+}
+
+export interface ResendOtp {
+  email: string;
 }
 
 export interface LoginPayload {
@@ -38,6 +43,7 @@ export interface UseAuthReturn {
   verifyAccount: (payload: EmailOtpPayload) => Promise<unknown>;
   login: (payload: LoginPayload) => Promise<unknown>;
   verifyOtp: (payload: EmailOtpPayload) => Promise<unknown>;
+  resendOtp: (payload: ResendOtp) => Promise<unknown>;
   refreshToken: (payload: RefreshTokenPayload) => Promise<unknown>;
   getProfile: () => Promise<UserProfile | unknown>;
   clearError: () => void;
@@ -73,7 +79,17 @@ export function useAuth(): UseAuthReturn {
     try {
       return await task();
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Request failed";
+      let message = "Request failed";
+      if (axios.isAxiosError(err)) {
+        if (!err.response) message = "Network error. Please check your connection.";
+        else {
+          const apiMessage = (err.response?.data as { message?: string } | undefined)
+            ?.message;
+          message = apiMessage || err.message || message;
+        }
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
       setError(message);
       throw err;
     } finally {
@@ -100,6 +116,17 @@ export function useAuth(): UseAuthReturn {
       run(async () => {
         const response = await api.post<ApiResponse<unknown>>(
           API_ENDPOINTS.VERIFY_EMAIL,
+          payload,
+        );
+        return response.data;
+      }),
+    [run],
+  );
+  const resendOtp = useCallback(
+    async (payload: ResendOtp) =>
+      run(async () => {
+        const response = await api.post<ApiResponse<unknown>>(
+          API_ENDPOINTS.RESEND_VERIFICATION,
           payload,
         );
         return response.data;
@@ -168,5 +195,6 @@ export function useAuth(): UseAuthReturn {
     refreshToken,
     getProfile,
     clearError,
+    resendOtp,
   };
 }

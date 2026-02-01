@@ -32,17 +32,6 @@ export default function SignIn() {
     {},
   );
 
-  const getErrorMessage = (err: unknown) => {
-    if (axios.isAxiosError(err)) {
-      if (!err.response) return "Network error. Please check your connection.";
-      const apiMessage = (err.response?.data as { message?: string } | undefined)
-        ?.message;
-      return apiMessage || err.message || "Request failed";
-    }
-    if (err instanceof Error) return err.message;
-    return "Request failed";
-  };
-
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
 
@@ -74,14 +63,9 @@ export default function SignIn() {
       toast.dismiss(loadingToast);
       toast.success("OTP sent! Check your email.");
       setStep("otp");
-    } catch (err) {
+    } catch (err: any) {
       toast.dismiss(loadingToast);
-      const message = getErrorMessage(err);
-      if (/not verified|unverified|verify/i.test(message)) {
-        toast.error("Email not verified, please verify OTP");
-      } else {
-        toast.error(message || "Login failed. Check your credentials.");
-      }
+      toast.error(err?.message);
       console.error(err);
     }
   };
@@ -103,12 +87,7 @@ export default function SignIn() {
       setTimeout(() => router.push("/"), 1000);
     } catch (err) {
       toast.dismiss(loadingToast);
-      const message = getErrorMessage(err);
-      if (/otp expired/i.test(message)) {
-        toast.error("OTP expired, please resend");
-      } else {
-        toast.error(message || "Invalid OTP. Try again.");
-      }
+      toast.error("Invalid OTP. Try again.");
       console.error(err);
     }
   };

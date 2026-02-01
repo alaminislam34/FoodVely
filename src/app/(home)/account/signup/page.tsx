@@ -5,13 +5,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
-// import { registerUser, verifyAccount } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import RoleSelector from "../components/RoleSelector";
 import BasicFields from "../components/BasicFields";
 import ProviderFields from "../components/ProviderFields";
 import PasswordStrength from "../components/PasswordStrength";
-import { registerUser, verifyAccount } from "@/services/authService";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -45,12 +45,12 @@ export default function SignUp() {
   const [role, setRole] = useState<UserRole>("customer");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [step, setStep] = useState<"register" | "verify">("register");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const { register, verifyAccount, resendOtp, isLoading } = useAuth();
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -120,6 +120,17 @@ export default function SignUp() {
     }
   };
 
+  const getErrorMessage = (err: unknown) => {
+    if (axios.isAxiosError(err)) {
+      if (!err.response) return "Network error. Please check your connection.";
+      const apiMessage = (err.response?.data as { message?: string } | undefined)
+        ?.message;
+      return apiMessage || err.message || "Request failed";
+    }
+    if (err instanceof Error) return err.message;
+    return "Request failed";
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -127,25 +138,33 @@ export default function SignUp() {
       return;
     }
 
-    setIsLoading(true);
     const loadingToast = toast.loading("Creating your account...");
 
     try {
-      await registerUser(
-        `${formData.firstName} ${formData.lastName}`,
-        formData.email,
-        formData.password,
-      );
+      await register({
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+      });
+
       setVerifyEmail(formData.email);
       setStep("verify");
       toast.dismiss(loadingToast);
       toast.success("Account created! Check your email for OTP.");
     } catch (err) {
       toast.dismiss(loadingToast);
-      toast.error("Registration failed. Try again.");
+      const message = getErrorMessage(err);
+      const normalized = message.toLowerCase();
+      if (normalized.includes("already") && normalized.includes("verified")) {
+        toast.error("Already verified, please login");
+      } else if (normalized.includes("already exists")) {
+        setVerifyEmail(formData.email);
+        setStep("verify");
+        toast.success("Check your email for OTP.");
+      } else {
+        toast.error(message || "Registration failed. Try again.");
+      }
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -157,20 +176,42 @@ export default function SignUp() {
       return;
     }
 
-    setIsLoading(true);
     const loadingToast = toast.loading("Verifying account...");
 
     try {
-      await verifyAccount(verifyEmail, otp);
+      await verifyAccount({ email: verifyEmail, otp });
       toast.dismiss(loadingToast);
       toast.success("Account verified! Redirecting...");
       setTimeout(() => router.push("/account/signin"), 1000);
     } catch (err) {
       toast.dismiss(loadingToast);
-      toast.error("Verification failed. Try again.");
+      const message = getErrorMessage(err);
+      if (/otp expired/i.test(message)) {
+        toast.error("OTP expired, please resend");
+      } else {
+        toast.error(message || "Verification failed. Try again.");
+      }
       console.error(err);
-    } finally {
-      setIsLoading(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (!verifyEmail.trim()) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    const loadingToast = toast.loading("Resending OTP...");
+
+    try {
+      await resendOtp({ email: verifyEmail });
+      toast.dismiss(loadingToast);
+      toast.success("OTP resent");
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      const message = getErrorMessage(err);
+      toast.error(message || "Failed to resend OTP");
+      console.error(err);
     }
   };
 
@@ -210,26 +251,50 @@ export default function SignUp() {
             </div>
 
             <form onSubmit={handleOtpSubmit} className="space-y-6">
-              <motion.div className="space-y-2">
-                <label className="block text-sm font-Sofia font-semibold text-gray-800">
-                  OTP Code
-                </label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.toUpperCase())}
-                  placeholder="000000"
-                  maxLength={6}
-                  className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
-                />
-              </motion.div>
+              <div className="space-y-2">
+                <motion.div className="space-y-2">
+                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={verifyEmail}
+                    onChange={(e) => setVerifyEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
+                  />
+                </motion.div>
+                <motion.div className="space-y-2 mt-4">
+                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                    OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.toUpperCase())}
+                    placeholder="000000"
+                    maxLength={6}
+                    className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
+                  />
+                </motion.div>
+                <div className="flex items-center justify-end mt-2">
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    disabled={isLoading}
+                    className="w-full text-rose-500 font-Sofia font-semibold hover:underline disabled:opacity-75"
+                  >
+                    {isLoading ? "Resending..." : "Resend OTP"}
+                  </button>
+                </div>
+              </div>
 
               <motion.button
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={isLoading || !otp}
+                disabled={isLoading || !otp || !verifyEmail}
                 className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
               >
                 {isLoading ? (
