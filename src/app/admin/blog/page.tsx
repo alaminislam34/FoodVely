@@ -141,7 +141,6 @@ export default function BlogManage() {
 
   return (
     <div className="relative space-y-6 lg:space-y-8">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-Sofia font-bold text-gray-800 tracking-tight">
@@ -160,7 +159,6 @@ export default function BlogManage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left List */}
         <div className="lg:col-span-4 space-y-4">
           <div className="relative group">
             <Search
@@ -205,7 +203,6 @@ export default function BlogManage() {
           </div>
         </div>
 
-        {/* Right Preview */}
         <div className="lg:col-span-8">
           {currentBlog ? (
             <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden h-[calc(100vh-250px)] overflow-y-auto custom-scrollbar">
@@ -273,7 +270,6 @@ export default function BlogManage() {
         </div>
       </div>
 
-      {/* ADMIN EDITOR OVERLAY */}
       <AnimatePresence>
         {isEditorOpen && (
           <motion.div

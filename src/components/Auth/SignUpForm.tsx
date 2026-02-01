@@ -133,7 +133,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
                     onChange={(e) => setOtp(e.target.value.toUpperCase())}
                     placeholder="000000"
                     maxLength={6}
-                    className="w-full px-4 py-3 border-2 border-border-primary rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-center text-lg tracking-widest font-semibold transition"
+                    className="w-full px-4 py-3 border-2 border-black rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 text-center text-lg tracking-widest font-semibold transition"
                     required
                   />
                 </div>
@@ -141,7 +141,7 @@ export function SignUpForm({ onSuccess }: SignUpFormProps) {
                 <button
                   type="submit"
                   disabled={isLoading || !otp}
-                  className="w-full bg-gradient-primary text-white py-3 rounded-lg font-semibold hover:shadow-brand disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
+                  className="w-full bg-gradient-primary text-black py-3 rounded-lg font-semibold hover:shadow-brand disabled:opacity-50 disabled:cursor-not-allowed transition transform hover:scale-105"
                 >
                   {isLoading ? 'Verifying...' : 'Verify Account'}
                 </button>

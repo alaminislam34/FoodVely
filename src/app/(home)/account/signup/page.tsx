@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
-import { registerUser, verifyAccount } from "@/services/authService";
+// import { registerUser, verifyAccount } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import RoleSelector from "../components/RoleSelector";
 import BasicFields from "../components/BasicFields";
 import ProviderFields from "../components/ProviderFields";
 import PasswordStrength from "../components/PasswordStrength";
+import { registerUser, verifyAccount } from "@/services/authService";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -18,8 +19,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 1 },
+  visible: { once: true, opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 type UserRole = "customer" | "provider";
@@ -209,7 +210,7 @@ export default function SignUp() {
             </div>
 
             <form onSubmit={handleOtpSubmit} className="space-y-6">
-              <motion.div variants={itemVariants} className="space-y-2">
+              <motion.div className="space-y-2">
                 <label className="block text-sm font-Sofia font-semibold text-gray-800">
                   OTP Code
                 </label>
@@ -219,7 +220,7 @@ export default function SignUp() {
                   onChange={(e) => setOtp(e.target.value.toUpperCase())}
                   placeholder="000000"
                   maxLength={6}
-                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
+                  className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
                 />
               </motion.div>
 

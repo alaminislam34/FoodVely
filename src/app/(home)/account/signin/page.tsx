@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
-import { loginRequest, loginVerify } from "@/services/authService";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -20,16 +21,27 @@ const itemVariants = {
 
 export default function SignIn() {
   const router = useRouter();
+  const { login, verifyOtp, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState<"credentials" | "otp">("credentials");
   const [otp, setOtp] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {},
   );
+
+  const getErrorMessage = (err: unknown) => {
+    if (axios.isAxiosError(err)) {
+      if (!err.response) return "Network error. Please check your connection.";
+      const apiMessage = (err.response?.data as { message?: string } | undefined)
+        ?.message;
+      return apiMessage || err.message || "Request failed";
+    }
+    if (err instanceof Error) return err.message;
+    return "Request failed";
+  };
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -55,20 +67,22 @@ export default function SignIn() {
 
     if (!validateForm()) return;
 
-    setIsLoading(true);
     const loadingToast = toast.loading("Sending OTP to your email...");
 
     try {
-      await loginRequest(email, password);
+      await login({ email, password });
       toast.dismiss(loadingToast);
       toast.success("OTP sent! Check your email.");
       setStep("otp");
     } catch (err) {
       toast.dismiss(loadingToast);
-      toast.error("Login failed. Check your credentials.");
+      const message = getErrorMessage(err);
+      if (/not verified|unverified|verify/i.test(message)) {
+        toast.error("Email not verified, please verify OTP");
+      } else {
+        toast.error(message || "Login failed. Check your credentials.");
+      }
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -80,20 +94,22 @@ export default function SignIn() {
       return;
     }
 
-    setIsLoading(true);
     const loadingToast = toast.loading("Verifying OTP...");
 
     try {
-      await loginVerify(email, otp);
+      await verifyOtp({ email, otp });
       toast.dismiss(loadingToast);
       toast.success("Login successful!");
       setTimeout(() => router.push("/"), 1000);
     } catch (err) {
       toast.dismiss(loadingToast);
-      toast.error("Invalid OTP. Try again.");
+      const message = getErrorMessage(err);
+      if (/otp expired/i.test(message)) {
+        toast.error("OTP expired, please resend");
+      } else {
+        toast.error(message || "Invalid OTP. Try again.");
+      }
       console.error(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
