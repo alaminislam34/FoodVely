@@ -23,29 +23,23 @@ export default function RoleSelector({
         {[
           { id: "customer", label: "👤 Customer", desc: "Order food" },
           { id: "provider", label: "🏪 Provider", desc: "Sell food" },
-        ].map(
-          (option) => (
-            <button
-              key={option.id}
-              onClick={() => {
-                setRole(option.id as UserRole);
-                setErrors({});
-              }}
-              className={`flex-1 p-4 rounded-2xl border-2 transition-all duration-300 ${
-                role === option.id
-                  ? "border-rose-500 bg-rose-50"
-                  : "border-gray-200 bg-white/30 hover:border-gray-300"
-              }`}
-            >
-              <div className="font-Sofia font-bold text-gray-900">
-                {option.label}
-              </div>
-              <div className="text-xs text-gray-500 font-Sofia">
-                {option.desc}
-              </div>
-            </button>
-          ),
-        )}
+        ].map((option) => (
+          <button
+            key={option.id}
+            onClick={() => {
+              setRole(option.id as UserRole);
+              setErrors({});
+            }}
+            className={`flex-1 p-4 rounded-2xl border-2 transition-all duration-300 ${
+              role === option.id
+                ? "border-rose-500 bg-rose-50"
+                : "border-gray-200 bg-white/30 hover:border-gray-300"
+            }`}
+          >
+            <div className=" font-bold text-gray-900">{option.label}</div>
+            <div className="text-xs text-gray-500 ">{option.desc}</div>
+          </button>
+        ))}
       </div>
     </motion.div>
   );

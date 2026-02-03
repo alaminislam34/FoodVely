@@ -49,13 +49,13 @@ export default function BasicFields({
       {/* Name Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <motion.div variants={itemVariants} className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             First Name
           </label>
           <div className="relative">
             <User
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
             />
             <input
               type="text"
@@ -71,18 +71,18 @@ export default function BasicFields({
             />
           </div>
           {errors.firstName && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.firstName}</p>
+            <p className="text-red-500 text-sm ">{errors.firstName}</p>
           )}
         </motion.div>
 
         <motion.div variants={itemVariants} className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             Last Name
           </label>
           <div className="relative">
             <User
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
             />
             <input
               type="text"
@@ -98,20 +98,20 @@ export default function BasicFields({
             />
           </div>
           {errors.lastName && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.lastName}</p>
+            <p className="text-red-500 text-sm ">{errors.lastName}</p>
           )}
         </motion.div>
       </div>
 
       {/* Email */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Email Address
         </label>
         <div className="relative">
           <Mail
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
           />
           <input
             type="email"
@@ -127,19 +127,19 @@ export default function BasicFields({
           />
         </div>
         {errors.email && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.email}</p>
+          <p className="text-red-500 text-sm ">{errors.email}</p>
         )}
       </motion.div>
 
       {/* Password */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Password
         </label>
         <div className="relative">
           <Lock
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
           />
           <input
             type={showPassword ? "text" : "password"}
@@ -163,19 +163,19 @@ export default function BasicFields({
         </div>
         <PasswordStrengthComponent strength={passwordStrength} password={formData.password} />
         {errors.password && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.password}</p>
+          <p className="text-red-500 text-sm ">{errors.password}</p>
         )}
       </motion.div>
 
       {/* Confirm Password */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Confirm Password
         </label>
         <div className="relative">
           <Lock
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
           />
           <input
             type={showConfirmPassword ? "text" : "password"}
@@ -198,7 +198,7 @@ export default function BasicFields({
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.confirmPassword}</p>
+          <p className="text-red-500 text-sm ">{errors.confirmPassword}</p>
         )}
       </motion.div>
     </>

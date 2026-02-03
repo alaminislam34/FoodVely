@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
-import { Phone, MapPin, Upload } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
+import { Category } from "@/types/product";
 
 interface FormData {
   firstName: string;
@@ -19,8 +20,8 @@ interface FormData {
 interface ProviderFieldsProps {
   formData: FormData;
   errors: Partial<FormData>;
-  activeCategory: string | null;
-  setActiveCategory: (cat: string | null) => void;
+  activeCategories: Category[];
+  setActiveCategories: React.Dispatch<React.SetStateAction<Category[]>>;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -40,22 +41,22 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-const categories = [
-  "🍔 Burgers",
-  "🍕 Pizza",
-  "🍜 Noodles",
-  "🍣 Sushi",
-  "🥗 Salads",
-  "🍰 Desserts",
-  "☕ Beverages",
-  "🌮 Mexican",
+const categories: Category[] = [
+  { id: "1", name: "🍔 Burgers", slug: "burgers" },
+  { id: "2", name: "🍕 Pizza", slug: "pizza" },
+  { id: "3", name: "🍜 Noodles", slug: "noodles" },
+  { id: "4", name: "🍣 Sushi", slug: "sushi" },
+  { id: "5", name: "🥗 Salads", slug: "salads" },
+  { id: "6", name: "🍰 Desserts", slug: "desserts" },
+  { id: "7", name: "☕ Beverages", slug: "beverages" },
+  { id: "8", name: "🌮 Mexican", slug: "mexican" },
 ];
 
 export default function ProviderFields({
   formData,
   errors,
-  activeCategory,
-  setActiveCategory,
+  activeCategories,
+  setActiveCategories,
   handleInputChange,
 }: ProviderFieldsProps) {
   return (
@@ -67,20 +68,20 @@ export default function ProviderFields({
     >
       <motion.h3
         variants={itemVariants}
-        className="text-lg font-Sofia font-bold text-gray-900"
+        className="text-lg  font-bold text-gray-900"
       >
         Restaurant Information
       </motion.h3>
 
       {/* Phone */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Phone Number
         </label>
         <div className="relative">
           <Phone
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
           />
           <input
             type="tel"
@@ -96,13 +97,13 @@ export default function ProviderFields({
           />
         </div>
         {errors.phone && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.phone}</p>
+          <p className="text-red-500 text-sm ">{errors.phone}</p>
         )}
       </motion.div>
 
       {/* Restaurant Name */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Restaurant Name
         </label>
         <input
@@ -118,9 +119,7 @@ export default function ProviderFields({
           }`}
         />
         {errors.restaurantName && (
-          <p className="text-red-500 text-sm font-Sofia">
-            {errors.restaurantName}
-          </p>
+          <p className="text-red-500 text-sm ">{errors.restaurantName}</p>
         )}
       </motion.div>
 
@@ -130,13 +129,13 @@ export default function ProviderFields({
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             Address
           </label>
           <div className="relative">
             <MapPin
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
             />
             <input
               type="text"
@@ -152,12 +151,12 @@ export default function ProviderFields({
             />
           </div>
           {errors.address && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.address}</p>
+            <p className="text-red-500 text-sm ">{errors.address}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             City
           </label>
           <input
@@ -173,7 +172,7 @@ export default function ProviderFields({
             }`}
           />
           {errors.city && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.city}</p>
+            <p className="text-red-500 text-sm ">{errors.city}</p>
           )}
         </div>
       </motion.div>
@@ -184,7 +183,7 @@ export default function ProviderFields({
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             Delivery Fee ($)
           </label>
           <input
@@ -198,7 +197,7 @@ export default function ProviderFields({
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             Minimum Order ($)
           </label>
           <input
@@ -214,24 +213,28 @@ export default function ProviderFields({
 
       {/* Categories */}
       <motion.div variants={itemVariants} className="space-y-3">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Food Categories
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {categories.map((cat) => (
             <button
-              key={cat}
+              key={cat.slug}
               type="button"
               onClick={() =>
-                setActiveCategory(activeCategory === cat ? null : cat)
+                setActiveCategories((prev) =>
+                  prev.some((item) => item.slug === cat.slug)
+                    ? prev.filter((item) => item.slug !== cat.slug)
+                    : [...prev, cat],
+                )
               }
-              className={`p-2 rounded-lg text-sm font-Sofia transition-all ${
-                activeCategory === cat
+              className={`p-2 rounded-lg text-sm  transition-all ${
+                activeCategories.some((item) => item.slug === cat.slug)
                   ? "bg-rose-500 text-white"
                   : "bg-white/30 text-gray-700 hover:bg-white/50"
               }`}
             >
-              {cat}
+              {cat.name}
             </button>
           ))}
         </div>
@@ -239,7 +242,7 @@ export default function ProviderFields({
 
       {/* License Number */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Business License Number
         </label>
         <input
@@ -250,20 +253,6 @@ export default function ProviderFields({
           placeholder="License #"
           className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
         />
-      </motion.div>
-
-      {/* Documents Upload */}
-      <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
-          Upload Documents
-        </label>
-        <button
-          type="button"
-          className="w-full px-4 py-3 rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50 hover:bg-rose-100 transition-all flex items-center justify-center gap-2 font-Sofia text-rose-600"
-        >
-          <Upload size={20} />
-          Choose files (License, Food Safety Certificate)
-        </button>
       </motion.div>
     </motion.div>
   );

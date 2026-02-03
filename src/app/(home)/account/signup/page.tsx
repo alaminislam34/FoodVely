@@ -12,6 +12,7 @@ import ProviderFields from "../components/ProviderFields";
 import PasswordStrength from "../components/PasswordStrength";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
+import { Category } from "@/types/product";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -46,7 +47,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeCategories, setActiveCategories] = useState<Category[]>([]);
   const [step, setStep] = useState<"register" | "verify">("register");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -123,8 +124,9 @@ export default function SignUp() {
   const getErrorMessage = (err: unknown) => {
     if (axios.isAxiosError(err)) {
       if (!err.response) return "Network error. Please check your connection.";
-      const apiMessage = (err.response?.data as { message?: string } | undefined)
-        ?.message;
+      const apiMessage = (
+        err.response?.data as { message?: string } | undefined
+      )?.message;
       return apiMessage || err.message || "Request failed";
     }
     if (err instanceof Error) return err.message;
@@ -141,12 +143,12 @@ export default function SignUp() {
     const loadingToast = toast.loading("Creating your account...");
 
     try {
-      await register({
+      const res = await register({
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         password: formData.password,
       });
-
+      console.log(res);
       setVerifyEmail(formData.email);
       setStep("verify");
       toast.dismiss(loadingToast);
@@ -242,10 +244,10 @@ export default function SignUp() {
             className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
           >
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 mb-2">
                 Verify Account
               </h1>
-              <p className="text-gray-600 font-Sofia">
+              <p className="text-gray-600 ">
                 Enter the code sent to {verifyEmail}
               </p>
             </div>
@@ -253,7 +255,7 @@ export default function SignUp() {
             <form onSubmit={handleOtpSubmit} className="space-y-6">
               <div className="space-y-2">
                 <motion.div className="space-y-2">
-                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  <label className="block text-sm  font-semibold text-gray-800">
                     Email
                   </label>
                   <input
@@ -265,7 +267,7 @@ export default function SignUp() {
                   />
                 </motion.div>
                 <motion.div className="space-y-2 mt-4">
-                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  <label className="block text-sm  font-semibold text-gray-800">
                     OTP Code
                   </label>
                   <input
@@ -282,7 +284,7 @@ export default function SignUp() {
                     type="button"
                     onClick={handleResendOtp}
                     disabled={isLoading}
-                    className="w-full text-rose-500 font-Sofia font-semibold hover:underline disabled:opacity-75"
+                    className="w-full text-rose-500  font-semibold hover:underline disabled:opacity-75"
                   >
                     {isLoading ? "Resending..." : "Resend OTP"}
                   </button>
@@ -295,7 +297,7 @@ export default function SignUp() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isLoading || !otp || !verifyEmail}
-                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
+                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
               >
                 {isLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -310,7 +312,7 @@ export default function SignUp() {
               <button
                 type="button"
                 onClick={() => setStep("register")}
-                className="w-full text-rose-500 font-Sofia font-semibold hover:underline"
+                className="w-full text-rose-500  font-semibold hover:underline"
               >
                 Back to Registration
               </button>
@@ -353,9 +355,7 @@ export default function SignUp() {
             <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
               Join Foodvely
             </h1>
-            <p className="text-gray-600 font-Sofia">
-              Create your account to get started
-            </p>
+            <p className="text-gray-600 ">Create your account to get started</p>
           </div>
 
           {/* Role Selector Component */}
@@ -390,8 +390,8 @@ export default function SignUp() {
                   <ProviderFields
                     formData={formData}
                     errors={errors}
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
+                    activeCategories={activeCategories}
+                    setActiveCategories={setActiveCategories}
                     handleInputChange={handleInputChange}
                   />
                 </motion.div>
@@ -405,7 +405,7 @@ export default function SignUp() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75 mt-6"
+              className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75 mt-6"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -425,7 +425,7 @@ export default function SignUp() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white/40 text-gray-600 font-Sofia">
+                <span className="px-2 bg-white/40 text-gray-600 ">
                   Already have an account?
                 </span>
               </div>
@@ -436,7 +436,7 @@ export default function SignUp() {
           <motion.div variants={itemVariants}>
             <Link
               href="/account/signin"
-              className="w-full py-3 px-4 rounded-2xl border-2 border-rose-500 text-rose-500 font-Sofia font-bold hover:bg-rose-50 transition-all duration-300 text-center block"
+              className="w-full py-3 px-4 rounded-2xl border-2 border-rose-500 text-rose-500  font-bold hover:bg-rose-50 transition-all duration-300 text-center block"
             >
               Sign In Instead
             </Link>
@@ -445,7 +445,7 @@ export default function SignUp() {
           {/* Terms */}
           <motion.p
             variants={itemVariants}
-            className="text-center text-xs text-gray-600 mt-6 font-Sofia"
+            className="text-center text-xs text-gray-600 mt-6 "
           >
             By creating an account, you agree to our{" "}
             <Link

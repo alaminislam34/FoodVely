@@ -81,10 +81,12 @@ export function useAuth(): UseAuthReturn {
     } catch (err) {
       let message = "Request failed";
       if (axios.isAxiosError(err)) {
-        if (!err.response) message = "Network error. Please check your connection.";
+        if (!err.response)
+          message = "Network error. Please check your connection.";
         else {
-          const apiMessage = (err.response?.data as { message?: string } | undefined)
-            ?.message;
+          const apiMessage = (
+            err.response?.data as { message?: string } | undefined
+          )?.message;
           message = apiMessage || err.message || message;
         }
       } else if (err instanceof Error) {
@@ -141,6 +143,10 @@ export function useAuth(): UseAuthReturn {
           API_ENDPOINTS.LOGIN_API,
           payload,
         );
+        if (response.data.success === true) {
+          const tokens = response?.data?.data as AuthTokens;
+          storeTokens(tokens);
+        }
         return response.data;
       }),
     [run],

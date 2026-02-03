@@ -59,10 +59,10 @@ export default function SignIn() {
     const loadingToast = toast.loading("Sending OTP to your email...");
 
     try {
-      await login({ email, password });
+      const result: any = await login({ email, password });
       toast.dismiss(loadingToast);
-      toast.success("OTP sent! Check your email.");
-      setStep("otp");
+      toast.success(result.data.message || "Logged in successfully.");
+      setTimeout(() => router.push("/"), 1000);
     } catch (err: any) {
       toast.dismiss(loadingToast);
       toast.error(err?.message);
