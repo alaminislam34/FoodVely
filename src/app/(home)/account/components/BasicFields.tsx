@@ -1,28 +1,26 @@
 import { motion } from "motion/react";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phone?: string;
-  restaurantName?: string;
-  address?: string;
-  city?: string;
-  deliveryFee?: string;
-  minimumOrder?: string;
-  licenseNumber?: string;
-}
+import type {
+  FieldErrors,
+  RegisterOptions,
+  UseFormRegister,
+} from "react-hook-form";
+import type { SignupFormValues } from "../signup/types";
 
 interface BasicFieldsProps {
-  formData: FormData;
-  errors: Partial<FormData>;
+  register: UseFormRegister<SignupFormValues>;
+  registerOptions: {
+    firstName?: RegisterOptions<SignupFormValues, "firstName">;
+    lastName?: RegisterOptions<SignupFormValues, "lastName">;
+    email?: RegisterOptions<SignupFormValues, "email">;
+    password?: RegisterOptions<SignupFormValues, "password">;
+    confirmPassword?: RegisterOptions<SignupFormValues, "confirmPassword">;
+  };
+  errors: FieldErrors<SignupFormValues>;
   showPassword: boolean;
   showConfirmPassword: boolean;
   passwordStrength: number;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  passwordValue: string;
   setShowPassword: (show: boolean) => void;
   setShowConfirmPassword: (show: boolean) => void;
   PasswordStrengthComponent: React.ComponentType<any>;
@@ -34,12 +32,13 @@ const itemVariants = {
 };
 
 export default function BasicFields({
-  formData,
+  register,
+  registerOptions,
   errors,
   showPassword,
   showConfirmPassword,
   passwordStrength,
-  handleInputChange,
+  passwordValue,
   setShowPassword,
   setShowConfirmPassword,
   PasswordStrengthComponent,
@@ -49,20 +48,18 @@ export default function BasicFields({
       {/* Name Fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <motion.div variants={itemVariants} className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             First Name
           </label>
           <div className="relative">
             <User
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute z-10 left-4 top-1/2 -translate-y-1/2 text-gray-500"
             />
             <input
               type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleInputChange}
               placeholder="John"
+              {...register("firstName", registerOptions.firstName)}
               className={`w-full pl-12 pr-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
                 errors.firstName
                   ? "border-red-500 focus:ring-red-500"
@@ -70,26 +67,26 @@ export default function BasicFields({
               }`}
             />
           </div>
-          {errors.firstName && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.firstName}</p>
+          {errors.firstName?.message && (
+            <p className="text-red-500 text-sm ">
+              {errors.firstName.message as string}
+            </p>
           )}
         </motion.div>
 
         <motion.div variants={itemVariants} className="space-y-2">
-          <label className="block text-sm font-Sofia font-semibold text-gray-800">
+          <label className="block text-sm  font-semibold text-gray-800">
             Last Name
           </label>
           <div className="relative">
             <User
               size={20}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute z-10 left-4 top-1/2 -translate-y-1/2 text-gray-500"
             />
             <input
               type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleInputChange}
               placeholder="Doe"
+              {...register("lastName", registerOptions.lastName)}
               className={`w-full pl-12 pr-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
                 errors.lastName
                   ? "border-red-500 focus:ring-red-500"
@@ -97,28 +94,28 @@ export default function BasicFields({
               }`}
             />
           </div>
-          {errors.lastName && (
-            <p className="text-red-500 text-sm font-Sofia">{errors.lastName}</p>
+          {errors.lastName?.message && (
+            <p className="text-red-500 text-sm ">
+              {errors.lastName.message as string}
+            </p>
           )}
         </motion.div>
       </div>
 
       {/* Email */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Email Address
         </label>
         <div className="relative">
           <Mail
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute z-10 left-4 top-1/2 -translate-y-1/2 text-gray-500"
           />
           <input
             type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
             placeholder="you@example.com"
+            {...register("email", registerOptions.email)}
             className={`w-full pl-12 pr-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
               errors.email
                 ? "border-red-500 focus:ring-red-500"
@@ -126,27 +123,27 @@ export default function BasicFields({
             }`}
           />
         </div>
-        {errors.email && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.email}</p>
+        {errors.email?.message && (
+          <p className="text-red-500 text-sm ">
+            {errors.email.message as string}
+          </p>
         )}
       </motion.div>
 
       {/* Password */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Password
         </label>
         <div className="relative">
           <Lock
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute z-10 left-4 top-1/2 -translate-y-1/2 text-gray-500"
           />
           <input
             type={showPassword ? "text" : "password"}
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
             placeholder="••••••••"
+            {...register("password", registerOptions.password)}
             className={`w-full pl-12 pr-12 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
               errors.password
                 ? "border-red-500 focus:ring-red-500"
@@ -156,33 +153,36 @@ export default function BasicFields({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <PasswordStrengthComponent strength={passwordStrength} password={formData.password} />
-        {errors.password && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.password}</p>
+        <PasswordStrengthComponent
+          strength={passwordStrength}
+          password={passwordValue}
+        />
+        {errors.password?.message && (
+          <p className="text-red-500 text-sm ">
+            {errors.password.message as string}
+          </p>
         )}
       </motion.div>
 
       {/* Confirm Password */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm font-Sofia font-semibold text-gray-800">
+        <label className="block text-sm  font-semibold text-gray-800">
           Confirm Password
         </label>
         <div className="relative">
           <Lock
             size={20}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            className="absolute z-10 left-4 top-1/2 -translate-y-1/2 text-gray-500"
           />
           <input
             type={showConfirmPassword ? "text" : "password"}
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleInputChange}
             placeholder="••••••••"
+            {...register("confirmPassword", registerOptions.confirmPassword)}
             className={`w-full pl-12 pr-12 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
               errors.confirmPassword
                 ? "border-red-500 focus:ring-red-500"
@@ -192,13 +192,15 @@ export default function BasicFields({
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600"
           >
             {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        {errors.confirmPassword && (
-          <p className="text-red-500 text-sm font-Sofia">{errors.confirmPassword}</p>
+        {errors.confirmPassword?.message && (
+          <p className="text-red-500 text-sm ">
+            {errors.confirmPassword.message as string}
+          </p>
         )}
       </motion.div>
     </>

@@ -2,16 +2,20 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import RoleSelector from "../components/RoleSelector";
 import BasicFields from "../components/BasicFields";
 import ProviderFields from "../components/ProviderFields";
 import PasswordStrength from "../components/PasswordStrength";
 import { useAuth } from "../hooks/useAuth";
+import API_ENDPOINTS from "@/api/ApiEndpoints";
 import axios from "axios";
+import type { SignupFormValues, UserRole } from "./types";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -23,26 +27,29 @@ const itemVariants = {
   visible: { once: true, opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-type UserRole = "customer" | "provider";
+interface RestaurantPayload {
+  name: string;
+  description?: string;
+  address: string;
+  city?: string;
+  lat?: number;
+  lng?: number;
+  phone?: string;
+  cuisineTypes: string[];
+  deliveryFee?: number;
+  minOrderAmount?: number;
+}
 
-interface FormData {
-  firstName: string;
-  lastName: string;
+interface RegisterPayload {
+  name: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  phone?: string;
-  restaurantName?: string;
-  address?: string;
-  city?: string;
-  deliveryFee?: string;
-  minimumOrder?: string;
-  licenseNumber?: string;
+  role: UserRole;
+  restaurant?: RestaurantPayload;
 }
 
 export default function SignUp() {
   const router = useRouter();
-  const [role, setRole] = useState<UserRole>("customer");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
@@ -50,17 +57,30 @@ export default function SignUp() {
   const [step, setStep] = useState<"register" | "verify">("register");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const { register, verifyAccount, resendOtp, isLoading } = useAuth();
+  const { verifyAccount, resendOtp, isLoading: authLoading } = useAuth();
 
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    clearErrors,
+    getValues,
+    formState: { errors },
+  } = useForm<SignupFormValues>({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      role: "CUSTOMER",
+      cuisineTypes: [],
+    },
   });
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const role = watch("role");
+  const passwordValue = watch("password");
 
   const calculatePasswordStrength = (pwd: string) => {
     let strength = 0;
@@ -71,101 +91,171 @@ export default function SignUp() {
     setPasswordStrength(strength);
   };
 
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.firstName) newErrors.firstName = "First name is required";
-    if (!formData.lastName) newErrors.lastName = "Last name is required";
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    if (role === "provider") {
-      if (!formData.phone) newErrors.phone = "Phone number is required";
-      if (!formData.restaurantName)
-        newErrors.restaurantName = "Restaurant name is required";
-      if (!formData.address) newErrors.address = "Address is required";
-      if (!formData.city) newErrors.city = "City is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "password") {
-      calculatePasswordStrength(value);
-    }
-
-    if (errors[name as keyof FormData]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
+  useEffect(() => {
+    calculatePasswordStrength(passwordValue || "");
+  }, [passwordValue]);
 
   const getErrorMessage = (err: unknown) => {
     if (axios.isAxiosError(err)) {
       if (!err.response) return "Network error. Please check your connection.";
-      const apiMessage = (err.response?.data as { message?: string } | undefined)
-        ?.message;
+      const apiMessage = (
+        err.response?.data as { message?: string } | undefined
+      )?.message;
       return apiMessage || err.message || "Request failed";
     }
     if (err instanceof Error) return err.message;
     return "Request failed";
   };
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      toast.error("Please fix the errors above");
-      return;
-    }
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL ?? process.env.NEXT_PUBLIC_BASE_URL ?? "";
 
-    const loadingToast = toast.loading("Creating your account...");
-
-    try {
-      await register({
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        password: formData.password,
-      });
-
-      setVerifyEmail(formData.email);
+  const registerMutation = useMutation({
+    mutationFn: async (payload: RegisterPayload) => {
+      const response = await axios.post(
+        `${BASE_URL}${API_ENDPOINTS.REGISTER_API}`,
+        payload,
+      );
+      return response.data;
+    },
+    onSuccess: (_, variables) => {
+      setVerifyEmail(variables.email);
       setStep("verify");
-      toast.dismiss(loadingToast);
       toast.success("Account created! Check your email for OTP.");
-    } catch (err) {
-      toast.dismiss(loadingToast);
+    },
+    onError: (err) => {
       const message = getErrorMessage(err);
       const normalized = message.toLowerCase();
       if (normalized.includes("already") && normalized.includes("verified")) {
         toast.error("Already verified, please login");
       } else if (normalized.includes("already exists")) {
-        setVerifyEmail(formData.email);
+        const emailValue = getValues("email");
+        setVerifyEmail(emailValue);
         setStep("verify");
         toast.success("Check your email for OTP.");
       } else {
         toast.error(message || "Registration failed. Try again.");
       }
       console.error(err);
+    },
+  });
+
+  const handleSignUp = handleSubmit(async (values) => {
+    const loadingToast = toast.loading("Creating your account...");
+
+    try {
+      const fullName = `${values.firstName} ${values.lastName}`.trim();
+      const payload: RegisterPayload = {
+        name: fullName,
+        email: values.email,
+        password: values.password,
+        role: values.role,
+      };
+
+      if (values.role === "PROVIDER") {
+        const safeNumber = (value?: number) =>
+          typeof value === "number" && !Number.isNaN(value) ? value : undefined;
+
+        const cuisineTypes = (values.cuisineTypes || []).filter(Boolean);
+
+        payload.restaurant = {
+          name: values.restaurantName?.trim() || "",
+          address: values.address?.trim() || "",
+          city: values.city?.trim() || undefined,
+          phone: values.phone?.trim() || undefined,
+          cuisineTypes,
+          deliveryFee: safeNumber(values.deliveryFee),
+          minOrderAmount: safeNumber(values.minimumOrder),
+        };
+      }
+
+      await registerMutation.mutateAsync(payload);
+      toast.dismiss(loadingToast);
+    } catch (err) {
+      toast.dismiss(loadingToast);
     }
+  });
+
+  const registerOptions = useMemo(
+    () => ({
+      firstName: { required: "First name is required" },
+      lastName: { required: "Last name is required" },
+      email: {
+        required: "Email is required",
+        pattern: {
+          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          message: "Invalid email format",
+        },
+      },
+      password: {
+        required: "Password is required",
+        minLength: { value: 8, message: "Password must be at least 8 characters" },
+      },
+      confirmPassword: {
+        required: "Please confirm your password",
+        validate: (value: string) =>
+          value === getValues("password") || "Passwords do not match",
+      },
+    }),
+    [getValues],
+  );
+
+  const providerRegisterOptions = useMemo(
+    () => ({
+      phone: {
+        validate: (value?: string) =>
+          role === "PROVIDER"
+            ? Boolean(value?.trim()) || "Phone number is required"
+            : true,
+      },
+      restaurantName: {
+        validate: (value?: string) =>
+          role === "PROVIDER"
+            ? Boolean(value?.trim()) || "Restaurant name is required"
+            : true,
+      },
+      address: {
+        validate: (value?: string) =>
+          role === "PROVIDER"
+            ? Boolean(value?.trim()) || "Address is required"
+            : true,
+      },
+      city: {},
+      deliveryFee: { valueAsNumber: true },
+      minimumOrder: { valueAsNumber: true },
+    }),
+    [role],
+  );
+
+  const cuisineInputProps = register("cuisineTypes", {
+    validate: (value) =>
+      role === "PROVIDER"
+        ? (value?.length ?? 0) > 0 || "Select at least one cuisine type"
+        : true,
+  });
+
+  const handleRoleChange = (nextRole: UserRole) => {
+    setValue("role", nextRole, { shouldValidate: true });
+    if (nextRole === "CUSTOMER") {
+      setActiveCategory(null);
+      setValue("cuisineTypes", []);
+      clearErrors([
+        "phone",
+        "restaurantName",
+        "address",
+        "city",
+        "deliveryFee",
+        "minimumOrder",
+        "cuisineTypes",
+      ]);
+    }
+  };
+
+  const handleCategorySelect = (category: string | null) => {
+    setActiveCategory(category);
+    setValue("cuisineTypes", category ? [category] : [], {
+      shouldValidate: true,
+    });
   };
 
   const handleOtpSubmit = async (e: React.FormEvent) => {
@@ -242,10 +332,10 @@ export default function SignUp() {
             className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
           >
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 mb-2">
                 Verify Account
               </h1>
-              <p className="text-gray-600 font-Sofia">
+              <p className="text-gray-600 ">
                 Enter the code sent to {verifyEmail}
               </p>
             </div>
@@ -253,7 +343,7 @@ export default function SignUp() {
             <form onSubmit={handleOtpSubmit} className="space-y-6">
               <div className="space-y-2">
                 <motion.div className="space-y-2">
-                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  <label className="block text-sm  font-semibold text-gray-800">
                     Email
                   </label>
                   <input
@@ -265,7 +355,7 @@ export default function SignUp() {
                   />
                 </motion.div>
                 <motion.div className="space-y-2 mt-4">
-                  <label className="block text-sm font-Sofia font-semibold text-gray-800">
+                  <label className="block text-sm  font-semibold text-gray-800">
                     OTP Code
                   </label>
                   <input
@@ -281,10 +371,10 @@ export default function SignUp() {
                   <button
                     type="button"
                     onClick={handleResendOtp}
-                    disabled={isLoading}
-                    className="w-full text-rose-500 font-Sofia font-semibold hover:underline disabled:opacity-75"
+                    disabled={authLoading}
+                    className="w-full text-rose-500  font-semibold hover:underline disabled:opacity-75"
                   >
-                    {isLoading ? "Resending..." : "Resend OTP"}
+                    {authLoading ? "Resending..." : "Resend OTP"}
                   </button>
                 </div>
               </div>
@@ -294,10 +384,10 @@ export default function SignUp() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={isLoading || !otp || !verifyEmail}
-                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
+                disabled={authLoading || !otp || !verifyEmail}
+                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
               >
-                {isLoading ? (
+                {authLoading ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
@@ -310,7 +400,7 @@ export default function SignUp() {
               <button
                 type="button"
                 onClick={() => setStep("register")}
-                className="w-full text-rose-500 font-Sofia font-semibold hover:underline"
+                className="w-full text-rose-500  font-semibold hover:underline"
               >
                 Back to Registration
               </button>
@@ -351,26 +441,25 @@ export default function SignUp() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
-              Join Foodvely
+              Join Food<span className="text-rose-600">vally</span>
             </h1>
-            <p className="text-gray-600 font-Sofia">
-              Create your account to get started
-            </p>
+            <p className="text-gray-600 ">Create your account to get started</p>
           </div>
 
           {/* Role Selector Component */}
-          <RoleSelector role={role} setRole={setRole} setErrors={setErrors} />
+          <RoleSelector role={role} onChange={handleRoleChange} />
 
           {/* Sign Up Form */}
           <form onSubmit={handleSignUp} className="space-y-4">
             {/* Basic Fields Component */}
             <BasicFields
-              formData={formData}
+              register={register}
+              registerOptions={registerOptions}
               errors={errors}
               showPassword={showPassword}
               showConfirmPassword={showConfirmPassword}
               passwordStrength={passwordStrength}
-              handleInputChange={handleInputChange}
+              passwordValue={passwordValue}
               setShowPassword={setShowPassword}
               setShowConfirmPassword={setShowConfirmPassword}
               PasswordStrengthComponent={PasswordStrength}
@@ -378,7 +467,7 @@ export default function SignUp() {
 
             {/* Provider Fields Component */}
             <AnimatePresence mode="wait">
-              {role === "provider" && (
+              {role === "PROVIDER" && (
                 <motion.div
                   key="provider-fields"
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
@@ -388,15 +477,22 @@ export default function SignUp() {
                   className="border-t border-gray-200 pt-6 overflow-visible"
                 >
                   <ProviderFields
-                    formData={formData}
+                    register={register}
+                    registerOptions={providerRegisterOptions}
                     errors={errors}
                     activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                    handleInputChange={handleInputChange}
+                    onSelectCategory={handleCategorySelect}
+                    cuisineInputProps={cuisineInputProps}
                   />
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {registerMutation.error && (
+              <p className="text-center text-sm text-red-500">
+                {getErrorMessage(registerMutation.error)}
+              </p>
+            )}
 
             {/* Sign Up Button */}
             <motion.button
@@ -404,10 +500,10 @@ export default function SignUp() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white font-Sofia font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75 mt-6"
+              disabled={registerMutation.isPending}
+              className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75 mt-6"
             >
-              {isLoading ? (
+              {registerMutation.isPending ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
@@ -425,7 +521,7 @@ export default function SignUp() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white/40 text-gray-600 font-Sofia">
+                <span className="px-2 bg-white/40 text-gray-600 ">
                   Already have an account?
                 </span>
               </div>
@@ -436,7 +532,7 @@ export default function SignUp() {
           <motion.div variants={itemVariants}>
             <Link
               href="/account/signin"
-              className="w-full py-3 px-4 rounded-2xl border-2 border-rose-500 text-rose-500 font-Sofia font-bold hover:bg-rose-50 transition-all duration-300 text-center block"
+              className="w-full py-3 px-4 rounded-2xl border-2 border-rose-500 text-rose-500  font-bold hover:bg-rose-50 transition-all duration-300 text-center block"
             >
               Sign In Instead
             </Link>
@@ -445,7 +541,7 @@ export default function SignUp() {
           {/* Terms */}
           <motion.p
             variants={itemVariants}
-            className="text-center text-xs text-gray-600 mt-6 font-Sofia"
+            className="text-center text-xs text-gray-600 mt-6 "
           >
             By creating an account, you agree to our{" "}
             <Link

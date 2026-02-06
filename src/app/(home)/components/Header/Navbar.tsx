@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
 import { Menu, Search, X, LogOut, ChefHat, ShoppingCart } from "lucide-react";
+import { useAuthContext } from "@/context/AuthContext";
 
 const links = [
   { name: "Home", href: "/" },
@@ -21,6 +22,39 @@ function Navbar() {
   const [openModal, setOpenModal] = useState(false);
   const pathName: string = usePathname();
   const [sticky, setSticky] = useState(false);
+  const { user, setUser } = useAuthContext();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const displayName =
+    (user?.name as string | undefined) ||
+    (user?.username as string | undefined) ||
+    (user?.email as string | undefined) ||
+    "User";
+
+  const username = (user?.username as string | undefined) || "";
+  const role = (user?.role as string | undefined)?.toUpperCase() || "";
+  const providerRestaurantName =
+    (user?.providerRestaurant as { name?: string } | undefined)?.name || "";
+
+  const profileHref =
+    role === "PROVIDER"
+      ? "/provider"
+      : `/account/${encodeURIComponent(username || displayName)}`;
+  const ordersHref = role === "PROVIDER" ? "/provider/orders" : "/account/orders";
+
+  const avatarUrl =
+    (user?.avatar as string | undefined) ||
+    (user?.image as string | undefined) ||
+    (user?.photo as string | undefined) ||
+    "";
+
+  const initials = displayName
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -41,6 +75,27 @@ function Navbar() {
     window.addEventListener("scroll", handleSticky);
     return () => window.removeEventListener("scroll", handleSticky);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!userMenuRef.current) return;
+      if (!userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }
+    setUser(null);
+    setIsUserMenuOpen(false);
+  };
 
   return (
     <header
@@ -121,28 +176,114 @@ function Navbar() {
                     </span>
                   </Link>
                 </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    href={"/account/signin"}
-                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
-                  >
-                    Sign In
-                  </Link>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    href={"/account/signup"}
-                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Sign Up
-                  </Link>
-                </motion.div>
+                {user ? (
+                  <div className="relative" ref={userMenuRef}>
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      type="button"
+                      onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                      className="flex items-center gap-3 py-2 px-3 rounded-xl border border-rose-100 bg-white/60 hover:bg-white transition-all"
+                    >
+                      {avatarUrl ? (
+                        <Image
+                          src={avatarUrl}
+                          alt={displayName}
+                          width={32}
+                          height={32}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs font-bold">
+                          {initials || "U"}
+                        </div>
+                      )}
+                      <span className="text-sm font-Sofia font-semibold text-gray-800 max-w-35 truncate">
+                        {displayName}
+                      </span>
+                    </motion.button>
+                    <AnimatePresence>
+                      {isUserMenuOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 8 }}
+                          className="absolute right-0 mt-3 w-52 rounded-2xl bg-white/95 backdrop-blur-xl border border-gray-200 shadow-xl overflow-hidden z-50"
+                        >
+                          <div className="px-4 py-3 border-b border-gray-100">
+                            <p className="text-sm font-Sofia font-semibold text-gray-900 truncate">
+                              {displayName}
+                            </p>
+                            {username && (
+                              <p className="text-xs text-gray-500 truncate">
+                                @{username}
+                              </p>
+                            )}
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {role && (
+                                <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-rose-50 text-rose-600 border border-rose-100">
+                                  {role}
+                                </span>
+                              )}
+                              {providerRestaurantName && (
+                                <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-orange-50 text-orange-600 border border-orange-100 truncate max-w-40">
+                                  {providerRestaurantName}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <Link
+                            href={profileHref}
+                            className="block px-4 py-3 text-sm font-Sofia font-semibold text-gray-800 hover:bg-rose-50"
+                            onClick={() => setIsUserMenuOpen(false)}
+                          >
+                            {role === "PROVIDER" ? "Dashboard" : "Profile"}
+                          </Link>
+                          <Link
+                            href={ordersHref}
+                            className="block px-4 py-3 text-sm font-Sofia font-semibold text-gray-800 hover:bg-rose-50"
+                            onClick={() => setIsUserMenuOpen(false)}
+                          >
+                            {role === "PROVIDER" ? "Orders" : "My Orders"}
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-3 text-sm font-Sofia font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2"
+                          >
+                            <LogOut size={16} />
+                            Log out
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={"/account/signin"}
+                        className="py-2.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
+                      >
+                        Sign In
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={"/account/signup"}
+                        className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        Sign Up
+                      </Link>
+                    </motion.div>
+                  </>
+                )}
               </div>
               <div className="lg:hidden">
                 <motion.button
@@ -238,45 +379,83 @@ function Navbar() {
                         </div>
                       </div>
                       {/* Action Buttons */}
-                      <div className="hidden flex-col gap-3 w-full">
-                        <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                      {user ? (
+                        <Link
+                          href={profileHref}
+                          onClick={() => setOpenModal(false)}
+                          className="flex items-center gap-3 px-4 py-3 rounded-lg bg-white/70 border border-gray-200"
                         >
-                          <Link
-                            href={"/account/signin"}
-                            onClick={() => setOpenModal(false)}
-                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 transition-all w-full"
+                          {avatarUrl ? (
+                            <Image
+                              src={avatarUrl}
+                              alt={displayName}
+                              width={36}
+                              height={36}
+                              className="rounded-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-9 h-9 rounded-full bg-rose-500 text-white flex items-center justify-center text-sm font-bold">
+                              {initials || "U"}
+                            </div>
+                          )}
+                          <div>
+                            <span className="font-Sofia font-semibold text-gray-800 block">
+                              {displayName}
+                            </span>
+                            {role && (
+                              <span className="text-xs text-gray-500">
+                                {role === "PROVIDER" ? "Provider" : "Customer"}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      ) : (
+                        <div className="flex flex-col gap-3 w-full">
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            Sign In
-                          </Link>
-                        </motion.div>
-                        <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <Link
-                            href={"/account/signup"}
-                            onClick={() => setOpenModal(false)}
-                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-all w-full"
+                            <Link
+                              href={"/account/signin"}
+                              onClick={() => setOpenModal(false)}
+                              className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 transition-all w-full"
+                            >
+                              Sign In
+                            </Link>
+                          </motion.div>
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            Sign Up
-                          </Link>
-                        </motion.div>
-                      </div>
+                            <Link
+                              href={"/account/signup"}
+                              onClick={() => setOpenModal(false)}
+                              className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-all w-full"
+                            >
+                              Sign Up
+                            </Link>
+                          </motion.div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   {/* Footer Section */}
-                  <div className="flex flex-col gap-3 border-t border-gray-200">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-50 to-orange-50 border-2 border-rose-200 text-rose-600 hover:border-rose-400 hover:bg-linear-to-r hover:from-rose-100 hover:to-orange-100 transition-all flex items-center justify-center gap-2"
-                    >
-                      <LogOut size={18} />
-                      Log out
-                    </motion.button>
-                  </div>
+                  {user && (
+                    <div className="flex flex-col gap-3 border-t border-gray-200">
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          handleLogout();
+                          setOpenModal(false);
+                        }}
+                        className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-50 to-orange-50 border-2 border-rose-200 text-rose-600 hover:border-rose-400 hover:bg-linear-to-r hover:from-rose-100 hover:to-orange-100 transition-all flex items-center justify-center gap-2"
+                      >
+                        <LogOut size={18} />
+                        Log out
+                      </motion.button>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </nav>

@@ -1,8 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import axios from "axios";
-import api from "@/api/Base_Api";
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 
 export interface RegisterPayload {
@@ -29,6 +27,10 @@ export interface RefreshTokenPayload {
   refresh_token: string;
 }
 
+export interface GoogleLoginPayload {
+  credential: string;
+}
+
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
@@ -42,6 +44,7 @@ export interface UseAuthReturn {
   register: (payload: RegisterPayload) => Promise<unknown>;
   verifyAccount: (payload: EmailOtpPayload) => Promise<unknown>;
   login: (payload: LoginPayload) => Promise<unknown>;
+  googleLogin: (payload: GoogleLoginPayload) => Promise<unknown>;
   verifyOtp: (payload: EmailOtpPayload) => Promise<unknown>;
   resendOtp: (payload: ResendOtp) => Promise<unknown>;
   refreshToken: (payload: RefreshTokenPayload) => Promise<unknown>;
@@ -54,6 +57,50 @@ interface ApiResponse<T> {
   message?: string;
   data?: T;
 }
+
+type ApiError = {
+  message: string;
+  status?: number;
+  details?: unknown;
+};
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? process.env.NEXT_PUBLIC_BASE_URL ?? "";
+
+const getAccessToken = () => {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("accessToken");
+};
+
+const request = async <T>(
+  path: string,
+  options: RequestInit = {},
+  withAuth = false,
+): Promise<T> => {
+  const headers = new Headers(options.headers);
+  if (!headers.has("Content-Type")) headers.set("Content-Type", "application/json");
+  if (withAuth) {
+    const accessToken = getAccessToken();
+    if (accessToken) headers.set("Authorization", `Bearer ${accessToken}`);
+  }
+
+  const response = await fetch(`${BASE_URL}${path}`, {
+    ...options,
+    headers,
+    cache: "no-store",
+  });
+
+  const text = await response.text();
+  const payload = text ? (JSON.parse(text) as ApiResponse<T>) : undefined;
+
+  if (!response.ok) {
+    const message = payload?.message || response.statusText || "Request failed";
+    const error: ApiError = { message, status: response.status, details: payload };
+    throw error;
+  }
+
+  return (payload?.data ?? (payload as T)) as T;
+};
 
 const storeTokens = (tokens: AuthTokens) => {
   if (typeof window === "undefined") return;
@@ -80,16 +127,9 @@ export function useAuth(): UseAuthReturn {
       return await task();
     } catch (err) {
       let message = "Request failed";
-      if (axios.isAxiosError(err)) {
-        if (!err.response) message = "Network error. Please check your connection.";
-        else {
-          const apiMessage = (err.response?.data as { message?: string } | undefined)
-            ?.message;
-          message = apiMessage || err.message || message;
-        }
-      } else if (err instanceof Error) {
-        message = err.message;
-      }
+      const apiErr = err as ApiError | undefined;
+      if (apiErr?.message) message = apiErr.message;
+      else if (err instanceof Error) message = err.message;
       setError(message);
       throw err;
     } finally {
@@ -102,11 +142,10 @@ export function useAuth(): UseAuthReturn {
   const register = useCallback(
     async (payload: RegisterPayload) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.REGISTER_API,
-          payload,
-        );
-        return response.data;
+        return request<unknown>(API_ENDPOINTS.REGISTER_API, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
       }),
     [run],
   );
@@ -114,22 +153,20 @@ export function useAuth(): UseAuthReturn {
   const verifyAccount = useCallback(
     async (payload: EmailOtpPayload) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.VERIFY_EMAIL,
-          payload,
-        );
-        return response.data;
+        return request<unknown>(API_ENDPOINTS.VERIFY_EMAIL, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
       }),
     [run],
   );
   const resendOtp = useCallback(
     async (payload: ResendOtp) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.RESEND_VERIFICATION,
-          payload,
-        );
-        return response.data;
+        return request<unknown>(API_ENDPOINTS.RESEND_VERIFICATION, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
       }),
     [run],
   );
@@ -137,11 +174,24 @@ export function useAuth(): UseAuthReturn {
   const login = useCallback(
     async (payload: LoginPayload) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.LOGIN_API,
-          payload,
-        );
-        return response.data;
+        return request<unknown>(API_ENDPOINTS.LOGIN_API, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+      }),
+    [run],
+  );
+
+  const googleLogin = useCallback(
+    async (payload: GoogleLoginPayload) =>
+      run(async () => {
+        const response = await request<unknown>(API_ENDPOINTS.GOOGLE_LOGIN, {
+          method: "POST",
+          body: JSON.stringify({ token: payload.credential }),
+        });
+        const tokens = extractTokens(response);
+        if (tokens) storeTokens(tokens);
+        return response;
       }),
     [run],
   );
@@ -149,13 +199,13 @@ export function useAuth(): UseAuthReturn {
   const verifyOtp = useCallback(
     async (payload: EmailOtpPayload) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.VERIFY_OTP,
-          payload,
-        );
-        const tokens = extractTokens(response.data);
+        const response = await request<unknown>(API_ENDPOINTS.VERIFY_OTP, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        const tokens = extractTokens(response);
         if (tokens) storeTokens(tokens);
-        return response.data;
+        return response;
       }),
     [run],
   );
@@ -163,13 +213,13 @@ export function useAuth(): UseAuthReturn {
   const refreshToken = useCallback(
     async (payload: RefreshTokenPayload) =>
       run(async () => {
-        const response = await api.post<ApiResponse<unknown>>(
-          API_ENDPOINTS.REFRESH_TOKEN,
-          payload,
-        );
-        const tokens = extractTokens(response.data);
+        const response = await request<unknown>(API_ENDPOINTS.REFRESH_TOKEN, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        const tokens = extractTokens(response);
         if (tokens) storeTokens(tokens);
-        return response.data;
+        return response;
       }),
     [run],
   );
@@ -177,10 +227,7 @@ export function useAuth(): UseAuthReturn {
   const getProfile = useCallback(
     async () =>
       run(async () => {
-        const response = await api.get<ApiResponse<UserProfile>>(
-          API_ENDPOINTS.GET_PROFILE,
-        );
-        return response.data;
+        return request<UserProfile>(API_ENDPOINTS.GET_PROFILE, { method: "GET" }, true);
       }),
     [run],
   );
@@ -191,6 +238,7 @@ export function useAuth(): UseAuthReturn {
     register,
     verifyAccount,
     login,
+    googleLogin,
     verifyOtp,
     refreshToken,
     getProfile,
