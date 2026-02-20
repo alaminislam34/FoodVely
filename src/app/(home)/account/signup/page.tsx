@@ -224,7 +224,7 @@ export default function SignUp() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-md"
+          className="w-full max-w-2xl"
         >
           <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
             <motion.div
@@ -329,7 +329,7 @@ export default function SignUp() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-2xl"
+        className="w-full max-w-3xl"
       >
         {/* Decorative Blobs */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
@@ -426,42 +426,17 @@ export default function SignUp() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white/40 text-gray-600 ">
-                  Already have an account?
+                  Already have an account?{" "}
+                  <Link
+                    href={"/account/signin"}
+                    className="text-rose-500 underline"
+                  >
+                    Sign in
+                  </Link>
                 </span>
               </div>
             </div>
           </motion.div>
-
-          {/* Sign In Link */}
-          <motion.div variants={itemVariants}>
-            <Link
-              href="/account/signin"
-              className="w-full py-3 px-4 rounded-2xl border-2 border-rose-500 text-rose-500  font-bold hover:bg-rose-50 transition-all duration-300 text-center block"
-            >
-              Sign In Instead
-            </Link>
-          </motion.div>
-
-          {/* Terms */}
-          <motion.p
-            variants={itemVariants}
-            className="text-center text-xs text-gray-600 mt-6 "
-          >
-            By creating an account, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="text-rose-500 hover:text-rose-600 font-semibold"
-            >
-              Terms & Conditions
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="text-rose-500 hover:text-rose-600 font-semibold"
-            >
-              Privacy Policy
-            </Link>
-          </motion.p>
         </motion.div>
       </motion.div>
     </section>

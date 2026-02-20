@@ -1,0 +1,52 @@
+[33mc0d5d5d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: commit: added some changes
+[33me1864fa[m HEAD@{1}: commit: added
+[33mbb57416[m HEAD@{2}: commit: added something
+[33m3758c70[m HEAD@{3}: commit: added the authentication integrate code
+[33m4f7fb68[m HEAD@{4}: commit: integrate the register api
+[33mcf3ee47[m HEAD@{5}: commit: added change
+[33mbb195e1[m HEAD@{6}: commit: added the sales report and order reports page
+[33md2bb03c[m HEAD@{7}: commit: added the reviews manage page, coupon manage page and overview page
+[33m185c138[m HEAD@{8}: commit: added some change
+[33m603da75[m HEAD@{9}: pull origin main: Fast-forward
+[33mc532edf[m HEAD@{10}: commit: added faq section
+[33m3dc6839[m HEAD@{11}: commit: design the faq section
+[33mb404339[m HEAD@{12}: commit: added the reports page and design it full responsive for all devices
+[33mac7fce9[m HEAD@{13}: commit: added reviews page and make it fully responsive and modern look
+[33ma9a3eff[m HEAD@{14}: commit: updated top restaurants and the restaurants page design
+[33m713cfcc[m HEAD@{15}: commit: updated products page
+[33mbbba9ab[m HEAD@{16}: commit: update the design change spacing colors and more
+[33mecd1aa6[m HEAD@{17}: commit: update the best sellers page on admin dashboard or make it responsive or modern look
+[33m8c35509[m HEAD@{18}: commit: update the categories page added the category create form and make the design fully responsive and modern look
+[33m411a0e4[m HEAD@{19}: commit: update the admin product page make it modern look and user friendly design
+[33m47e98c8[m HEAD@{20}: commit: updated the admin dashboard design - user roles sidebar
+[33m7f065a6[m HEAD@{21}: commit: remove the customer layout
+[33m5acd0e4[m HEAD@{22}: commit: added customer profile and dashboard pages
+[33mc39e90e[m HEAD@{23}: commit: design the admin dashboard and create under all pages. make it responsive and modern look. added user, product, reviews, and all management system
+[33m1e1b445[m HEAD@{24}: commit: added the blog page design make it fully responsive and modern look |
+[33m8e464ca[m HEAD@{25}: commit: added some modification on restaurant page and restaurant profile page
+[33md2772e0[m HEAD@{26}: commit: added the restaurant page and indivisual restaurant profile
+[33mf7dff37[m HEAD@{27}: commit: added restaurant page and details page and design that modern look and user friendly vibe
+[33m7ccbc87[m HEAD@{28}: commit: design a modern food details page and make it fully responsive
+[33m0aa3b65[m HEAD@{29}: commit: updated food card design and make it modern look
+[33m0c4d4d8[m HEAD@{30}: commit: updated the about page change some colors
+[33mc8ed03d[m HEAD@{31}: commit: updated the about section and the popular provider section
+[33m4986085[m HEAD@{32}: commit: update banner design
+[33m172ae48[m HEAD@{33}: pull origin main: Fast-forward
+[33m79f4a0d[m HEAD@{34}: commit: added contact page design
+[33m33f6aa2[m HEAD@{35}: commit: added the sign in or sign up page
+[33m95a7e81[m HEAD@{36}: commit: updated footer section and the banner section
+[33m9d0fc9d[m HEAD@{37}: commit: added footer design and update the logo
+[33m96f3164[m HEAD@{38}: commit: design the popular resturant section
+[33m9a5c7e0[m HEAD@{39}: commit: added the menu page |
+[33mc04c867[m HEAD@{40}: commit: added Food category section design and make it fully responsive
+[33m18bb29d[m HEAD@{41}: commit: added our product section
+[33m586dda3[m HEAD@{42}: commit: added banner section
+[33m12eddeb[m HEAD@{43}: commit: added product section and design product card
+[33me303613[m HEAD@{44}: commit: added some updated design
+[33m23a22a7[m HEAD@{45}: commit: updated the sidebar make it fully responsive and functional
+[33m19f56bd[m HEAD@{46}: commit: added sidebar on small device
+[33m2c2942d[m HEAD@{47}: commit: added navbar design and make it modern look
+[33m377974d[m HEAD@{48}: pull origin main: Fast-forward
+[33m2ed1d98[m HEAD@{49}: Branch: renamed refs/heads/main to refs/heads/main
+[33m2ed1d98[m HEAD@{51}: commit: added my first commit and design basic navbar on my website
+[33m2d1d0b5[m HEAD@{52}: commit (initial): Initial commit from Create Next App

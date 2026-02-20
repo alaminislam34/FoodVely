@@ -44,7 +44,7 @@ function Navbar() {
 
   return (
     <header
-      className={`w-full sticky z-40 transition-all duration-300 ${sticky ? " top-0 bg-[#fffdf7] backdrop-blur-xl shadow-xl" : ""}`}
+      className={`w-full sticky z-40 transition-all duration-300 ${sticky ? " top-0 bg-[#fffdf7] backdrop-blur-xl shadow-md" : ""}`}
     >
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -64,7 +64,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
-            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4 lg:py-6">
+            <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4">
               <motion.div
                 className="shrink-0"
                 whileHover={{ scale: 1.05 }}
@@ -74,11 +74,8 @@ function Navbar() {
                   <div className="p-2.5 rounded-xl bg-linear-to-br from-rose-500 to-orange-500 text-white shadow-lg group-hover:shadow-xl transition-shadow">
                     <ChefHat size={24} />
                   </div>
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent hidden sm:block">
+                  <h3 className="text-xl lg:text-2xl font-Sofia font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent">
                     Food<span className="text-rose-500">Vally</span>
-                  </h3>
-                  <h3 className="text-2xl font-Sofia font-bold text-gray-900 sm:hidden">
-                    FV
                   </h3>
                 </Link>
               </motion.div>
@@ -89,9 +86,9 @@ function Navbar() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className={`px-4 py-2.5 rounded-lg font-Sofia font-semibold transition-all duration-300 relative group ${
+                        className={`px-4 py-1.5 rounded-lg font-Sofia font-semibold transition-all duration-300 relative group ${
                           pathName === href
-                            ? "bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-md"
+                            ? "bg-linear-to-r from-rose-500 to-orange-600 text-white shadow-md"
                             : "text-gray-700 hover:text-rose-600"
                         }`}
                       >
@@ -127,7 +124,7 @@ function Navbar() {
                 >
                   <Link
                     href={"/account/signin"}
-                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
+                    className="py-1.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
                   >
                     Sign In
                   </Link>
@@ -138,7 +135,7 @@ function Navbar() {
                 >
                   <Link
                     href={"/account/signup"}
-                    className="py-2.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="py-1.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Sign Up
                   </Link>
@@ -246,7 +243,7 @@ function Navbar() {
                           <Link
                             href={"/account/signin"}
                             onClick={() => setOpenModal(false)}
-                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 transition-all w-full"
+                            className="py-1.5 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 transition-all w-full"
                           >
                             Sign In
                           </Link>
@@ -258,7 +255,7 @@ function Navbar() {
                           <Link
                             href={"/account/signup"}
                             onClick={() => setOpenModal(false)}
-                            className="py-3 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-all w-full"
+                            className="py-1.5 px-6 rounded-lg flex items-center justify-center font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white shadow-lg hover:shadow-xl transition-all w-full"
                           >
                             Sign Up
                           </Link>

@@ -37,11 +37,11 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-linear-to-br from-white to-white/80 backdrop-blur-sm py-16 md:py-20 relative mt-50 shadow-md
+      className="bg-linear-to-br from-white to-white/80 backdrop-blur-sm py-16 md:py-20 relative shadow-md
     "
     >
       {/* Newsletter Section */}
-      <motion.div
+      {/* <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto w-11/12 bg-linear-to-br from-white via-orange-50 to-orange-200 backdrop-blur-2xl rounded-3xl p-6 md:p-8 mb-8 shadow-md absolute -top-40 left-1/2 -translate-x-1/2"
       >
@@ -66,7 +66,7 @@ export default function Footer() {
             </button>
           </div>
         </div>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         variants={footerVariants}
