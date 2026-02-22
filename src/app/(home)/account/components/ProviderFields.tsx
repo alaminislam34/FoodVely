@@ -1,6 +1,16 @@
 import { motion } from "motion/react";
-import { Phone, MapPin } from "lucide-react";
+import {
+  Phone,
+  MapPin,
+  Clock,
+  Utensils,
+  Image as ImageIcon,
+} from "lucide-react";
 import { Category } from "@/types/product";
+import { useEffect, useState } from "react";
+import axios from "axios";
+const base_url =
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v1";
 
 interface FormData {
   firstName: string;
@@ -8,20 +18,21 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  phone?: string;
+  contactNumber?: string;
   restaurantName?: string;
   address?: string;
   city?: string;
-  deliveryFee?: string;
-  minimumOrder?: string;
-  licenseNumber?: string;
+  cuisine?: string;
+  openingHours?: string;
+  logo?: string;
+  coverImage?: string;
 }
 
 interface ProviderFieldsProps {
   formData: FormData;
   errors: Partial<FormData>;
-  activeCategories: Category[];
-  setActiveCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  activeCategories: string[];
+  setActiveCategories: React.Dispatch<React.SetStateAction<string[]>>;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -41,17 +52,6 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
-const categories: Category[] = [
-  { id: "1", name: "🍔 Burgers", slug: "burgers" },
-  { id: "2", name: "🍕 Pizza", slug: "pizza" },
-  { id: "3", name: "🍜 Noodles", slug: "noodles" },
-  { id: "4", name: "🍣 Sushi", slug: "sushi" },
-  { id: "5", name: "🥗 Salads", slug: "salads" },
-  { id: "6", name: "🍰 Desserts", slug: "desserts" },
-  { id: "7", name: "☕ Beverages", slug: "beverages" },
-  { id: "8", name: "🌮 Mexican", slug: "mexican" },
-];
-
 export default function ProviderFields({
   formData,
   errors,
@@ -59,6 +59,27 @@ export default function ProviderFields({
   setActiveCategories,
   handleInputChange,
 }: ProviderFieldsProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(`${base_url}/food-categories`, {
+          withCredentials: true,
+        });
+        console.log(res.data.data);
+        if (res.status === 200) {
+          setCategories(res.data.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  console.log(categories);
   return (
     <motion.div
       variants={containerVariants}
@@ -68,42 +89,14 @@ export default function ProviderFields({
     >
       <motion.h3
         variants={itemVariants}
-        className="text-lg  font-bold text-gray-900"
+        className="text-lg font-bold text-gray-900"
       >
-        Restaurant Information
+        Restaurant Details
       </motion.h3>
-
-      {/* Phone */}
-      <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm  font-semibold text-gray-800">
-          Phone Number
-        </label>
-        <div className="relative">
-          <Phone
-            size={20}
-            className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone || ""}
-            onChange={handleInputChange}
-            placeholder="+1 (555) 000-0000"
-            className={`w-full pl-12 pr-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
-              errors.phone
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-200 focus:ring-rose-500 focus:border-transparent"
-            }`}
-          />
-        </div>
-        {errors.phone && (
-          <p className="text-red-500 text-sm ">{errors.phone}</p>
-        )}
-      </motion.div>
 
       {/* Restaurant Name */}
       <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm  font-semibold text-gray-800">
+        <label className="block text-sm font-semibold text-gray-800">
           Restaurant Name
         </label>
         <input
@@ -111,16 +104,59 @@ export default function ProviderFields({
           name="restaurantName"
           value={formData.restaurantName || ""}
           onChange={handleInputChange}
-          placeholder="Your Restaurant"
+          placeholder="e.g. Burger Hub"
           className={`w-full px-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
             errors.restaurantName
               ? "border-red-500 focus:ring-red-500"
-              : "border-gray-200 focus:ring-rose-500 focus:border-transparent"
+              : "border-gray-200 focus:ring-rose-500"
           }`}
         />
-        {errors.restaurantName && (
-          <p className="text-red-500 text-sm ">{errors.restaurantName}</p>
-        )}
+      </motion.div>
+
+      {/* Contact & Cuisine */}
+      <motion.div
+        variants={itemVariants}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-800">
+            Contact Number
+          </label>
+          <div className="relative">
+            <Phone
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="tel"
+              name="contactNumber"
+              value={formData.contactNumber || ""}
+              onChange={handleInputChange}
+              placeholder="+8801712345678"
+              className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-gray-800">
+            Cuisine Type
+          </label>
+          <div className="relative">
+            <Utensils
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+            />
+            <input
+              type="text"
+              name="cuisine"
+              value={formData.cuisine || ""}
+              onChange={handleInputChange}
+              placeholder="e.g. Italian, Fast Food"
+              className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
+            />
+          </div>
+        </div>
       </motion.div>
 
       {/* Address & City */}
@@ -129,34 +165,26 @@ export default function ProviderFields({
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div className="space-y-2">
-          <label className="block text-sm  font-semibold text-gray-800">
+          <label className="block text-sm font-semibold text-gray-800">
             Address
           </label>
           <div className="relative">
             <MapPin
-              size={20}
-              className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-gray-400"
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
             />
             <input
               type="text"
               name="address"
               value={formData.address || ""}
               onChange={handleInputChange}
-              placeholder="Street address"
-              className={`w-full pl-12 pr-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
-                errors.address
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-200 focus:ring-rose-500 focus:border-transparent"
-              }`}
+              placeholder="House 12, Road 5, Dhanmondi"
+              className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
             />
           </div>
-          {errors.address && (
-            <p className="text-red-500 text-sm ">{errors.address}</p>
-          )}
         </div>
-
         <div className="space-y-2">
-          <label className="block text-sm  font-semibold text-gray-800">
+          <label className="block text-sm font-semibold text-gray-800">
             City
           </label>
           <input
@@ -164,95 +192,93 @@ export default function ProviderFields({
             name="city"
             value={formData.city || ""}
             onChange={handleInputChange}
-            placeholder="City"
-            className={`w-full px-4 py-3 rounded-2xl border bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 transition-all ${
-              errors.city
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-200 focus:ring-rose-500 focus:border-transparent"
-            }`}
+            placeholder="Dhaka"
+            className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
           />
-          {errors.city && (
-            <p className="text-red-500 text-sm ">{errors.city}</p>
-          )}
         </div>
       </motion.div>
 
-      {/* Delivery & Order Info */}
+      {/* Opening Hours */}
+      <motion.div variants={itemVariants} className="space-y-2">
+        <label className="block text-sm font-semibold text-gray-800">
+          Opening Hours
+        </label>
+        <div className="relative">
+          <Clock
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+          <input
+            type="text"
+            name="openingHours"
+            value={formData.openingHours || ""}
+            onChange={handleInputChange}
+            placeholder="10:00 AM - 11:00 PM"
+            className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
+          />
+        </div>
+      </motion.div>
+
+      {/* Media Links */}
       <motion.div
         variants={itemVariants}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
       >
         <div className="space-y-2">
-          <label className="block text-sm  font-semibold text-gray-800">
-            Delivery Fee ($)
+          <label className="block text-sm font-semibold text-gray-800">
+            Logo URL
           </label>
           <input
-            type="number"
-            name="deliveryFee"
-            value={formData.deliveryFee || ""}
+            type="text"
+            name="logo"
+            value={formData.logo || ""}
             onChange={handleInputChange}
-            placeholder="2.99"
-            className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+            placeholder="https://example.com/logo.png"
+            className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
           />
         </div>
-
         <div className="space-y-2">
-          <label className="block text-sm  font-semibold text-gray-800">
-            Minimum Order ($)
+          <label className="block text-sm font-semibold text-gray-800">
+            Cover Image URL
           </label>
           <input
-            type="number"
-            name="minimumOrder"
-            value={formData.minimumOrder || ""}
+            type="text"
+            name="coverImage"
+            value={formData.coverImage || ""}
             onChange={handleInputChange}
-            placeholder="10.00"
-            className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+            placeholder="https://example.com/cover.jpg"
+            className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-2 focus:ring-rose-500 outline-none"
           />
         </div>
       </motion.div>
 
       {/* Categories */}
       <motion.div variants={itemVariants} className="space-y-3">
-        <label className="block text-sm  font-semibold text-gray-800">
+        <label className="block text-sm font-semibold text-gray-800">
           Food Categories
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {categories.map((cat) => (
             <button
-              key={cat.slug}
+              key={cat.id}
               type="button"
               onClick={() =>
                 setActiveCategories((prev) =>
-                  prev.some((item) => item.slug === cat.slug)
-                    ? prev.filter((item) => item.slug !== cat.slug)
-                    : [...prev, cat],
+                  prev.includes(cat.id)
+                    ? prev.filter((id) => id !== cat.id)
+                    : [...prev, cat.id],
                 )
               }
-              className={`p-2 rounded-lg text-sm  transition-all ${
-                activeCategories.some((item) => item.slug === cat.slug)
-                  ? "bg-rose-500 text-white"
-                  : "bg-white/30 text-gray-700 hover:bg-white/50"
+              className={`p-2 rounded-xl text-sm transition-all border ${
+                activeCategories.includes(cat.id)
+                  ? "bg-rose-500 text-white border-rose-600 shadow-md"
+                  : "bg-white/40 text-gray-700 border-gray-100 hover:bg-white/60"
               }`}
             >
-              {cat.name}
+              {cat.title}
             </button>
           ))}
         </div>
-      </motion.div>
-
-      {/* License Number */}
-      <motion.div variants={itemVariants} className="space-y-2">
-        <label className="block text-sm  font-semibold text-gray-800">
-          Business License Number
-        </label>
-        <input
-          type="text"
-          name="licenseNumber"
-          value={formData.licenseNumber || ""}
-          onChange={handleInputChange}
-          placeholder="License #"
-          className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
-        />
       </motion.div>
     </motion.div>
   );

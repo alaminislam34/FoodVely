@@ -1,5 +1,7 @@
+"use client";
 import { motion } from "motion/react";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
+import { useState } from "react";
 
 interface FormData {
   firstName: string;
@@ -161,7 +163,10 @@ export default function BasicFields({
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <PasswordStrengthComponent strength={passwordStrength} password={formData.password} />
+        <PasswordStrengthComponent
+          strength={passwordStrength}
+          password={formData.password}
+        />
         {errors.password && (
           <p className="text-red-500 text-sm ">{errors.password}</p>
         )}
@@ -200,6 +205,8 @@ export default function BasicFields({
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm ">{errors.confirmPassword}</p>
         )}
+
+        {/* {err && <p className="text-red-500 text-sm">{err}</p>} */}
       </motion.div>
     </>
   );

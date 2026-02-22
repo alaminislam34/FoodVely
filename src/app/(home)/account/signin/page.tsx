@@ -2,12 +2,16 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v1";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -67,6 +71,28 @@ export default function SignIn() {
       toast.dismiss(loadingToast);
       toast.error(err?.message);
       console.error(err);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      if (!email || !password) {
+        toast.error("Please fill in all fields");
+        return;
+      }
+
+      const res = await axios.post(
+        `${BASE_URL}/auth/login`,
+        { email, password },
+        { withCredentials: true },
+      );
+      toast.success(res.data.message || "Login successful!");
+      setTimeout(() => router.push("/"), 1000);
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
@@ -210,7 +236,7 @@ export default function SignIn() {
           </div>
 
           {/* Sign In Form */}
-          <form onSubmit={handleSignIn} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             {/* Email Field */}
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="block text-sm  font-semibold text-gray-800">

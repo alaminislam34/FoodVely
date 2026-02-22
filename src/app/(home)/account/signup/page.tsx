@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,8 @@ import ProviderFields from "../components/ProviderFields";
 import PasswordStrength from "../components/PasswordStrength";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
-import { Category } from "@/types/product";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v1";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -24,7 +25,7 @@ const itemVariants = {
   visible: { once: true, opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-type UserRole = "customer" | "provider";
+type UserRole = "CUSTOMER" | "PROVIDER";
 
 interface FormData {
   firstName: string;
@@ -32,22 +33,24 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  phone?: string;
+  contactNumber?: string;
   restaurantName?: string;
   address?: string;
   city?: string;
-  deliveryFee?: string;
-  minimumOrder?: string;
-  licenseNumber?: string;
+  cuisine?: string;
+  openingHours?: string;
+  logo?: string;
+  coverImage?: string;
+  categories?: string[];
 }
 
 export default function SignUp() {
   const router = useRouter();
-  const [role, setRole] = useState<UserRole>("customer");
+  const [role, setRole] = useState<UserRole>("CUSTOMER");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const [activeCategories, setActiveCategories] = useState<Category[]>([]);
+  const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [step, setStep] = useState<"register" | "verify">("register");
   const [verifyEmail, setVerifyEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -94,8 +97,9 @@ export default function SignUp() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (role === "provider") {
-      if (!formData.phone) newErrors.phone = "Phone number is required";
+    if (role === "PROVIDER") {
+      if (!formData.contactNumber)
+        newErrors.contactNumber = "Contact number is required";
       if (!formData.restaurantName)
         newErrors.restaurantName = "Restaurant name is required";
       if (!formData.address) newErrors.address = "Address is required";
@@ -167,6 +171,108 @@ export default function SignUp() {
         toast.error(message || "Registration failed. Try again.");
       }
       console.error(err);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      if (role === "CUSTOMER") {
+        const full_name = `${formData.firstName} ${formData.lastName}`;
+        const userData = {
+          name: full_name,
+          email: formData.email,
+          password: formData.password,
+        };
+
+        console.log({
+          name: formData.firstName + formData.lastName,
+          email: formData.email,
+          password: formData.password,
+        });
+
+        const res = await axios.post(
+          `${BASE_URL}/auth/create-customer`,
+          userData,
+          { withCredentials: true },
+        );
+        console.log(res.status);
+        if (res.status === 201) {
+          toast.success("Account created successfully!");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+          router.push("/account/signin");
+        } else {
+          toast.error("Failed to create account. Please try again.");
+        }
+      }
+
+      if (role === "PROVIDER") {
+        const providerData = {
+          password: formData.password,
+          user: {
+            name: `${formData.firstName} ${formData.lastName}`,
+            email: formData.email,
+            role: "PROVIDER",
+          },
+          restaurant: {
+            restaurantName: formData.restaurantName,
+            city: formData.city,
+            address: formData.address,
+            contactNumber: formData.contactNumber,
+            cuisine: formData.cuisine,
+            openingHours: formData.openingHours,
+            logo: formData.logo,
+            coverImage: formData.coverImage,
+            foodCategories: activeCategories,
+          },
+        };
+        if (
+          !formData.firstName ||
+          !formData.lastName ||
+          !formData.email ||
+          !formData.password ||
+          !formData.address ||
+          !formData.city ||
+          !formData.contactNumber ||
+          !formData.restaurantName ||
+          activeCategories.length === 0
+        ) {
+          toast.error(
+            "Please fill all required fields and select at least one food category.",
+          );
+          return;
+        }
+        const res = await axios.post(
+          `${BASE_URL}/auth/create-provider`,
+          providerData,
+          { withCredentials: true },
+        );
+        console.log(res.status);
+        if (res.status === 201) {
+          toast.success("Account created successfully!");
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+          setActiveCategories([]);
+          router.push("/account/signin");
+        } else {
+          toast.error("Failed to create account. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to create account. Please try again.");
     }
   };
 
@@ -362,7 +468,7 @@ export default function SignUp() {
           <RoleSelector role={role} setRole={setRole} setErrors={setErrors} />
 
           {/* Sign Up Form */}
-          <form onSubmit={handleSignUp} className="space-y-4">
+          <form onSubmit={handleRegister} className="space-y-4">
             {/* Basic Fields Component */}
             <BasicFields
               formData={formData}
@@ -378,7 +484,7 @@ export default function SignUp() {
 
             {/* Provider Fields Component */}
             <AnimatePresence mode="wait">
-              {role === "provider" && (
+              {role === "PROVIDER" && (
                 <motion.div
                   key="provider-fields"
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
