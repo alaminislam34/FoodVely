@@ -23,7 +23,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
   const displayPrice = product.discountPrice || product.price;
   const hasDiscount = !!product.discountPrice;
-  const categoryName = product.category?.name || "Uncategorized";
+  const categoryName = product.category?.title || "Uncategorized";
 
   return (
     <motion.div

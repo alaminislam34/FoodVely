@@ -205,7 +205,7 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
             {/* Category & Rating */}
             <div className="flex items-center gap-4 mb-6">
               <span className="text-xs font-black text-rose-500 uppercase tracking-widest bg-rose-50 px-3 py-1 rounded-full">
-                {product.category?.name || "Uncategorized"}
+                {product.category?.title || "Uncategorized"}
               </span>
               {product.rating?.average && (
                 <div className="flex items-center gap-1.5">
