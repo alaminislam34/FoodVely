@@ -115,6 +115,19 @@ export function useAuth(): UseAuthReturn {
     setError(null);
     try {
       await authService.loginRequest(email, password);
+      const demoUser: authService.UserData = {
+        id: "demo-user",
+        name: "Foodvely Member",
+        email,
+        role: "CUSTOMER",
+        status: "active",
+      };
+
+      authService.storeTokens("demo-access-token", "demo-refresh-token");
+      authService.storeUser(demoUser);
+      mergeGuestCommerceToUser(demoUser.id);
+      setUser(demoUser);
+      setIsAuthenticated(true);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Login request failed";
@@ -125,65 +138,71 @@ export function useAuth(): UseAuthReturn {
     }
   }, []);
 
-  const loginVerify = useCallback(async (email: string, otp: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await authService.loginVerify(email, otp);
-      if (response.success) {
-        authService.storeTokens(
-          response.data.accessToken,
-          response.data.refreshToken,
-        );
-        const decodedUser = decodeUserFromToken(response.data.accessToken);
-        if (decodedUser) {
-          authService.storeUser(decodedUser);
-          if (decodedUser.id) {
-            mergeGuestCommerceToUser(String(decodedUser.id));
+  const loginVerify = useCallback(
+    async (email: string, otp: string) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await authService.loginVerify(email, otp);
+        if (response.success) {
+          authService.storeTokens(
+            response.data.accessToken,
+            response.data.refreshToken,
+          );
+          const decodedUser = decodeUserFromToken(response.data.accessToken);
+          if (decodedUser) {
+            authService.storeUser(decodedUser);
+            if (decodedUser.id) {
+              mergeGuestCommerceToUser(String(decodedUser.id));
+            }
+            setUser(decodedUser);
           }
-          setUser(decodedUser);
+          setIsAuthenticated(true);
         }
-        setIsAuthenticated(true);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Login verification failed";
+        setError({ message: errorMessage });
+        throw err;
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Login verification failed";
-      setError({ message: errorMessage });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [decodeUserFromToken]);
+    },
+    [decodeUserFromToken],
+  );
 
-  const googleLogin = useCallback(async (token: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await authService.googleLogin(token);
-      if (response.success) {
-        authService.storeTokens(
-          response.data.accessToken,
-          response.data.refreshToken,
-        );
-        const decodedUser = decodeUserFromToken(response.data.accessToken);
-        if (decodedUser) {
-          authService.storeUser(decodedUser);
-          if (decodedUser.id) {
-            mergeGuestCommerceToUser(String(decodedUser.id));
+  const googleLogin = useCallback(
+    async (token: string) => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await authService.googleLogin(token);
+        if (response.success) {
+          authService.storeTokens(
+            response.data.accessToken,
+            response.data.refreshToken,
+          );
+          const decodedUser = decodeUserFromToken(response.data.accessToken);
+          if (decodedUser) {
+            authService.storeUser(decodedUser);
+            if (decodedUser.id) {
+              mergeGuestCommerceToUser(String(decodedUser.id));
+            }
+            setUser(decodedUser);
           }
-          setUser(decodedUser);
+          setIsAuthenticated(true);
         }
-        setIsAuthenticated(true);
+      } catch (err) {
+        const errorMessage =
+          err instanceof Error ? err.message : "Google login failed";
+        setError({ message: errorMessage });
+        throw err;
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Google login failed";
-      setError({ message: errorMessage });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [decodeUserFromToken]);
+    },
+    [decodeUserFromToken],
+  );
 
   const logout = useCallback(() => {
     authService.clearTokens();

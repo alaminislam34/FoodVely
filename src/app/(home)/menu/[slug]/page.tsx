@@ -16,7 +16,11 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { addToCart, isWishlisted, toggleWishlist } from "@/utils/commerceStorage";
+import {
+  addToCart,
+  isWishlisted,
+  toggleWishlist,
+} from "@/utils/commerceStorage";
 
 interface MenuDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -37,7 +41,6 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
     notes: "",
   });
 
-  // Get slug from params
   useEffect(() => {
     params.then((p) => setSlug(p.slug));
   }, [params]);
@@ -338,12 +341,8 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
                 >
                   −
                 </button>
-                  onClick={() => {
-                    toggleWishlist(String(product.id), "product");
-                    setIsFavorite((prev) => !prev);
-                  }}
-                  {quantity}
-                    isFavorite || wished
+                {quantity}
+                isFavorite || wished
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="px-2 py-1 text-gray-600 hover:text-rose-500 transition-colors font-bold text-lg"

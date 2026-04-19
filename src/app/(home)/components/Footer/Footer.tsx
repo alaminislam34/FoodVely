@@ -37,7 +37,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-linear-to-br from-white to-white/80 backdrop-blur-sm py-16 md:py-20 relative shadow-md
+      className="bg-linear-to-br from-white to-white/80 backdrop-blur-sm py-16 md:py-20 relative shadow-md border-t border-gray-200
     "
     >
       {/* Newsletter Section */}

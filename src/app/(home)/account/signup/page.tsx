@@ -16,6 +16,12 @@ import {
 import toast from "react-hot-toast";
 import { useAuthContext } from "@/context/AuthContext";
 import { getRedirectPathByRole } from "@/utils/authRedirect";
+import { Button } from "@/components/ui/button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 // --- Components & Constants ---
 
@@ -24,9 +30,13 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+const inputClassName =
+  "h-11 w-full rounded-xl border border-rose-100 bg-white px-3 text-sm text-gray-900 outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100";
+
 export default function SignUp() {
   const router = useRouter();
-  const { register, verifyAccount, isLoading, isAuthenticated, user } = useAuthContext();
+  const { register, verifyAccount, isLoading, isAuthenticated, user } =
+    useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState<"register" | "verify">("register");
   const [otp, setOtp] = useState("");
@@ -106,37 +116,50 @@ export default function SignUp() {
 
   if (step === "verify") {
     return (
-      <section className="relative h-full py-12 lg:py-14 flex items-center justify-center px-4">
-        <div className="w-full max-w-120">
-          <div className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)]">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2 text-center">
+      <section className="flex items-center justify-center px-4 py-10 lg:py-14">
+        <div className="w-full max-w-md">
+          <div className="rounded-3xl border border-rose-100 bg-white/95 p-6 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.35)]">
+            <h1 className="text-center text-2xl font-semibold text-gray-900">
               Verify Account
             </h1>
-            <p className="text-gray-500 font-medium text-center mb-8">
+            <p className="mb-6 mt-2 text-center text-sm text-gray-600">
               Enter the OTP sent to {formData.email}
             </p>
 
-            <form onSubmit={handleVerify} className="space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-gray-700 ml-1">OTP Code</label>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.toUpperCase())}
-                  placeholder="000000"
-                  maxLength={6}
-                  className="w-full px-4 py-4 bg-white/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-semibold text-center tracking-widest"
-                />
+            <form onSubmit={handleVerify} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  OTP Code
+                </label>
+                <div className="flex justify-center">
+                  <InputOTP
+                    maxLength={6}
+                    value={otp}
+                    onChange={(value) => setOtp(value.toUpperCase())}
+                  >
+                    <InputOTPGroup className="rounded-xl border border-rose-100 bg-white shadow-sm">
+                      <InputOTPSlot index={0} className="size-10 border-none" />
+                      <InputOTPSlot index={1} className="size-10 border-none" />
+                      <InputOTPSlot index={2} className="size-10 border-none" />
+                      <InputOTPSlot index={3} className="size-10 border-none" />
+                      <InputOTPSlot index={4} className="size-10 border-none" />
+                      <InputOTPSlot index={5} className="size-10 border-none" />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
               </div>
 
-              <motion.button
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
+              <Button
+                size="lg"
                 disabled={isLoading}
-                className="w-full mt-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                className="h-11 w-full rounded-xl bg-rose-500 text-white hover:bg-rose-600"
               >
-                {isLoading ? <Loader2 className="animate-spin" size={20} /> : "Verify Account"}
-              </motion.button>
+                {isLoading ? (
+                  <Loader2 className="animate-spin" size={20} />
+                ) : (
+                  "Verify Account"
+                )}
+              </Button>
             </form>
           </div>
         </div>
@@ -145,54 +168,33 @@ export default function SignUp() {
   }
 
   return (
-    <section className="relative h-full py-12 lg:py-14 flex items-center justify-center px-4">
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        <motion.div
-          animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
-          transition={{ duration: 20, repeat: Infinity }}
-          className="absolute -top-[10%] -right-[10%] w-125 h-125 bg-rose-100/50 rounded-full blur-[120px]"
-        />
-        <motion.div
-          animate={{ x: [0, -80, 0], y: [0, -40, 0] }}
-          transition={{ duration: 15, repeat: Infinity }}
-          className="absolute -bottom-[10%] -left-[10%] w-100 h-100 bg-orange-100/40 rounded-full blur-[100px]"
-        />
-      </div>
-
+    <section className="flex items-center justify-center px-4 py-10 lg:py-14">
       <motion.div
         initial="hidden"
         animate="visible"
-        className="w-full max-w-120"
+        className="w-full max-w-lg"
       >
-        <div className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)]">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              className="inline-block p-4 rounded-3xl bg-rose-50 mb-6"
-            >
-              <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
-                <User className="text-white" size={24} />
-              </div>
-            </motion.div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+        <div className="rounded-3xl border border-rose-100 bg-white/95 p-6 lg:p-12 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.35)]">
+          <div className="mb-6 text-center">
+            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-500">
+              <User size={20} />
+            </div>
+            <h1 className="text-2xl font-semibold text-gray-900">
               Create Account
             </h1>
-            <p className="text-gray-500 font-medium">
-              Join the food community today
+            <p className="mt-2 text-sm text-gray-600">
+              Join Foodvely in seconds
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name Field */}
-            <motion.div variants={itemVariants} className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <motion.div variants={itemVariants} className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
                 Full Name
               </label>
-              <div className="relative group">
+              <div className="relative">
                 <User
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                   size={18}
                 />
                 <input
@@ -201,22 +203,21 @@ export default function SignUp() {
                   placeholder="John Doe"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.name ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                  className={`${inputClassName} pl-10 ${errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
                 />
               </div>
               {errors.name && (
-                <p className="text-xs text-red-500 ml-1">{errors.name}</p>
+                <p className="text-xs text-red-500">{errors.name}</p>
               )}
             </motion.div>
 
-            {/* Email Field */}
-            <motion.div variants={itemVariants} className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
+            <motion.div variants={itemVariants} className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
                 Email Address
               </label>
-              <div className="relative group">
+              <div className="relative">
                 <Mail
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                   size={18}
                 />
                 <input
@@ -225,22 +226,21 @@ export default function SignUp() {
                   placeholder="name@example.com"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.email ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                  className={`${inputClassName} pl-10 ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
                 />
               </div>
               {errors.email && (
-                <p className="text-xs text-red-500 ml-1">{errors.email}</p>
+                <p className="text-xs text-red-500">{errors.email}</p>
               )}
             </motion.div>
 
-            {/* Password Field */}
-            <motion.div variants={itemVariants} className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
+            <motion.div variants={itemVariants} className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div className="relative group">
+              <div className="relative">
                 <Lock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                   size={18}
                 />
                 <input
@@ -249,29 +249,28 @@ export default function SignUp() {
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-12 py-4 bg-white/50 border ${errors.password ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                  className={`${inputClassName} pl-10 pr-10 ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-xs text-red-500 ml-1">{errors.password}</p>
+                <p className="text-xs text-red-500">{errors.password}</p>
               )}
             </motion.div>
 
-            {/* Confirm Password Field */}
-            <motion.div variants={itemVariants} className="space-y-1.5">
-              <label className="text-sm font-bold text-gray-700 ml-1">
+            <motion.div variants={itemVariants} className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">
                 Confirm Password
               </label>
-              <div className="relative group">
+              <div className="relative">
                 <Lock
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                   size={18}
                 />
                 <input
@@ -280,61 +279,60 @@ export default function SignUp() {
                   placeholder="••••••••"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.confirmPassword ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                  className={`${inputClassName} pl-10 ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
                 />
               </div>
               {errors.confirmPassword && (
-                <p className="text-xs text-red-500 ml-1">{errors.confirmPassword}</p>
+                <p className="text-xs text-red-500">{errors.confirmPassword}</p>
               )}
             </motion.div>
 
-            <motion.div variants={itemVariants} className="space-y-1.5">
-              <label className="flex items-start gap-3 cursor-pointer text-sm text-gray-600">
+            <motion.div variants={itemVariants} className="space-y-2">
+              <label className="flex cursor-pointer items-start gap-3 text-sm text-gray-600">
                 <input
                   type="checkbox"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-gray-300 text-rose-500 focus:ring-rose-500"
+                  className="mt-1 h-4 w-4 text-xs rounded border-gray-300 text-rose-500 focus:ring-rose-500"
                 />
                 <span>
-                  I agree to the{' '}
-                  <Link href="/terms" className="font-semibold text-rose-500 hover:underline">
+                  I agree to the{" "}
+                  <Link
+                    href="/terms"
+                    className="font-semibold text-rose-500 hover:underline"
+                  >
                     Terms & Conditions
-                  </Link>{' '}
+                  </Link>{" "}
                   and privacy policy.
                 </span>
               </label>
               {errors.terms && (
-                <p className="text-xs text-red-500 ml-7">{errors.terms}</p>
+                <p className="ml-7 text-xs text-red-500">{errors.terms}</p>
               )}
             </motion.div>
 
-            {/* Submit Button */}
-            <motion.button
-              variants={itemVariants}
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
+              size="lg"
               disabled={isLoading || !acceptTerms}
-              className="w-full mt-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+              className="h-11 w-full rounded-xl bg-rose-500 text-white hover:bg-rose-600"
             >
               {isLoading ? (
-                <Loader2 className="animate-spin" size={20} />
+                <Loader2 className="animate-spin" size={18} />
               ) : (
                 <>
                   Create Free Account
                   <ArrowRight size={18} />
                 </>
               )}
-            </motion.button>
+            </Button>
           </form>
 
-          {/* Footer */}
-          <motion.div variants={itemVariants} className="mt-8 text-center">
-            <p className="text-gray-500 font-medium">
+          <motion.div variants={itemVariants} className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
               Already a member?{" "}
               <Link
                 href="/account/signin"
-                className="text-rose-500 font-bold hover:underline underline-offset-4"
+                className="font-semibold text-rose-500 hover:underline"
               >
                 Sign In
               </Link>
