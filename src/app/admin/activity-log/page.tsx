@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   FileText,
@@ -11,86 +11,40 @@ import {
   Search,
   Download,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
 
-const mockActivityLog = [
-  {
-    id: 1,
-    user: "John Doe",
-    action: "User Banned",
-    description: "Account suspended for fraudulent activity",
-    timestamp: "2 hours ago",
-    severity: "high",
-    ip: "192.168.1.1",
-  },
-  {
-    id: 2,
-    user: "Admin Panel",
-    action: "Coupon Created",
-    description: "New coupon code SAVE20 created",
-    timestamp: "4 hours ago",
-    severity: "medium",
-    ip: "192.168.1.2",
-  },
-  {
-    id: 3,
-    user: "Sarah Smith",
-    action: "Profile Updated",
-    description: "Restaurant profile information changed",
-    timestamp: "6 hours ago",
-    severity: "low",
-    ip: "192.168.1.3",
-  },
-  {
-    id: 4,
-    user: "Admin Panel",
-    action: "Banner Updated",
-    description: "Homepage banner image changed",
-    timestamp: "8 hours ago",
-    severity: "low",
-    ip: "192.168.1.4",
-  },
-  {
-    id: 5,
-    user: "Mike Johnson",
-    action: "Order Completed",
-    description: "Order #12345 marked as delivered",
-    timestamp: "10 hours ago",
-    severity: "low",
-    ip: "192.168.1.5",
-  },
-  {
-    id: 6,
-    user: "Admin Panel",
-    action: "Review Reported",
-    description: "Inappropriate review removed",
-    timestamp: "12 hours ago",
-    severity: "medium",
-    ip: "192.168.1.6",
-  },
-  {
-    id: 7,
-    user: "Lisa Brown",
-    action: "Contact Form Submitted",
-    description: "Support ticket #789 created",
-    timestamp: "1 day ago",
-    severity: "low",
-    ip: "192.168.1.7",
-  },
-  {
-    id: 8,
-    user: "Admin Panel",
-    action: "Restaurant Verified",
-    description: "New restaurant approved for platform",
-    timestamp: "1 day ago",
-    severity: "medium",
-    ip: "192.168.1.8",
-  },
-];
+type ActivityLog = {
+  id: string;
+  user: string;
+  action: string;
+  description: string;
+  timestamp: string;
+  severity: string;
+  ip: string;
+};
 
 export default function ActivityLogPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterSeverity, setFilterSeverity] = useState("all");
-  const [logs, setLogs] = useState(mockActivityLog);
+  const [logs, setLogs] = useState<ActivityLog[]>([]);
+
+  useEffect(() => {
+    adminApi
+      .listActivityLogs({ limit: 200 })
+      .then((data) => {
+        const mapped: ActivityLog[] = data.map((item) => ({
+          id: String(item.id ?? ""),
+          user: String((item.user as { name?: string } | undefined)?.name ?? item.user ?? "System"),
+          action: String(item.action ?? "Activity"),
+          description: String(item.description ?? item.message ?? ""),
+          timestamp: String(item.timestamp ?? item.createdAt ?? ""),
+          severity: String(item.severity ?? "low").toLowerCase(),
+          ip: String(item.ip ?? "-"),
+        }));
+        setLogs(mapped);
+      })
+      .catch((error) => console.error("Failed to load activity logs", error));
+  }, []);
 
   const filteredLogs = logs.filter((log) => {
     const matchesSearch =
@@ -123,7 +77,7 @@ export default function ActivityLogPage() {
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="font-Sofia text-3xl font-bold text-gray-800">
+            <h1 className=" text-3xl font-bold text-gray-800">
               Activity Log
             </h1>
             <p className="text-gray-600 mt-2">Track all platform activities</p>

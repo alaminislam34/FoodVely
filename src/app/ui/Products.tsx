@@ -5,6 +5,9 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Product } from "@/types/product";
 import Link from "next/link";
+import { addToCart, isWishlisted, toggleWishlist } from "@/utils/commerceStorage";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -24,6 +27,13 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const displayPrice = product.discountPrice || product.price;
   const hasDiscount = !!product.discountPrice;
   const categoryName = product.category?.title || "Uncategorized";
+  const [wished, setWished] = useState(
+    isWishlisted(String(product.id), "product"),
+  );
+
+  useEffect(() => {
+    setWished(isWishlisted(String(product.id), "product"));
+  }, [product.id]);
 
   return (
     <motion.div
@@ -122,8 +132,16 @@ export const ProductCard = ({ product }: { product: Product }) => {
               {product.shortDescription || product.description}
             </p>
           </div>
-          <button className="shrink-0 p-2 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all">
-            <Heart size={18} />
+          <button
+            onClick={() => {
+              const nextWished = !wished;
+              toggleWishlist(String(product.id), "product");
+              setWished(nextWished);
+              toast.success(nextWished ? "Added to wishlist" : "Removed from wishlist");
+            }}
+            className="shrink-0 p-2 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all"
+          >
+            <Heart size={18} className={wished ? "fill-rose-500 text-rose-500" : ""} />
           </button>
         </div>
 
@@ -145,6 +163,10 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              addToCart(String(product.id), 1);
+              toast.success("Added to cart");
+            }}
             className="flex items-center gap-2 
              bg-white/10 backdrop-blur-md 
              text-rose-600 pl-4 pr-3 py-2 

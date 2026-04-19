@@ -103,7 +103,7 @@ export default function AdminDashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-800 mb-2">
           Welcome Back, Admin
         </h1>
         <p className="text-gray-600">
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
-                  <p className="text-3xl font-Sofia font-bold text-gray-800">
+                  <p className="text-3xl  font-bold text-gray-800">
                     {stat.value}
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export default function AdminDashboard() {
           className="lg:col-span-2 bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-Sofia font-bold text-gray-800">
+            <h2 className="text-xl  font-bold text-gray-800">
               Recent Activity
             </h2>
             <Link
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
           className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-Sofia font-bold text-gray-800">
+            <h2 className="text-xl  font-bold text-gray-800">
               🏆 Best Sellers
             </h2>
             <Link
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
           className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-Sofia font-bold text-gray-800">
+            <h2 className="text-xl  font-bold text-gray-800">
               ⭐ Top Restaurants
             </h2>
             <Link

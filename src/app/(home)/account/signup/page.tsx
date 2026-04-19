@@ -1,549 +1,346 @@
 "use client";
 
-import { motion, AnimatePresence } from "motion/react";
-import Link from "next/link";
-import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
-import toast from "react-hot-toast";
+import React, { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import RoleSelector from "../components/RoleSelector";
-import BasicFields from "../components/BasicFields";
-import ProviderFields from "../components/ProviderFields";
-import PasswordStrength from "../components/PasswordStrength";
-import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v1";
+import Link from "next/link";
+import {
+  ArrowRight,
+  Mail,
+  Lock,
+  User,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
+import toast from "react-hot-toast";
+import { useAuthContext } from "@/context/AuthContext";
+import { getRedirectPathByRole } from "@/utils/authRedirect";
 
-const containerVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
+// --- Components & Constants ---
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 1 },
-  visible: { once: true, opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0 },
 };
-
-type UserRole = "CUSTOMER" | "PROVIDER";
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  contactNumber?: string;
-  restaurantName?: string;
-  address?: string;
-  city?: string;
-  cuisine?: string;
-  openingHours?: string;
-  logo?: string;
-  coverImage?: string;
-  categories?: string[];
-}
 
 export default function SignUp() {
   const router = useRouter();
-  const [role, setRole] = useState<UserRole>("CUSTOMER");
+  const { register, verifyAccount, isLoading, isAuthenticated, user } = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState(0);
-  const [activeCategories, setActiveCategories] = useState<string[]>([]);
   const [step, setStep] = useState<"register" | "verify">("register");
-  const [verifyEmail, setVerifyEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const { register, verifyAccount, resendOtp, isLoading } = useAuth();
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
+  const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const calculatePasswordStrength = (pwd: string) => {
-    let strength = 0;
-    if (pwd.length >= 8) strength++;
-    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) strength++;
-    if (/\d/.test(pwd)) strength++;
-    if (/[^a-zA-Z\d]/.test(pwd)) strength++;
-    setPasswordStrength(strength);
-  };
-
-  const validateForm = () => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.firstName) newErrors.firstName = "First name is required";
-    if (!formData.lastName) newErrors.lastName = "Last name is required";
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace(getRedirectPathByRole(user?.role));
     }
+  }, [isAuthenticated, router, user?.role]);
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-
-    if (formData.password !== formData.confirmPassword) {
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (formData.name.length < 2) newErrors.name = "Full name is required";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      newErrors.email = "Invalid email address";
+    if (formData.password.length < 8)
+      newErrors.password = "Password must be 8+ characters";
+    if (formData.confirmPassword !== formData.password)
       newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    if (role === "PROVIDER") {
-      if (!formData.contactNumber)
-        newErrors.contactNumber = "Contact number is required";
-      if (!formData.restaurantName)
-        newErrors.restaurantName = "Restaurant name is required";
-      if (!formData.address) newErrors.address = "Address is required";
-      if (!formData.city) newErrors.city = "City is required";
-    }
+    if (!acceptTerms) newErrors.terms = "You must accept the terms to continue";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "password") {
-      calculatePasswordStrength(value);
-    }
-
-    if (errors[name as keyof FormData]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
     }
   };
 
-  const getErrorMessage = (err: unknown) => {
-    if (axios.isAxiosError(err)) {
-      if (!err.response) return "Network error. Please check your connection.";
-      const apiMessage = (
-        err.response?.data as { message?: string } | undefined
-      )?.message;
-      return apiMessage || err.message || "Request failed";
-    }
-    if (err instanceof Error) return err.message;
-    return "Request failed";
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) {
-      toast.error("Please fix the errors above");
-      return;
-    }
+    if (!validate()) return;
 
-    const loadingToast = toast.loading("Creating your account...");
-
+    const loadingToast = toast.loading("Creating account...");
     try {
-      const res = await register({
-        name: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        password: formData.password,
-      });
-      console.log(res);
-      setVerifyEmail(formData.email);
+      await register(formData.name, formData.email, formData.password);
+      toast.dismiss(loadingToast);
+      toast.success("Account created. Check your email for OTP.");
       setStep("verify");
+    } catch (error: any) {
       toast.dismiss(loadingToast);
-      toast.success("Account created! Check your email for OTP.");
-    } catch (err) {
-      toast.dismiss(loadingToast);
-      const message = getErrorMessage(err);
-      const normalized = message.toLowerCase();
-      if (normalized.includes("already") && normalized.includes("verified")) {
-        toast.error("Already verified, please login");
-      } else if (normalized.includes("already exists")) {
-        setVerifyEmail(formData.email);
-        setStep("verify");
-        toast.success("Check your email for OTP.");
-      } else {
-        toast.error(message || "Registration failed. Try again.");
-      }
-      console.error(err);
+      toast.error(error?.message || "Registration failed");
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      if (role === "CUSTOMER") {
-        const full_name = `${formData.firstName} ${formData.lastName}`;
-        const userData = {
-          name: full_name,
-          email: formData.email,
-          password: formData.password,
-        };
-
-        console.log({
-          name: formData.firstName + formData.lastName,
-          email: formData.email,
-          password: formData.password,
-        });
-
-        const res = await axios.post(
-          `${BASE_URL}/auth/create-customer`,
-          userData,
-          { withCredentials: true },
-        );
-        console.log(res.status);
-        if (res.status === 201) {
-          toast.success("Account created successfully!");
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          });
-          router.push("/account/signin");
-        } else {
-          toast.error("Failed to create account. Please try again.");
-        }
-      }
-
-      if (role === "PROVIDER") {
-        const providerData = {
-          password: formData.password,
-          user: {
-            name: `${formData.firstName} ${formData.lastName}`,
-            email: formData.email,
-            role: "PROVIDER",
-          },
-          restaurant: {
-            restaurantName: formData.restaurantName,
-            city: formData.city,
-            address: formData.address,
-            contactNumber: formData.contactNumber,
-            cuisine: formData.cuisine,
-            openingHours: formData.openingHours,
-            logo: formData.logo,
-            coverImage: formData.coverImage,
-            foodCategories: activeCategories,
-          },
-        };
-        if (
-          !formData.firstName ||
-          !formData.lastName ||
-          !formData.email ||
-          !formData.password ||
-          !formData.address ||
-          !formData.city ||
-          !formData.contactNumber ||
-          !formData.restaurantName ||
-          activeCategories.length === 0
-        ) {
-          toast.error(
-            "Please fill all required fields and select at least one food category.",
-          );
-          return;
-        }
-        const res = await axios.post(
-          `${BASE_URL}/auth/create-provider`,
-          providerData,
-          { withCredentials: true },
-        );
-        console.log(res.status);
-        if (res.status === 201) {
-          toast.success("Account created successfully!");
-          setFormData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          });
-          setActiveCategories([]);
-          router.push("/account/signin");
-        } else {
-          toast.error("Failed to create account. Please try again.");
-        }
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to create account. Please try again.");
-    }
-  };
-
-  const handleOtpSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
     if (!otp.trim()) {
-      toast.error("Please enter the OTP");
+      toast.error("Please enter OTP");
       return;
     }
 
     const loadingToast = toast.loading("Verifying account...");
-
     try {
-      await verifyAccount({ email: verifyEmail, otp });
+      await verifyAccount(formData.email, otp);
       toast.dismiss(loadingToast);
-      toast.success("Account verified! Redirecting...");
-      setTimeout(() => router.push("/account/signin"), 1000);
-    } catch (err) {
+      toast.success("Account verified. Please sign in.");
+      router.push("/account/signin");
+    } catch (error: any) {
       toast.dismiss(loadingToast);
-      const message = getErrorMessage(err);
-      if (/otp expired/i.test(message)) {
-        toast.error("OTP expired, please resend");
-      } else {
-        toast.error(message || "Verification failed. Try again.");
-      }
-      console.error(err);
-    }
-  };
-
-  const handleResendOtp = async () => {
-    if (!verifyEmail.trim()) {
-      toast.error("Please enter your email");
-      return;
-    }
-
-    const loadingToast = toast.loading("Resending OTP...");
-
-    try {
-      await resendOtp({ email: verifyEmail });
-      toast.dismiss(loadingToast);
-      toast.success("OTP resent");
-    } catch (err) {
-      toast.dismiss(loadingToast);
-      const message = getErrorMessage(err);
-      toast.error(message || "Failed to resend OTP");
-      console.error(err);
+      toast.error(error?.message || "Verification failed");
     }
   };
 
   if (step === "verify") {
     return (
-      <section className="min-h-screen flex items-center justify-center py-12 px-4">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="w-full max-w-2xl"
-        >
-          <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-            <motion.div
-              animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
-            />
-            <motion.div
-              animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
-            />
-          </div>
+      <section className="relative h-full py-12 lg:py-14 flex items-center justify-center px-4">
+        <div className="w-full max-w-120">
+          <div className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)]">
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2 text-center">
+              Verify Account
+            </h1>
+            <p className="text-gray-500 font-medium text-center mb-8">
+              Enter the OTP sent to {formData.email}
+            </p>
 
-          <motion.div
-            variants={itemVariants}
-            className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
-          >
-            <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl  font-bold text-gray-900 mb-2">
-                Verify Account
-              </h1>
-              <p className="text-gray-600 ">
-                Enter the code sent to {verifyEmail}
-              </p>
-            </div>
-
-            <form onSubmit={handleOtpSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <motion.div className="space-y-2">
-                  <label className="block text-sm  font-semibold text-gray-800">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={verifyEmail}
-                    onChange={(e) => setVerifyEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
-                  />
-                </motion.div>
-                <motion.div className="space-y-2 mt-4">
-                  <label className="block text-sm  font-semibold text-gray-800">
-                    OTP Code
-                  </label>
-                  <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.toUpperCase())}
-                    placeholder="000000"
-                    maxLength={6}
-                    className="w-full px-4 py-3 rounded-2xl border border-gray-600 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent text-center text-lg tracking-widest font-bold"
-                  />
-                </motion.div>
-                <div className="flex items-center justify-end mt-2">
-                  <button
-                    type="button"
-                    onClick={handleResendOtp}
-                    disabled={isLoading}
-                    className="w-full text-rose-500  font-semibold hover:underline disabled:opacity-75"
-                  >
-                    {isLoading ? "Resending..." : "Resend OTP"}
-                  </button>
-                </div>
+            <form onSubmit={handleVerify} className="space-y-5">
+              <div className="space-y-1.5">
+                <label className="text-sm font-bold text-gray-700 ml-1">OTP Code</label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.toUpperCase())}
+                  placeholder="000000"
+                  maxLength={6}
+                  className="w-full px-4 py-4 bg-white/50 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-semibold text-center tracking-widest"
+                />
               </div>
 
               <motion.button
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={isLoading || !otp || !verifyEmail}
-                className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75"
+                disabled={isLoading}
+                className="w-full mt-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
               >
-                {isLoading ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    Verify Account
-                    <ArrowRight size={20} />
-                  </>
-                )}
+                {isLoading ? <Loader2 className="animate-spin" size={20} /> : "Verify Account"}
               </motion.button>
-
-              <button
-                type="button"
-                onClick={() => setStep("register")}
-                className="w-full text-rose-500  font-semibold hover:underline"
-              >
-                Back to Registration
-              </button>
             </form>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center py-12 px-4">
+    <section className="relative h-full py-12 lg:py-14 flex items-center justify-center px-4">
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <motion.div
+          animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
+          transition={{ duration: 20, repeat: Infinity }}
+          className="absolute -top-[10%] -right-[10%] w-125 h-125 bg-rose-100/50 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ x: [0, -80, 0], y: [0, -40, 0] }}
+          transition={{ duration: 15, repeat: Infinity }}
+          className="absolute -bottom-[10%] -left-[10%] w-100 h-100 bg-orange-100/40 rounded-full blur-[100px]"
+        />
+      </div>
+
       <motion.div
-        variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="w-full max-w-3xl"
+        className="w-full max-w-120"
       >
-        {/* Decorative Blobs */}
-        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          <motion.div
-            animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-1/4 -right-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-1/4 -left-1/4 w-96 h-96 bg-rose-200/20 rounded-full blur-3xl"
-          />
-        </div>
-
-        {/* Sign Up Card */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-10 shadow-xl"
-        >
+        <div className="bg-white/70 backdrop-blur-2xl border border-white/40 rounded-[2.5rem] p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)]">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-900 mb-2">
-              Join Foodvely
+          <div className="text-center mb-10">
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              className="inline-block p-4 rounded-3xl bg-rose-50 mb-6"
+            >
+              <div className="w-12 h-12 bg-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200">
+                <User className="text-white" size={24} />
+              </div>
+            </motion.div>
+            <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+              Create Account
             </h1>
-            <p className="text-gray-600 ">Create your account to get started</p>
+            <p className="text-gray-500 font-medium">
+              Join the food community today
+            </p>
           </div>
 
-          {/* Role Selector Component */}
-          <RoleSelector role={role} setRole={setRole} setErrors={setErrors} />
-
-          {/* Sign Up Form */}
-          <form onSubmit={handleRegister} className="space-y-4">
-            {/* Basic Fields Component */}
-            <BasicFields
-              formData={formData}
-              errors={errors}
-              showPassword={showPassword}
-              showConfirmPassword={showConfirmPassword}
-              passwordStrength={passwordStrength}
-              handleInputChange={handleInputChange}
-              setShowPassword={setShowPassword}
-              setShowConfirmPassword={setShowConfirmPassword}
-              PasswordStrengthComponent={PasswordStrength}
-            />
-
-            {/* Provider Fields Component */}
-            <AnimatePresence mode="wait">
-              {role === "PROVIDER" && (
-                <motion.div
-                  key="provider-fields"
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: "auto", marginTop: 24 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="border-t border-gray-200 pt-6 overflow-visible"
-                >
-                  <ProviderFields
-                    formData={formData}
-                    errors={errors}
-                    activeCategories={activeCategories}
-                    setActiveCategories={setActiveCategories}
-                    handleInputChange={handleInputChange}
-                  />
-                </motion.div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Name Field */}
+            <motion.div variants={itemVariants} className="space-y-1.5">
+              <label className="text-sm font-bold text-gray-700 ml-1">
+                Full Name
+              </label>
+              <div className="relative group">
+                <User
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  size={18}
+                />
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.name ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                />
+              </div>
+              {errors.name && (
+                <p className="text-xs text-red-500 ml-1">{errors.name}</p>
               )}
-            </AnimatePresence>
+            </motion.div>
 
-            {/* Sign Up Button */}
+            {/* Email Field */}
+            <motion.div variants={itemVariants} className="space-y-1.5">
+              <label className="text-sm font-bold text-gray-700 ml-1">
+                Email Address
+              </label>
+              <div className="relative group">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  size={18}
+                />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.email ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                />
+              </div>
+              {errors.email && (
+                <p className="text-xs text-red-500 ml-1">{errors.email}</p>
+              )}
+            </motion.div>
+
+            {/* Password Field */}
+            <motion.div variants={itemVariants} className="space-y-1.5">
+              <label className="text-sm font-bold text-gray-700 ml-1">
+                Password
+              </label>
+              <div className="relative group">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  size={18}
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full pl-12 pr-12 py-4 bg-white/50 border ${errors.password ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-xs text-red-500 ml-1">{errors.password}</p>
+              )}
+            </motion.div>
+
+            {/* Confirm Password Field */}
+            <motion.div variants={itemVariants} className="space-y-1.5">
+              <label className="text-sm font-bold text-gray-700 ml-1">
+                Confirm Password
+              </label>
+              <div className="relative group">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-rose-500 transition-colors"
+                  size={18}
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="••••••••"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full pl-12 pr-4 py-4 bg-white/50 border ${errors.confirmPassword ? "border-red-400" : "border-gray-200"} rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all font-medium`}
+                />
+              </div>
+              {errors.confirmPassword && (
+                <p className="text-xs text-red-500 ml-1">{errors.confirmPassword}</p>
+              )}
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="space-y-1.5">
+              <label className="flex items-start gap-3 cursor-pointer text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                  className="mt-1 h-4 w-4 rounded border-gray-300 text-rose-500 focus:ring-rose-500"
+                />
+                <span>
+                  I agree to the{' '}
+                  <Link href="/terms" className="font-semibold text-rose-500 hover:underline">
+                    Terms & Conditions
+                  </Link>{' '}
+                  and privacy policy.
+                </span>
+              </label>
+              {errors.terms && (
+                <p className="text-xs text-red-500 ml-7">{errors.terms}</p>
+              )}
+            </motion.div>
+
+            {/* Submit Button */}
             <motion.button
               variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-4 rounded-2xl bg-linear-to-r from-rose-500 to-rose-600 text-white  font-bold shadow-lg shadow-rose-200 hover:shadow-rose-300 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-75 mt-6"
+              disabled={isLoading || !acceptTerms}
+              className="w-full mt-4 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-70"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <Loader2 className="animate-spin" size={20} />
               ) : (
                 <>
-                  Create Account
-                  <ArrowRight size={20} />
+                  Create Free Account
+                  <ArrowRight size={18} />
                 </>
               )}
             </motion.button>
           </form>
 
-          {/* Divider */}
-          <motion.div variants={itemVariants} className="my-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white/40 text-gray-600 ">
-                  Already have an account?{" "}
-                  <Link
-                    href={"/account/signin"}
-                    className="text-rose-500 underline"
-                  >
-                    Sign in
-                  </Link>
-                </span>
-              </div>
-            </div>
+          {/* Footer */}
+          <motion.div variants={itemVariants} className="mt-8 text-center">
+            <p className="text-gray-500 font-medium">
+              Already a member?{" "}
+              <Link
+                href="/account/signin"
+                className="text-rose-500 font-bold hover:underline underline-offset-4"
+              >
+                Sign In
+              </Link>
+            </p>
           </motion.div>
-        </motion.div>
+        </div>
       </motion.div>
     </section>
   );

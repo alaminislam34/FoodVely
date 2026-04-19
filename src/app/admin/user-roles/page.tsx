@@ -1,36 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Shield, Eye, Search } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
 
-const mockRoles = [
-  {
-    id: 1,
-    name: "Customer",
-    description: "Regular user can order food",
-    permissions: 12,
-    users: 1234,
-  },
-  {
-    id: 2,
-    name: "Restaurant",
-    description: "Can manage restaurant and products",
-    permissions: 25,
-    users: 87,
-  },
-  {
-    id: 4,
-    name: "Admin",
-    description: "Full platform access",
-    permissions: 50,
-    users: 5,
-  },
-];
+type RoleItem = {
+  id: string;
+  name: string;
+  description: string;
+  permissions: number;
+  users: number;
+};
 
 export default function UserRolesPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [roles, setRoles] = useState(mockRoles);
+  const [roles, setRoles] = useState<RoleItem[]>([]);
+
+  useEffect(() => {
+    adminApi
+      .listRoles({ limit: 100 })
+      .then((data) => {
+        const mapped: RoleItem[] = data.map((item) => ({
+          id: String(item.id ?? ""),
+          name: String(item.name ?? "Role"),
+          description: String(item.description ?? "Role permissions"),
+          permissions: Number(item.permissionsCount ?? item.permissions ?? 0),
+          users: Number(item.usersCount ?? item.users ?? 0),
+        }));
+        setRoles(mapped);
+      })
+      .catch((error) => console.error("Failed to load roles", error));
+  }, []);
 
   const filteredRoles = roles.filter((role) =>
     role.name.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -44,7 +45,7 @@ export default function UserRolesPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-Sofia text-3xl font-bold text-gray-800">
+        <h1 className=" text-3xl font-bold text-gray-800">
           User Roles & Permissions
         </h1>
         <p className="text-gray-600 mt-2">
@@ -77,7 +78,7 @@ export default function UserRolesPage() {
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className="font-Sofia font-bold text-gray-800">
+                <h3 className=" font-bold text-gray-800">
                   {role.name}
                 </h3>
                 <p className="text-sm text-gray-600 mt-1">{role.description}</p>

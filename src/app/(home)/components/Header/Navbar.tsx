@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import NavbarSkeleton from "../Skeletons/NavbarSkeleton";
-import { Menu, Search, X, LogOut, ChefHat, ShoppingCart } from "lucide-react";
+import { Menu, Search, X, LogOut, ChefHat, ShoppingCart, Heart } from "lucide-react";
+import { useAuthContext } from "@/context/AuthContext";
+import { useCommerceState } from "@/hooks/useCommerceState";
 
 const links = [
   { name: "Home", href: "/" },
@@ -17,10 +19,13 @@ const links = [
 ];
 
 function Navbar() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const pathName: string = usePathname();
   const [sticky, setSticky] = useState(false);
+  const { isAuthenticated, logout, user } = useAuthContext();
+  const { cartCount, wishlistCount } = useCommerceState();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,7 +49,7 @@ function Navbar() {
 
   return (
     <header
-      className={`w-full sticky z-40 transition-all duration-300 ${sticky ? " top-0 bg-[#fffdf7] backdrop-blur-xl shadow-md" : ""}`}
+      className={`w-full sticky border border-black/10 z-40 transition-all duration-300 ${sticky ? " top-0 bg-[#fffdf7] backdrop-blur-xl shadow-md" : ""}`}
     >
       <AnimatePresence mode="wait">
         {isLoading ? (
@@ -67,7 +72,6 @@ function Navbar() {
             <nav className="max-w-360 mx-auto w-11/12 flex items-center justify-between py-4">
               <motion.div
                 className="shrink-0"
-                whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
                 <Link href="/" className="flex items-center gap-2 group">
@@ -106,6 +110,21 @@ function Navbar() {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  className="flex items-center justify-center"
+                >
+                  <Link
+                    href="/account/wishlist"
+                    className="p-2 inline-block relative text-rose-600"
+                  >
+                    <Heart />
+                    <span className="absolute text-xs -top-1 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
+                      {wishlistCount}
+                    </span>
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   className="flex items-center justify-center ml-6"
                 >
                   <Link
@@ -114,32 +133,58 @@ function Navbar() {
                   >
                     <ShoppingCart />{" "}
                     <span className="absolute text-xs -top-1 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
-                      0
+                      {cartCount}
                     </span>
                   </Link>
                 </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    href={"/account/signin"}
-                    className="py-1.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
-                  >
-                    Sign In
-                  </Link>
-                </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Link
-                    href={"/account/signup"}
-                    className="py-1.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Sign Up
-                  </Link>
-                </motion.div>
+                {isAuthenticated ? (
+                  <>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link
+                        href={`/account/${encodeURIComponent((user?.name ?? "me").toLowerCase())}`}
+                        className="py-1.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
+                      >
+                        {user?.name ?? "Profile"}
+                      </Link>
+                    </motion.div>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        logout();
+                        router.push("/");
+                      }}
+                      className="py-1.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      Logout
+                    </motion.button>
+                  </>
+                ) : (
+                  <>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={"/account/signin"}
+                        className="py-1.5 px-6 rounded-xl font-Sofia font-semibold text-rose-600 border-2 border-rose-600 hover:bg-rose-50 hover:border-rose-700 transition-all duration-300"
+                      >
+                        Sign In
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <Link
+                        href={"/account/signup"}
+                        className="py-1.5 px-6 rounded-xl font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                      >
+                        Sign Up
+                      </Link>
+                    </motion.div>
+                  </>
+                )}
               </div>
               <div className="lg:hidden">
                 <motion.button
@@ -215,6 +260,13 @@ function Navbar() {
                     </div>
                     {/* Search and Auth */}
                     <div className="flex flex-col gap-4">
+                      <Link
+                        href="/account/wishlist"
+                        onClick={() => setOpenModal(false)}
+                        className="px-4 py-3 rounded-lg w-full block font-Sofia font-semibold text-gray-700 hover:bg-orange-100/50 hover:text-rose-600 transition-all duration-300"
+                      >
+                        Wishlist ({wishlistCount})
+                      </Link>
                       {/* Search Bar */}
                       <div className="flex flex-wrap gap-2 justify-end">
                         <div className="w-full">
@@ -265,14 +317,38 @@ function Navbar() {
                   </div>
                   {/* Footer Section */}
                   <div className="flex flex-col gap-3 border-t border-gray-200">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-50 to-orange-50 border-2 border-rose-200 text-rose-600 hover:border-rose-400 hover:bg-linear-to-r hover:from-rose-100 hover:to-orange-100 transition-all flex items-center justify-center gap-2"
-                    >
-                      <LogOut size={18} />
-                      Log out
-                    </motion.button>
+                    {isAuthenticated ? (
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          logout();
+                          setOpenModal(false);
+                          router.push("/");
+                        }}
+                        className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-50 to-orange-50 border-2 border-rose-200 text-rose-600 hover:border-rose-400 hover:bg-linear-to-r hover:from-rose-100 hover:to-orange-100 transition-all flex items-center justify-center gap-2"
+                      >
+                        <LogOut size={18} />
+                        Log out
+                      </motion.button>
+                    ) : (
+                      <>
+                        <Link
+                          href="/account/signin"
+                          onClick={() => setOpenModal(false)}
+                          className="py-3 px-4 rounded-lg font-Sofia font-semibold text-rose-600 border-2 border-rose-300 text-center"
+                        >
+                          Sign In
+                        </Link>
+                        <Link
+                          href="/account/signup"
+                          onClick={() => setOpenModal(false)}
+                          className="py-3 px-4 rounded-lg font-Sofia font-semibold bg-linear-to-r from-rose-500 to-orange-500 text-white text-center"
+                        >
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </motion.div>

@@ -7,16 +7,18 @@ import {
   Star,
   Trash2,
   ExternalLink,
-  ChevronLeft,
-  ChevronRight,
   Filter,
   ArrowUpDown,
   Utensils,
   Calendar,
   Clock,
-  Loader2,
-  MessageSquare,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 interface ReviewData {
   id: string;
@@ -42,44 +44,107 @@ interface ReviewData {
 export default function ReviewsManagement() {
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [ratingFilter, setRatingFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const [totalPages, setTotalPages] = useState(1);
+  const [error, setError] = useState<string | null>(null);
+  const itemsPerPage = 20;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const res = await fetch("/reviews.json");
-        const data = await res.json();
-        setReviews(data);
+        setIsLoading(true);
+        setError(null);
+        const { items, meta } = await adminApi.listReviewsPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+          search: debouncedSearch || undefined,
+          minRating: ratingFilter !== "all" ? Number(ratingFilter) : undefined,
+          sortBy,
+        });
+
+        const mapped: ReviewData[] = items.map((item) => {
+          const ratingRaw = item.rating as
+            | { value?: number; outOf?: number }
+            | number
+            | undefined;
+
+          return {
+            id: String(item.id ?? ""),
+            rating: {
+              value:
+                typeof ratingRaw === "number"
+                  ? ratingRaw
+                  : Number(ratingRaw?.value ?? 0),
+              outOf:
+                typeof ratingRaw === "number"
+                  ? 5
+                  : Number(ratingRaw?.outOf ?? 5),
+            },
+            comment: String(item.comment ?? "No comment provided"),
+            customer: {
+              id: String((item.customer as { id?: string } | undefined)?.id ?? ""),
+              name: String(
+                (item.customer as { name?: string } | undefined)?.name ?? "Unknown Customer",
+              ),
+              avatar: String(
+                (item.customer as { avatar?: string } | undefined)?.avatar ?? "",
+              ),
+            },
+            restaurant: {
+              id: String((item.restaurant as { id?: string } | undefined)?.id ?? ""),
+              name: String(
+                (item.restaurant as { name?: string } | undefined)?.name ?? "Unknown Restaurant",
+              ),
+            },
+            product: {
+              id: String((item.product as { id?: string } | undefined)?.id ?? ""),
+              name: String(
+                (item.product as { name?: string } | undefined)?.name ?? "Unknown Product",
+              ),
+              category: String(
+                (item.product as { category?: string } | undefined)?.category ?? "general",
+              ),
+            },
+            createdAt: String(item.createdAt ?? new Date().toISOString()),
+          };
+        });
+
+        setReviews(mapped);
+        setTotalPages(Number(meta?.totalPages ?? 1));
       } catch (error) {
-        console.error("Error loading reviews:", error);
+        setError(getApiErrorMessage(error, "Error loading reviews"));
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchReviews();
-  }, []);
+  }, [currentPage, debouncedSearch, ratingFilter, reloadKey, sortBy]);
+
+  const handleDeleteReview = async (id: string) => {
+    const prev = reviews;
+    setReviews((current) => current.filter((review) => review.id !== id));
+    try {
+      await adminApi.deleteReview(id, "Removed by admin moderation");
+      toast.success("Review deleted");
+    } catch (error) {
+      setReviews(prev);
+      toast.error(getApiErrorMessage(error, "Failed to delete review"));
+    }
+  };
 
   const filteredReviews = useMemo(() => {
-    let result = reviews.filter((item) => {
-      const matchesSearch =
-        item.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.restaurant.name
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        item.product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.comment.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesRating =
-        ratingFilter === "all"
-          ? true
-          : item.rating.value >= parseFloat(ratingFilter);
-
-      return matchesSearch && matchesRating;
-    });
+    let result = [...reviews];
 
     return result.sort((a, b) => {
       if (sortBy === "newest")
@@ -94,23 +159,15 @@ export default function ReviewsManagement() {
       if (sortBy === "lowest") return a.rating.value - b.rating.value;
       return 0;
     });
-  }, [reviews, searchQuery, ratingFilter, sortBy]);
+  }, [reviews, sortBy]);
 
   // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, ratingFilter, sortBy]);
+  }, [debouncedSearch, ratingFilter, sortBy]);
 
-  // --- Pagination Logic ---
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredReviews.length / itemsPerPage),
-  );
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredReviews.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+  const paginatedData = filteredReviews;
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen">
@@ -121,7 +178,7 @@ export default function ReviewsManagement() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-700">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-700">
             Reviews & Feedback
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -140,8 +197,8 @@ export default function ReviewsManagement() {
           <input
             type="text"
             placeholder="Search reviews..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/60 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all backdrop-blur-md"
           />
         </div>
@@ -177,8 +234,15 @@ export default function ReviewsManagement() {
       {/* Table Section */}
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden relative">
         {isLoading ? (
-          <div className="py-40 flex items-center justify-center">
-            <Loader2 className="animate-spin text-rose-500" size={40} />
+          <div className="p-6">
+            <AdminLoadingState label="Loading reviews..." />
+          </div>
+        ) : error ? (
+          <div className="p-6">
+            <AdminErrorState
+              description={error}
+              onAction={retry}
+            />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -277,7 +341,10 @@ export default function ReviewsManagement() {
                           <button className="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-blue-500 hover:shadow-md transition-all">
                             <ExternalLink size={16} />
                           </button>
-                          <button className="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-rose-500 hover:shadow-md transition-all">
+                          <button
+                            onClick={() => handleDeleteReview(review.id)}
+                            className="p-2 bg-white border border-gray-100 rounded-xl text-gray-400 hover:text-rose-500 hover:shadow-md transition-all"
+                          >
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -299,61 +366,21 @@ export default function ReviewsManagement() {
             </span>{" "}
             to{" "}
             <span className="text-gray-800 font-bold">
-              {Math.min(startIndex + itemsPerPage, filteredReviews.length)}
+              {startIndex + paginatedData.length}
             </span>{" "}
-            of {filteredReviews.length} items
+            of {Math.max(filteredReviews.length, startIndex + paginatedData.length)} items
           </p>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1 || isLoading}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${
-                currentPage !== 1
-                  ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm"
-                  : "bg-transparent text-gray-300"
-              }`}
-            >
-              <ChevronLeft size={18} />
-            </button>
-
-            {/* Generated Page Numbers */}
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
-                  currentPage === i + 1
-                    ? "bg-rose-600 text-white shadow-lg shadow-rose-200"
-                    : "bg-white border border-gray-200 text-gray-500 hover:border-rose-400 hover:text-rose-600 shadow-sm"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages || isLoading}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${
-                currentPage !== totalPages
-                  ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm"
-                  : "bg-transparent text-gray-300"
-              }`}
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+          <AdminPaginator
+            page={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 
       {!isLoading && filteredReviews.length === 0 && (
-        <div className="py-20 text-center">
-          <MessageSquare className="mx-auto text-gray-200 mb-4" size={48} />
-          <p className="text-gray-400 font-medium">
-            No reviews found matching your criteria.
-          </p>
-        </div>
+        <AdminEmptyState description="No reviews found matching your criteria." />
       )}
     </div>
   );

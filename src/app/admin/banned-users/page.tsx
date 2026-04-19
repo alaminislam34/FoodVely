@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Ban,
@@ -11,58 +11,53 @@ import {
   Undo2,
   Search,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
 
-const mockBannedUsers = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    reason: "Fraudulent activity",
-    bannedDate: "2024-12-15",
-    banDuration: "Permanent",
-    orders: 45,
-  },
-  {
-    id: 2,
-    name: "Sarah Smith",
-    email: "sarah@example.com",
-    reason: "Abusive behavior",
-    bannedDate: "2024-12-10",
-    banDuration: "30 days",
-    orders: 23,
-  },
-  {
-    id: 3,
-    name: "Mike Johnson",
-    email: "mike@example.com",
-    reason: "Payment fraud",
-    bannedDate: "2024-12-05",
-    banDuration: "Permanent",
-    orders: 67,
-  },
-  {
-    id: 4,
-    name: "Lisa Brown",
-    email: "lisa@example.com",
-    reason: "Spam complaints",
-    bannedDate: "2024-11-28",
-    banDuration: "14 days",
-    orders: 12,
-  },
-  {
-    id: 5,
-    name: "David Wilson",
-    email: "david@example.com",
-    reason: "Harassing drivers",
-    bannedDate: "2024-11-20",
-    banDuration: "7 days",
-    orders: 34,
-  },
-];
+type BannedUser = {
+  id: string;
+  name: string;
+  email: string;
+  reason: string;
+  bannedDate: string;
+  banDuration: string;
+  orders: number;
+};
 
 export default function BannedUsersPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [bannedUsers, setBannedUsers] = useState(mockBannedUsers);
+  const [bannedUsers, setBannedUsers] = useState<BannedUser[]>([]);
+
+  useEffect(() => {
+    adminApi
+      .listBannedUsers({ limit: 200 })
+      .then((data) => {
+        const mapped: BannedUser[] = data.map((item) => ({
+          id: String(item.id ?? ""),
+          name: String(item.name ?? "Unknown"),
+          email: String(item.email ?? ""),
+          reason: String(item.reason ?? item.banReason ?? "Policy violation"),
+          bannedDate: String(item.bannedDate ?? item.bannedAt ?? item.updatedAt ?? ""),
+          banDuration: String(item.banDuration ?? "Permanent"),
+          orders: Number(item.orders ?? item.totalOrders ?? 0),
+        }));
+        setBannedUsers(mapped);
+      })
+      .catch((error) => console.error("Failed to load banned users", error));
+  }, []);
+
+  const handleUnban = async (id: string) => {
+    const prev = bannedUsers;
+    setBannedUsers((current) => current.filter((user) => user.id !== id));
+    try {
+      await adminApi.unbanUser(id, "Unbanned from admin panel");
+      toast.success("User unbanned successfully");
+    } catch (error) {
+      setBannedUsers(prev);
+      toast.error(getApiErrorMessage(error, "Failed to unban user"));
+    }
+  };
 
   const filteredUsers = bannedUsers.filter(
     (user) =>
@@ -78,7 +73,7 @@ export default function BannedUsersPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="font-Sofia text-3xl font-bold text-gray-800">
+        <h1 className=" text-3xl font-bold text-gray-800">
           Banned Users
         </h1>
         <p className="text-gray-600 mt-2">
@@ -183,7 +178,11 @@ export default function BannedUsersPage() {
                   <td className="px-6 py-4 text-sm text-gray-700">{user.orders}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
-                      <button className="p-2 text-blue-600 hover:bg-blue-50 rounded transition" title="Unban user">
+                      <button
+                        onClick={() => handleUnban(user.id)}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded transition"
+                        title="Unban user"
+                      >
                         <Undo2 size={18} />
                       </button>
                       <button className="p-2 text-red-600 hover:bg-red-50 rounded transition" title="Delete account">

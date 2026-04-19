@@ -13,6 +13,7 @@ import {
   Store,
 } from "lucide-react";
 import Image from "next/image";
+import { adminApi } from "@/api/adminApi";
 
 // --- Interface matching your JSON structure ---
 interface Product {
@@ -31,15 +32,33 @@ export default function StockPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetch("/FoodProducts.json")
-      .then((res) => res.json())
-      .then((data: Product[]) => {
-        // Only keep products where stock is 0 or availability is false
-        const outOfStock = data.filter((p) => p.availability.stock === 0);
-        setProducts(outOfStock);
+    adminApi
+      .listOutOfStockProducts({ limit: 200 })
+      .then((data) => {
+        const mapped = data.map((item) => ({
+          id: String(item.id ?? ""),
+          name: String(item.name ?? item.title ?? "Unnamed Product"),
+          price: Number(item.price ?? 0),
+          thumbnail: String(item.thumbnail ?? item.image ?? ""),
+          provider: {
+            name: String((item.provider as { name?: string } | undefined)?.name ?? "Unknown Provider"),
+          },
+          rating: {
+            average: Number((item.rating as { average?: number } | undefined)?.average ?? 0),
+            totalReviews: Number((item.rating as { totalReviews?: number } | undefined)?.totalReviews ?? 0),
+          },
+          availability: {
+            stock: Number((item.availability as { stock?: number } | undefined)?.stock ?? 0),
+            isAvailable: Boolean((item.availability as { isAvailable?: boolean } | undefined)?.isAvailable ?? false),
+          },
+        }));
+        setProducts(mapped);
         setLoading(false);
       })
-      .catch((err) => console.error("Failed to load stock data", err));
+      .catch((err) => {
+        console.error("Failed to load stock data", err);
+        setLoading(false);
+      });
   }, []);
 
   const filteredProducts = useMemo(() => {
@@ -66,7 +85,7 @@ export default function StockPage() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
             Stock Alerts
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -108,7 +127,7 @@ export default function StockPage() {
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-6 shadow-lg backdrop-blur-xl"
           >
             <div className="relative z-10">
-              <p className={`text-3xl font-bold font-Sofia ${stat.color}`}>
+              <p className={`text-3xl font-bold ${stat.color}`}>
                 {stat.value}
               </p>
               <p className="text-sm font-medium text-gray-500">{stat.label}</p>
@@ -201,7 +220,7 @@ export default function StockPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-sm font-bold text-gray-700 font-Sofia">
+                      <span className="text-sm font-bold text-gray-700">
                         ${product.price.toFixed(2)}
                       </span>
                     </td>
@@ -246,7 +265,7 @@ export default function StockPage() {
                     {product.provider.name}
                   </p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-sm font-Sofia font-bold text-red-600">
+                    <span className="text-sm font-bold text-red-600">
                       $0.00 Stock
                     </span>
                     <span className="text-xs font-bold text-gray-700">

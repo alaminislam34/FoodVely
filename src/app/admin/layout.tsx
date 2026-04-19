@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -16,8 +16,10 @@ import {
   Settings,
   LogOut,
   ChevronDown,
+  Loader2,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
 
 export default function AdminLayout({
   children,
@@ -27,7 +29,64 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
   const pathName = usePathname();
+  const router = useRouter();
+  const { isAuthenticated, user, logout } = useAuthContext();
+
+  const existingAdminRoutes = useMemo(
+    () =>
+      new Set([
+        "/admin",
+        "/admin/users",
+        "/admin/user-roles",
+        "/admin/banned-users",
+        "/admin/activity-log",
+        "/admin/products",
+        "/admin/categories",
+        "/admin/stock",
+        "/admin/restaurants",
+        "/admin/best-sellers",
+        "/admin/reviews",
+        "/admin/reports",
+        "/admin/banners",
+        "/admin/blog",
+        "/admin/faqs",
+        "/admin/coupons",
+        "/admin/profile",
+        "/admin/analytics",
+      ]),
+    []
+  );
+
+  const userPermissionSet = useMemo(() => {
+    const rawPermissions = (user as any)?.permissions;
+    if (!Array.isArray(rawPermissions)) return new Set<string>();
+
+    return new Set(
+      rawPermissions
+        .map((permission) => {
+          if (typeof permission === "string") return permission;
+          if (permission && typeof permission === "object") {
+            return permission.code ?? permission.name ?? permission.slug ?? "";
+          }
+          return "";
+        })
+        .filter(Boolean)
+        .map((permission) => String(permission).toUpperCase())
+    );
+  }, [user]);
+
+  const hasMenuPermission = (requiredPermissions?: string[]) => {
+    if (!requiredPermissions || requiredPermissions.length === 0) return true;
+
+    const isAdminRole = String(user?.role ?? "").toUpperCase() === "ADMIN";
+    if (isAdminRole && userPermissionSet.size === 0) return true;
+
+    return requiredPermissions.some((permission) =>
+      userPermissionSet.has(permission.toUpperCase())
+    );
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -42,79 +101,133 @@ export default function AdminLayout({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setAuthReady(false);
+      router.replace("/account/signin");
+      return;
+    }
+
+    if (user?.role && String(user.role).toUpperCase() !== "ADMIN") {
+      logout();
+      setAuthReady(false);
+      router.replace("/account/signin");
+      return;
+    }
+
+    setAuthReady(true);
+  }, [isAuthenticated, logout, router, user?.role]);
+
+  if (!authReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex items-center gap-3 text-gray-600">
+          <Loader2 className="animate-spin text-rose-500" size={20} />
+          <span className="font-medium">Checking admin access...</span>
+        </div>
+      </div>
+    );
+  }
+
   const menuItems = [
     {
       label: "Dashboard",
       icon: LayoutDashboard,
       href: "/admin",
       submenu: null,
+      permissions: ["ANALYTICS_VIEW", "DASHBOARD_VIEW"],
     },
     {
       label: "Users & Access",
       icon: Users,
       submenu: [
-        { label: "All Users", href: "/admin/users" },
-        { label: "User Roles", href: "/admin/user-roles" },
-        { label: "Banned Users", href: "/admin/banned-users" },
-        { label: "Activity Log", href: "/admin/activity-log" },
+        { label: "All Users", href: "/admin/users", permissions: ["USERS_VIEW"] },
+        { label: "User Roles", href: "/admin/user-roles", permissions: ["ROLES_VIEW"] },
+        { label: "Banned Users", href: "/admin/banned-users", permissions: ["USERS_VIEW"] },
+        { label: "Activity Log", href: "/admin/activity-log", permissions: ["ACTIVITY_LOG_VIEW"] },
       ],
     },
     {
       label: "Products",
       icon: Package,
       submenu: [
-        { label: "All Products", href: "/admin/products" },
-        { label: "Categories", href: "/admin/categories" },
-        { label: "Out of Stock", href: "/admin/stock" },
+        { label: "All Products", href: "/admin/products", permissions: ["PRODUCTS_VIEW"] },
+        { label: "Categories", href: "/admin/categories", permissions: ["CATEGORIES_VIEW"] },
+        { label: "Out of Stock", href: "/admin/stock", permissions: ["PRODUCTS_VIEW"] },
       ],
     },
     {
       label: "Restaurants",
       icon: UtensilsCrossed,
       submenu: [
-        { label: "All Restaurants", href: "/admin/restaurants" },
-        { label: "Best Restaurants", href: "/admin/best-sellers" },
+        { label: "All Restaurants", href: "/admin/restaurants", permissions: ["RESTAURANTS_VIEW"] },
+        { label: "Best Restaurants", href: "/admin/best-sellers", permissions: ["RESTAURANTS_VIEW"] },
       ],
     },
     {
       label: "Reviews & Feedback",
       icon: MessageCircle,
       submenu: [
-        { label: "Customer Reviews", href: "/admin/reviews" },
-        { label: "Report Manage", href: "/admin/reports" },
+        { label: "Customer Reviews", href: "/admin/reviews", permissions: ["REVIEWS_VIEW"] },
+        { label: "Report Manage", href: "/admin/reports", permissions: ["REPORTS_VIEW"] },
       ],
     },
     {
       label: "Content Management",
       icon: Images,
       submenu: [
-        { label: "Banners", href: "/admin/banners" },
-        { label: "Image Slider", href: "/admin/slider" },
-        { label: "Blog Management", href: "/admin/blog" },
-        { label: "FAQs", href: "/admin/faqs" },
+        { label: "Banners", href: "/admin/banners", permissions: ["BANNERS_VIEW"] },
+        { label: "Image Slider", href: "/admin/slider", permissions: ["BANNERS_VIEW"] },
+        { label: "Blog Management", href: "/admin/blog", permissions: ["BLOG_VIEW"] },
+        { label: "FAQs", href: "/admin/faqs", permissions: ["FAQS_VIEW"] },
       ],
     },
     {
       label: "Promotions",
       icon: Zap,
       submenu: [
-        { label: "Coupons", href: "/admin/coupons" },
-        { label: "Events", href: "/admin/events" },
-        { label: "Discounts", href: "/admin/discounts" },
-        { label: "Active Campaigns", href: "/admin/campaigns" },
+        { label: "Coupons", href: "/admin/coupons", permissions: ["COUPONS_VIEW"] },
+        { label: "Events", href: "/admin/events", permissions: ["COUPONS_VIEW"] },
+        { label: "Discounts", href: "/admin/discounts", permissions: ["COUPONS_VIEW"] },
+        { label: "Active Campaigns", href: "/admin/campaigns", permissions: ["COUPONS_VIEW"] },
       ],
     },
     {
       label: "Settings",
       icon: Settings,
       submenu: [
-        { label: "Profile", href: "/admin/profile" },
-        { label: "Website Settings", href: "/admin/settings" },
-        { label: "Analytics", href: "/admin/analytics" },
-        { label: "Security", href: "/admin/security" },
+        { label: "Profile", href: "/admin/profile", permissions: ["ADMIN_PROFILE_VIEW"] },
+        { label: "Website Settings", href: "/admin/settings", permissions: ["SETTINGS_VIEW"] },
+        { label: "Analytics", href: "/admin/analytics", permissions: ["ANALYTICS_VIEW"] },
+        { label: "Security", href: "/admin/security", permissions: ["SETTINGS_VIEW"] },
       ],
     },
   ];
+
+  const visibleMenuItems = menuItems
+    .map((item) => {
+      if (item.submenu) {
+        const allowedSubmenu = item.submenu.filter(
+          (subitem) =>
+            existingAdminRoutes.has(subitem.href) &&
+            hasMenuPermission(subitem.permissions)
+        );
+        return {
+          ...item,
+          submenu: allowedSubmenu,
+        };
+      }
+
+      const isVisible =
+        !!item.href &&
+        existingAdminRoutes.has(item.href) &&
+        hasMenuPermission(item.permissions);
+      return isVisible ? item : null;
+    })
+    .filter(
+      (item): item is NonNullable<typeof item> =>
+        item !== null && (!item.submenu || item.submenu.length > 0)
+    );
 
   const toggleMenu = (label: string) => {
     setExpandedMenu(expandedMenu === label ? null : label);
@@ -159,7 +272,7 @@ export default function AdminLayout({
 
         {/* Navigation Menu */}
         <nav className="p-4 space-y-2">
-          {menuItems.map((item) => (
+          {visibleMenuItems.map((item) => (
             <div key={item.label}>
               {item.submenu ? (
                 <>
@@ -226,7 +339,13 @@ export default function AdminLayout({
 
         {/* Logout Button */}
         <div className="p-4 mt-auto">
-          <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-rose-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow">
+          <button
+            onClick={() => {
+              logout();
+              router.replace("/account/signin");
+            }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-rose-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-shadow"
+          >
             <LogOut size={18} />
             Logout
           </button>
@@ -252,8 +371,8 @@ export default function AdminLayout({
             </h1>
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <p className="font-semibold text-gray-800">Admin User</p>
-                <p className="text-xs text-gray-600">Super Admin</p>
+                <p className="font-semibold text-gray-800">{user?.name ?? "Admin User"}</p>
+                <p className="text-xs text-gray-600">{String(user?.role ?? "ADMIN")}</p>
               </div>
               <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-full" />
             </div>

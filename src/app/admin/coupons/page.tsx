@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Plus,
@@ -12,6 +12,12 @@ import {
   Users,
   TrendingUp,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 interface Coupon {
   id: string;
@@ -27,71 +33,79 @@ interface Coupon {
 }
 
 export default function CouponsManagement() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+  const [coupons, setCoupons] = useState<Coupon[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
-  const coupons: Coupon[] = [
-    {
-      id: "1",
-      code: "SAVE20",
-      type: "percentage",
-      value: 20,
-      maxUses: 500,
-      usedCount: 342,
-      minOrder: 25,
-      validFrom: "2024-01-01",
-      validUntil: "2024-02-29",
-      active: true,
-    },
-    {
-      id: "2",
-      code: "FLAT10",
-      type: "fixed",
-      value: 10,
-      maxUses: 300,
-      usedCount: 156,
-      minOrder: 50,
-      validFrom: "2024-01-15",
-      validUntil: "2024-03-15",
-      active: true,
-    },
-    {
-      id: "3",
-      code: "WELCOME",
-      type: "percentage",
-      value: 30,
-      maxUses: 1000,
-      usedCount: 987,
-      minOrder: 15,
-      validFrom: "2024-01-01",
-      validUntil: "2024-12-31",
-      active: true,
-    },
-    {
-      id: "4",
-      code: "OLDCODE",
-      type: "percentage",
-      value: 15,
-      maxUses: 500,
-      usedCount: 500,
-      minOrder: 30,
-      validFrom: "2023-01-01",
-      validUntil: "2024-01-01",
-      active: false,
-    },
-  ];
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, filterStatus]);
 
-  const filteredCoupons = coupons.filter((coupon) => {
-    const matchSearch = coupon.code
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    const matchStatus =
-      filterStatus === "all" ||
-      (filterStatus === "active" && coupon.active) ||
-      (filterStatus === "inactive" && !coupon.active);
-    return matchSearch && matchStatus;
-  });
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const { items, meta } = await adminApi.listCouponsPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+          search: debouncedSearch || undefined,
+          isActive:
+            filterStatus === "all"
+              ? undefined
+              : filterStatus === "active",
+        });
+
+        const mapped: Coupon[] = items.map((item) => ({
+          id: String(item.id ?? ""),
+          code: String(item.code ?? ""),
+          type: (String(item.type ?? "percentage") as Coupon["type"]),
+          value: Number(item.value ?? 0),
+          maxUses: Number(item.maxUses ?? 0),
+          usedCount: Number(item.usedCount ?? 0),
+          minOrder: Number(item.minOrder ?? 0),
+          validFrom: String(item.startsAt ?? item.validFrom ?? ""),
+          validUntil: String(item.endsAt ?? item.validUntil ?? ""),
+          active: Boolean(item.active ?? item.status === "active"),
+        }));
+
+        setCoupons(mapped);
+        setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+      } catch (fetchError) {
+        setError(getApiErrorMessage(fetchError, "Failed to load coupons"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCoupons();
+  }, [currentPage, debouncedSearch, filterStatus, reloadKey]);
+
+  const handleDeleteCoupon = async (id: string) => {
+    const prev = coupons;
+    setCoupons((current) => current.filter((coupon) => coupon.id !== id));
+    try {
+      await adminApi.deleteCoupon(id);
+      toast.success("Coupon deleted");
+    } catch (error) {
+      setCoupons(prev);
+      toast.error(getApiErrorMessage(error, "Failed to delete coupon"));
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -103,7 +117,7 @@ export default function CouponsManagement() {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-3xl font-Sofia font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl  font-bold text-gray-800 mb-2">
             Coupons & Promotions
           </h1>
           <p className="text-gray-600">
@@ -135,8 +149,8 @@ export default function CouponsManagement() {
             <input
               type="text"
               placeholder="Search coupon code..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
             />
           </div>
@@ -164,31 +178,31 @@ export default function CouponsManagement() {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Code
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Discount
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Usage
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Min Order
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Valid Until
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {filteredCoupons.map((coupon, index) => (
+              {coupons.map((coupon, index) => (
                 <motion.tr
                   key={coupon.id}
                   initial={{ opacity: 0 }}
@@ -250,7 +264,10 @@ export default function CouponsManagement() {
                       <button className="p-2 hover:bg-blue-100 rounded-lg transition-colors">
                         <Edit2 size={16} className="text-blue-600" />
                       </button>
-                      <button className="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDeleteCoupon(coupon.id)}
+                        className="p-2 hover:bg-red-100 rounded-lg transition-colors"
+                      >
                         <Trash2 size={16} className="text-red-600" />
                       </button>
                     </div>
@@ -261,11 +278,24 @@ export default function CouponsManagement() {
           </table>
         </div>
 
-        {filteredCoupons.length === 0 && (
-          <div className="p-8 text-center">
-            <p className="text-gray-600">No coupons found</p>
-          </div>
-        )}
+        {loading ? <AdminLoadingState label="Loading coupons..." /> : null}
+        {error ? (
+          <AdminErrorState
+            description={error}
+            onAction={retry}
+          />
+        ) : null}
+        {!loading && !error && coupons.length === 0 ? (
+          <AdminEmptyState title="No coupons found" description="Try changing status or search query." />
+        ) : null}
+
+        <div className="p-6 border-t border-gray-200 flex justify-end">
+          <AdminPaginator
+            page={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
       </motion.div>
 
       {/* Quick Stats */}
@@ -279,7 +309,7 @@ export default function CouponsManagement() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Active Coupons</p>
-              <p className="text-3xl font-bold font-Sofia text-gray-800">
+              <p className="text-3xl font-bold  text-gray-800">
                 {coupons.filter((c) => c.active).length}
               </p>
             </div>
@@ -298,7 +328,7 @@ export default function CouponsManagement() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Total Redeemed</p>
-              <p className="text-3xl font-bold font-Sofia text-gray-800">
+              <p className="text-3xl font-bold  text-gray-800">
                 {coupons.reduce((sum, c) => sum + c.usedCount, 0)}
               </p>
             </div>
@@ -317,7 +347,7 @@ export default function CouponsManagement() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Estimated Saved</p>
-              <p className="text-3xl font-bold font-Sofia text-gray-800">
+              <p className="text-3xl font-bold  text-gray-800">
                 $1,245
               </p>
             </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Plus,
@@ -14,6 +14,7 @@ import {
   ShoppingBag,
   Info,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
 
 interface FAQ {
   id: string;
@@ -47,9 +48,28 @@ const mockFaqs: FAQ[] = [
 ];
 
 export default function FAQManage() {
+  const [faqs, setFaqs] = useState<FAQ[]>(mockFaqs);
   const [activeTab, setActiveTab] = useState("General");
   const [openId, setOpenId] = useState<string | null>("1");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    adminApi
+      .listFaqs({ limit: 200 })
+      .then((data) => {
+        const mapped: FAQ[] = data.map((item) => ({
+          id: String(item.id ?? ""),
+          question: String(item.question ?? ""),
+          answer: String(item.answer ?? ""),
+          category: (String(item.category ?? "General") as FAQ["category"]),
+        }));
+        if (mapped.length > 0) {
+          setFaqs(mapped);
+          setOpenId(mapped[0].id);
+        }
+      })
+      .catch((error) => console.error("Failed to load faqs", error));
+  }, []);
 
   const categories = [
     { name: "General", icon: <Info size={18} /> },
@@ -57,7 +77,7 @@ export default function FAQManage() {
     { name: "Restaurant", icon: <MessageCircle size={18} /> },
   ];
 
-  const filteredFaqs = mockFaqs.filter(
+  const filteredFaqs = faqs.filter(
     (faq) =>
       faq.category === activeTab &&
       faq.question.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -68,7 +88,7 @@ export default function FAQManage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
         <div>
-          <h1 className="text-3xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl font-bold text-gray-800">
             Support Center
           </h1>
           <p className="text-gray-500 font-medium">

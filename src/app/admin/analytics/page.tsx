@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   TrendingUp,
@@ -12,9 +13,10 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
 
 export default function AdminAnalytics() {
-  const metrics = [
+  const [metrics, setMetrics] = useState([
     {
       title: "Total Revenue",
       value: "$127,450",
@@ -47,16 +49,54 @@ export default function AdminAnalytics() {
       color: "from-orange-500 to-orange-600",
       status: "up",
     },
-  ];
+  ]);
 
-  const chartData = [
+  const [chartData, setChartData] = useState([
     { month: "Jan", revenue: 24000, orders: 4000 },
     { month: "Feb", revenue: 26000, orders: 4100 },
     { month: "Mar", revenue: 28000, orders: 4300 },
     { month: "Apr", revenue: 31000, orders: 4500 },
     { month: "May", revenue: 35000, orders: 4800 },
     { month: "Jun", revenue: 38000, orders: 5100 },
-  ];
+  ]);
+
+  useEffect(() => {
+    adminApi
+      .getAnalyticsOverview()
+      .then((data) => {
+        setMetrics((prev) => [
+          {
+            ...prev[0],
+            value: `$${Number(data.totalRevenue ?? data.revenue ?? 0).toLocaleString()}`,
+          },
+          {
+            ...prev[1],
+            value: Number(data.totalOrders ?? data.orders ?? 0).toLocaleString(),
+          },
+          {
+            ...prev[2],
+            value: Number(data.activeUsers ?? data.totalUsers ?? 0).toLocaleString(),
+          },
+          {
+            ...prev[3],
+            value: Number(data.productsSold ?? data.totalProducts ?? 0).toLocaleString(),
+          },
+        ]);
+      })
+      .catch((error) => console.error("Failed to load analytics overview", error));
+
+    adminApi
+      .getRevenueTrend({ limit: 12 })
+      .then((rows) => {
+        const mapped = rows.map((item) => ({
+          month: String(item.month ?? item.label ?? "N/A"),
+          revenue: Number(item.revenue ?? 0),
+          orders: Number(item.orders ?? 0),
+        }));
+        if (mapped.length > 0) setChartData(mapped);
+      })
+      .catch((error) => console.error("Failed to load revenue trend", error));
+  }, []);
 
   const bestPerformers = [
     {
@@ -97,7 +137,7 @@ export default function AdminAnalytics() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-800 mb-2">
           Platform Analytics
         </h1>
         <p className="text-gray-600">
@@ -118,7 +158,7 @@ export default function AdminAnalytics() {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <p className="text-sm text-gray-600 mb-1">{metric.title}</p>
-                <p className="text-3xl font-Sofia font-bold text-gray-800">
+                <p className="text-3xl  font-bold text-gray-800">
                   {metric.value}
                 </p>
               </div>
@@ -150,7 +190,7 @@ export default function AdminAnalytics() {
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-Sofia font-bold text-gray-800 mb-1">
+            <h2 className="text-2xl  font-bold text-gray-800 mb-1">
               Revenue & Orders Trend
             </h2>
             <p className="text-sm text-gray-600">Last 6 months</p>
@@ -196,7 +236,7 @@ export default function AdminAnalytics() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
         >
-          <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-6">
+          <h2 className="text-xl  font-bold text-gray-800 mb-6">
             🏆 Top Performers
           </h2>
 
@@ -251,7 +291,7 @@ export default function AdminAnalytics() {
           transition={{ duration: 0.5, delay: 0.6 }}
           className="bg-linear-to-br from-rose-500 to-orange-500 rounded-2xl p-6 md:p-8 text-white space-y-6"
         >
-          <h2 className="text-xl font-Sofia font-bold">Website Growth</h2>
+          <h2 className="text-xl  font-bold">Website Growth</h2>
 
           <div className="space-y-4">
             <div>
@@ -322,7 +362,7 @@ export default function AdminAnalytics() {
       >
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <p className="text-sm text-gray-600 mb-2">Average Order Value</p>
-          <p className="text-3xl font-Sofia font-bold text-gray-800">$28.50</p>
+          <p className="text-3xl  font-bold text-gray-800">$28.50</p>
           <p className="text-xs text-green-600 font-semibold mt-2">
             ↑ 5.2% from last month
           </p>
@@ -330,7 +370,7 @@ export default function AdminAnalytics() {
 
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <p className="text-sm text-gray-600 mb-2">Customer Retention</p>
-          <p className="text-3xl font-Sofia font-bold text-gray-800">78.5%</p>
+          <p className="text-3xl  font-bold text-gray-800">78.5%</p>
           <p className="text-xs text-green-600 font-semibold mt-2">
             ↑ 2.3% from last month
           </p>
@@ -338,7 +378,7 @@ export default function AdminAnalytics() {
 
         <div className="bg-white rounded-2xl border border-gray-200 p-6">
           <p className="text-sm text-gray-600 mb-2">Platform Rating</p>
-          <p className="text-3xl font-Sofia font-bold text-gray-800">4.7 ⭐</p>
+          <p className="text-3xl  font-bold text-gray-800">4.7 ⭐</p>
           <p className="text-xs text-gray-600 mt-2">Based on 8,542 reviews</p>
         </div>
       </motion.div>

@@ -9,8 +9,6 @@ import {
   Clock,
   CheckCircle2,
   MoreVertical,
-  ChevronLeft,
-  ChevronRight,
   Filter,
   User,
   MapPin,
@@ -18,53 +16,119 @@ import {
   Package,
 } from "lucide-react";
 import { Provider } from "@/types/provider";
+import { adminApi } from "@/api/adminApi";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 export default function BestSellersPage() {
   const [restaurants, setRestaurants] = useState<Provider[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all"); // New State
-  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRestaurants, setTotalRestaurants] = useState(0);
   const itemsPerPage = 10;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
   // Reset to page 1 when any filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, statusFilter, ratingFilter]);
+  }, [debouncedSearch, statusFilter, ratingFilter]);
 
   useEffect(() => {
-    fetch("/Restaurants.json")
-      .then((res) => res.json())
-      .then((data) => setRestaurants(data));
-  }, []);
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  // Updated Filtering Logic
-  const filteredRestaurants = restaurants.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.owner.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const { items, meta } = await adminApi.listRestaurantsPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+          search: debouncedSearch || undefined,
+          isActive:
+            statusFilter === "all"
+              ? undefined
+              : statusFilter === "true",
+          minRating: ratingFilter === "all" ? undefined : Number(ratingFilter),
+        });
 
-    const matchesStatus =
-      statusFilter === "all"
-        ? true
-        : item.status.isActive.toString() === statusFilter;
+        const mapped = items.map((item) => {
+          const owner = (item.owner as Provider["owner"] | undefined) ?? {
+            name: "Unknown Owner",
+            phone: "",
+            email: "",
+          };
 
-    // Rating Filter Logic (Matches average >= selected value)
-    const matchesRating =
-      ratingFilter === "all"
-        ? true
-        : item.rating.average >= parseFloat(ratingFilter);
+          return {
+            id: String(item.id ?? ""),
+            name: String(item.name ?? "Restaurant"),
+            slug: String(item.slug ?? ""),
+            description: String(item.description ?? ""),
+            owner,
+            location: (item.location as Provider["location"] | undefined) ?? {
+              address: "",
+              city: "Unknown",
+              lat: 0,
+              lng: 0,
+            },
+            categories: (item.categories as string[] | undefined) ?? [],
+            images: (item.images as Provider["images"] | undefined) ?? {
+              logo: "",
+              cover: "",
+            },
+            rating: (item.rating as Provider["rating"] | undefined) ?? {
+              average: 0,
+              totalReviews: 0,
+            },
+            delivery: (item.delivery as Provider["delivery"] | undefined) ?? {
+              isAvailable: false,
+              deliveryTime: "",
+              deliveryFee: 0,
+              minimumOrder: 0,
+            },
+            openingHours:
+              (item.openingHours as Provider["openingHours"] | undefined) ?? {
+                open: "",
+                close: "",
+                isOpenNow: false,
+              },
+            status: (item.status as Provider["status"] | undefined) ?? {
+              isVerified: false,
+              isActive: false,
+              isSuspended: false,
+            },
+            stats: (item.stats as Provider["stats"] | undefined) ?? {
+              totalFoods: 0,
+              totalOrders: 0,
+            },
+            createdAt: String(item.createdAt ?? ""),
+            updatedAt: String(item.updatedAt ?? ""),
+          } as Provider;
+        });
 
-    return matchesSearch && matchesStatus && matchesRating;
-  });
+        setRestaurants(mapped);
+        setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+        setTotalRestaurants(meta?.total ?? mapped.length);
+      } catch (fetchError) {
+        setError(getApiErrorMessage(fetchError, "Failed to load restaurants"));
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Pagination Logic
-  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredRestaurants.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+    fetchRestaurants();
+  }, [currentPage, debouncedSearch, itemsPerPage, ratingFilter, reloadKey, statusFilter]);
 
   // Stats
   const totalOrders = restaurants.reduce(
@@ -85,11 +149,11 @@ export default function BestSellersPage() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-700">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-700">
             Restaurants
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Managing {restaurants.length} active vendors and their performance.
+            Managing {totalRestaurants} active vendors and their performance.
           </p>
         </div>
       </motion.div>
@@ -99,7 +163,7 @@ export default function BestSellersPage() {
         {[
           {
             label: "Total Partners",
-            value: restaurants.length,
+            value: totalRestaurants,
             color: "text-blue-600",
             icon: User,
           },
@@ -130,7 +194,7 @@ export default function BestSellersPage() {
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-4 md:p-6 shadow-lg backdrop-blur-xl"
           >
             <div className="flex flex-col gap-2">
-              <p className={`text-2xl font-bold font-Sofia ${stat.color}`}>
+              <p className={`text-2xl font-bold  ${stat.color}`}>
                 {stat.value}
               </p>
               <p className="text-sm font-medium text-gray-500">{stat.label}</p>
@@ -155,8 +219,8 @@ export default function BestSellersPage() {
           <input
             type="text"
             placeholder="Search by restaurant or owner..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/60 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all"
           />
         </div>
@@ -194,6 +258,17 @@ export default function BestSellersPage() {
 
       {/* Table Section */}
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden">
+        {loading ? (
+          <AdminLoadingState label="Loading restaurants..." />
+        ) : error ? (
+          <AdminErrorState
+            description={error}
+            onAction={retry}
+          />
+        ) : restaurants.length === 0 ? (
+          <AdminEmptyState title="No restaurants found" description="Try changing filters or search query." />
+        ) : null}
+
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -220,7 +295,7 @@ export default function BestSellersPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               <AnimatePresence mode="popLayout">
-                {paginatedData.map((item, idx) => (
+                {restaurants.map((item, idx) => (
                   <motion.tr
                     key={item.id}
                     initial={{ opacity: 0 }}
@@ -323,45 +398,13 @@ export default function BestSellersPage() {
         {/* Pagination Footer */}
         <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">
           <p className="text-sm text-gray-500 font-medium">
-            Showing{" "}
-            <span className="text-gray-800 font-bold">{startIndex + 1}</span> to{" "}
-            <span className="text-gray-800 font-bold">
-              {Math.min(startIndex + itemsPerPage, filteredRestaurants.length)}
-            </span>{" "}
-            of {filteredRestaurants.length} restaurants
+            Showing page <span className="text-gray-800 font-bold">{currentPage}</span> of {totalPages}
           </p>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== 1 ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
-            >
-              <ChevronLeft size={18} />
-            </button>
-
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
-                  currentPage === i + 1
-                    ? "bg-rose-600 text-white shadow-lg shadow-rose-200"
-                    : "bg-white border border-gray-200 text-gray-500 hover:border-rose-400"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== totalPages ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+          <AdminPaginator
+            page={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

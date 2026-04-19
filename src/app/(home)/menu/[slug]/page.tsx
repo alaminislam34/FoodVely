@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { addToCart, isWishlisted, toggleWishlist } from "@/utils/commerceStorage";
 
 interface MenuDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -66,12 +67,7 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
 
   const handleAddToCart = () => {
     if (product) {
-      const cartItem = {
-        ...product,
-        cartQuantity: quantity,
-      };
-      console.log("Added to cart:", cartItem);
-      // You can integrate with cart context/store here
+      addToCart(String(product.id), quantity);
     }
   };
 
@@ -134,6 +130,8 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
         ((product.price - product.discountPrice) / product.price) * 100,
       )
     : 0;
+
+  const wished = isWishlisted(String(product.id), "product");
 
   return (
     <section className="min-h-screen py-8 md:py-12">
@@ -340,9 +338,12 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
                 >
                   −
                 </button>
-                <span className="w-8 text-center font-bold text-gray-800">
+                  onClick={() => {
+                    toggleWishlist(String(product.id), "product");
+                    setIsFavorite((prev) => !prev);
+                  }}
                   {quantity}
-                </span>
+                    isFavorite || wished
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="px-2 py-1 text-gray-600 hover:text-rose-500 transition-colors font-bold text-lg"

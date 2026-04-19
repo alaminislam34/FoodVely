@@ -8,14 +8,17 @@ import {
   Trash2,
   Package,
   Filter,
-  ChevronLeft,
-  ChevronRight,
   SlidersHorizontal,
   Star,
   CheckCircle2,
   MapPin,
 } from "lucide-react";
 import Image from "next/image";
+import { adminApi } from "@/api/adminApi";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 // --- Interface ---
 interface Product {
@@ -48,88 +51,125 @@ interface Product {
 export default function ProductsManagement() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [categories, setCategories] = useState<string[]>([]);
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [stockFilter, setStockFilter] = useState("all");
   const [ratingFilter, setRatingFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
 
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
+
+  const sortFieldMap: Record<string, string> = {
+    newest: "createdAt",
+    "price-asc": "price",
+    "price-desc": "price",
+    rating: "rating",
+    name: "name",
+  };
 
   useEffect(() => {
-    fetch("/FoodProducts.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const { items, meta } = await adminApi.listProductsPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+          search: debouncedSearch || undefined,
+          category: selectedCategory !== "All" ? selectedCategory : undefined,
+          inStock:
+            stockFilter === "all"
+              ? undefined
+              : stockFilter === "in-stock",
+          minRating:
+            ratingFilter === "all"
+              ? undefined
+              : ratingFilter === "4.5+"
+                ? 4.5
+                : 4.0,
+          sortBy: sortFieldMap[sortBy] ?? "createdAt",
+          sortOrder:
+            sortBy === "price-desc"
+              ? "desc"
+              : sortBy === "price-asc" || sortBy === "name"
+                ? "asc"
+                : "desc",
+        });
+
+        const mappedProducts: Product[] = items.map((item) => ({
+          id: String(item.id ?? ""),
+          name: String(item.name ?? item.title ?? "Unnamed Product"),
+          shortDescription: String(item.shortDescription ?? item.description ?? ""),
+          price: Number(item.price ?? 0),
+          thumbnail: String(item.thumbnail ?? item.image ?? ""),
+          category: {
+            name: String((item.category as { name?: string } | undefined)?.name ?? "Uncategorized"),
+            slug: String((item.category as { slug?: string } | undefined)?.slug ?? "uncategorized"),
+          },
+          provider: {
+            name: String((item.provider as { name?: string } | undefined)?.name ?? "Unknown Provider"),
+          },
+          rating: {
+            average: Number((item.rating as { average?: number } | undefined)?.average ?? 0),
+            totalReviews: Number((item.rating as { totalReviews?: number } | undefined)?.totalReviews ?? 0),
+          },
+          availability: {
+            stock: Number((item.availability as { stock?: number } | undefined)?.stock ?? 0),
+            status: String((item.availability as { status?: string } | undefined)?.status ?? "inactive"),
+            isAvailable: Boolean((item.availability as { isAvailable?: boolean } | undefined)?.isAvailable ?? false),
+          },
+          foodInfo: {
+            calories: Number((item.foodInfo as { calories?: number } | undefined)?.calories ?? 0),
+          },
+        }));
+
+        setProducts(mappedProducts);
+        setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+        setTotalItems(meta?.total ?? mappedProducts.length);
+      } catch (fetchError) {
+        setError(getApiErrorMessage(fetchError, "Failed to load products"));
+      } finally {
         setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [currentPage, debouncedSearch, itemsPerPage, ratingFilter, reloadKey, selectedCategory, sortBy, stockFilter]);
+
+  useEffect(() => {
+    adminApi
+      .listCategories({ limit: 200 })
+      .then((data) => {
+        const names = data
+          .map((item) => String(item.name ?? ""))
+          .filter(Boolean);
+        setCategories(names);
       })
-      .catch((err) => console.error("Failed to load products", err));
+      .catch(() => setCategories([]));
   }, []);
 
   const uniqueCategories = useMemo(() => {
-    const cats = new Set(products.map((p) => p.category?.name).filter(Boolean));
+    const cats = new Set(categories);
     return ["All", ...Array.from(cats)];
-  }, [products]);
-
-  const processedProducts = useMemo(() => {
-    let result = [...products];
-    if (searchQuery) {
-      const lowerQuery = searchQuery.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.name.toLowerCase().includes(lowerQuery) ||
-          p.category?.name.toLowerCase().includes(lowerQuery),
-      );
-    }
-    if (selectedCategory !== "All") {
-      result = result.filter((p) => p.category?.name === selectedCategory);
-    }
-    if (stockFilter === "in-stock") {
-      result = result.filter((p) => (p.availability?.stock ?? 0) > 0);
-    } else if (stockFilter === "out-of-stock") {
-      result = result.filter((p) => (p.availability?.stock ?? 0) === 0);
-    }
-    if (ratingFilter === "4.5+") {
-      result = result.filter((p) => (p.rating?.average ?? 0) >= 4.5);
-    } else if (ratingFilter === "4.0+") {
-      result = result.filter((p) => (p.rating?.average ?? 0) >= 4.0);
-    }
-    result.sort((a, b) => {
-      switch (sortBy) {
-        case "price-asc":
-          return a.price - b.price;
-        case "price-desc":
-          return b.price - a.price;
-        case "rating":
-          return (b.rating?.average ?? 0) - (a.rating?.average ?? 0);
-        case "name":
-          return a.name.localeCompare(b.name);
-        default:
-          return 0;
-      }
-    });
-    return result;
-  }, [
-    products,
-    searchQuery,
-    selectedCategory,
-    stockFilter,
-    ratingFilter,
-    sortBy,
-  ]);
-
-  const totalPages = Math.ceil(processedProducts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentProducts = processedProducts.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
+  }, [categories]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedCategory, stockFilter, ratingFilter, sortBy]);
+  }, [debouncedSearch, selectedCategory, stockFilter, ratingFilter, sortBy]);
 
   const totalStock = products.reduce(
     (sum, p) => sum + (p.availability?.stock ?? 0),
@@ -151,14 +191,15 @@ export default function ProductsManagement() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Inventory Management
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Tracking {products.length} menu items across{" "}
+            Tracking {totalItems} menu items across{" "}
             {uniqueCategories.length - 1} categories.
           </p>
         </div>
+        
       </motion.div>
 
       {/* Analytics Cards */}
@@ -166,7 +207,7 @@ export default function ProductsManagement() {
         {[
           {
             label: "Total Items",
-            value: products.length,
+            value: totalItems,
             color: "text-rose-600",
             icon: Package,
           },
@@ -199,9 +240,7 @@ export default function ProductsManagement() {
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-4 md:p-6 shadow-lg backdrop-blur-xl"
           >
             <div className="flex flex-col gap-1">
-              <p
-                className={`text-2xl md:text-3xl font-bold font-Sofia ${stat.color}`}
-              >
+              <p className={`text-2xl md:text-3xl font-bold  ${stat.color}`}>
                 {stat.value}
               </p>
               <p className="text-xs md:text-sm font-medium text-gray-500">
@@ -219,6 +258,20 @@ export default function ProductsManagement() {
 
       {/* Main Container */}
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden">
+        {loading ? <AdminLoadingState label="Loading products..." /> : null}
+        {error ? (
+          <AdminErrorState
+            description={error}
+            onAction={retry}
+          />
+        ) : null}
+        {!loading && !error && products.length === 0 ? (
+          <AdminEmptyState
+            title="No products found"
+            description="Try adjusting search and filters."
+          />
+        ) : null}
+
         {/* Toolbar */}
         <div className="p-6 border-b border-gray-100 space-y-4">
           <div className="relative">
@@ -229,8 +282,8 @@ export default function ProductsManagement() {
             <input
               type="text"
               placeholder="Search by product name or category..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/50 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all"
             />
           </div>
@@ -305,7 +358,7 @@ export default function ProductsManagement() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               <AnimatePresence mode="popLayout">
-                {currentProducts.map((product, idx) => (
+                {products.map((product, idx) => (
                   <motion.tr
                     key={product.id}
                     initial={{ opacity: 0 }}
@@ -342,7 +395,7 @@ export default function ProductsManagement() {
                       </span>
                     </td>
                     <td className="px-6 py-3">
-                      <span className="text-sm font-bold text-gray-700 font-Sofia">
+                      <span className="text-sm font-bold text-gray-700 ">
                         ${product.price.toFixed(2)}
                       </span>
                     </td>
@@ -402,7 +455,7 @@ export default function ProductsManagement() {
         {/* Mobile View (Preserved but styled) */}
         <div className="md:hidden grid grid-cols-1 gap-4 p-4">
           <AnimatePresence mode="wait">
-            {currentProducts.map((product) => (
+            {products.map((product) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -431,7 +484,7 @@ export default function ProductsManagement() {
                           {product.category?.name}
                         </span>
                       </div>
-                      <span className="font-Sofia font-bold text-gray-900">
+                      <span className=" font-bold text-gray-900">
                         ${product.price}
                       </span>
                     </div>
@@ -469,45 +522,14 @@ export default function ProductsManagement() {
         {/* Pagination Footer */}
         <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">
           <p className="text-sm text-gray-500 font-medium">
-            Showing{" "}
-            <span className="text-gray-800 font-bold">{startIndex + 1}</span> to{" "}
-            <span className="text-gray-800 font-bold">
-              {Math.min(startIndex + itemsPerPage, processedProducts.length)}
-            </span>{" "}
-            of {processedProducts.length} items
+            Page <span className="text-gray-800 font-bold">{currentPage}</span> of {totalPages}
           </p>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== 1 ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
-            >
-              <ChevronLeft size={18} />
-            </button>
-
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`w-9 h-9 rounded-xl text-sm font-bold transition-all ${
-                  currentPage === i + 1
-                    ? "bg-rose-600 text-white shadow-lg shadow-rose-200"
-                    : "bg-white border border-gray-200 text-gray-500 hover:border-rose-400"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className={`p-2 rounded-xl border border-gray-200 disabled:opacity-30 transition-all ${currentPage !== totalPages ? "bg-white text-gray-700 hover:border-rose-500 shadow-sm" : "bg-transparent text-gray-300"}`}
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+          <AdminPaginator
+            page={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

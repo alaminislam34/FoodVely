@@ -3,6 +3,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { Search, Filter, MoreVertical, Ban, Shield, Trash2, Eye } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 interface User {
   id: number;
@@ -17,34 +22,72 @@ interface User {
 }
 
 export default function UsersManagement() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterRole, setFilterRole] = useState("all");
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 20;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page,
+    setPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
-  // Fetch data from JSON file
   useEffect(() => {
-    fetch("/data/users.json")
-      .then(res => res.json())
-      .then(data => {
-        setUsers(data.users);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error loading users:", err);
-        setLoading(false);
-      });
-  }, []);
+    setPage(1);
+  }, [debouncedSearch, filterStatus, filterRole]);
 
-  const filteredUsers = users.filter((user) => {
-    const matchSearch =
-      user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchStatus = filterStatus === "all" || user.status === filterStatus;
-    const matchRole = filterRole === "all" || user.role === filterRole;
-    return matchSearch && matchStatus && matchRole;
-  });
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUsers = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const { items, meta } = await adminApi.listUsersPaged({
+          page,
+          limit,
+          search: debouncedSearch || undefined,
+          role: filterRole !== "all" ? filterRole.toUpperCase() : undefined,
+          status: filterStatus !== "all" ? filterStatus.toUpperCase() : undefined,
+        });
+
+        const mappedUsers: User[] = items.map((item) => ({
+          id: Number(item.id ?? 0),
+          name: String(item.name ?? "Unknown"),
+          email: String(item.email ?? ""),
+          role: String(item.role ?? "customer").toLowerCase() as User["role"],
+          status: String(item.status ?? "active").toLowerCase() as User["status"],
+          joinDate: String(item.createdAt ?? new Date().toISOString()),
+          orders: Number(item.orders ?? item.totalOrders ?? 0),
+          verified: Boolean(item.emailVerified ?? false),
+          image: String(item.image ?? ""),
+        }));
+
+        if (!mounted) return;
+        setUsers(mappedUsers);
+        setTotalPages(Number(meta?.totalPages ?? 1));
+      } catch (err) {
+        if (!mounted) return;
+        setError(getApiErrorMessage(err, "Failed to load users"));
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    loadUsers();
+
+    return () => {
+      mounted = false;
+    };
+  }, [debouncedSearch, filterRole, filterStatus, page, reloadKey]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -80,7 +123,7 @@ export default function UsersManagement() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-Sofia font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl  font-bold text-gray-800 mb-2">
           Users Management
         </h1>
         <p className="text-gray-600">
@@ -104,8 +147,8 @@ export default function UsersManagement() {
           <input
             type="text"
             placeholder="Search users by name or email..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
           />
         </div>
@@ -155,13 +198,11 @@ export default function UsersManagement() {
 
       {/* Users Table */}
       {loading ? (
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
-          <p className="text-gray-600">Loading users...</p>
-        </div>
-      ) : filteredUsers.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center">
-          <p className="text-gray-600">No users found matching your filters</p>
-        </div>
+        <AdminLoadingState label="Loading users..." />
+      ) : error ? (
+        <AdminErrorState description={error} onAction={retry} />
+      ) : users.length === 0 ? (
+        <AdminEmptyState description="No users found matching your filters." />
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -173,28 +214,28 @@ export default function UsersManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   User
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Role
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Joined
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Orders
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-Sofia font-bold text-gray-700">
+                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                   Actions
                 </th>
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user, index) => (
+              {users.map((user, index) => (
                 <motion.tr
                   key={user.id}
                   initial={{ opacity: 0 }}
@@ -261,9 +302,12 @@ export default function UsersManagement() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-sm text-gray-600"
+        className="text-sm text-gray-600 flex items-center justify-between gap-3"
       >
-        Showing {filteredUsers.length} of {users.length} users
+        <span>
+          Showing {users.length} users on page {page} of {totalPages}
+        </span>
+        <AdminPaginator page={page} totalPages={totalPages} onPageChange={setPage} />
       </motion.div>
     </div>
   );

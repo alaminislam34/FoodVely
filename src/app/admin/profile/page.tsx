@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { Camera, Save, Lock, AlertCircle, CheckCircle } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
 
 export default function AdminProfile() {
   const [profile, setProfile] = useState({
@@ -19,6 +22,25 @@ export default function AdminProfile() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
+  useEffect(() => {
+    adminApi
+      .getAdminProfile()
+      .then((data) => {
+        const mapped = {
+          name: String(data.name ?? "Admin User"),
+          email: String(data.email ?? "admin@foodvely.com"),
+          phone: String(data.phone ?? "+1-555-0123"),
+          role: String(data.role ?? "Admin"),
+          department: String(data.department ?? "Management"),
+          joinDate: String(data.joinDate ?? data.createdAt ?? "2023-01-15"),
+          bio: String(data.bio ?? "Platform administrator."),
+        };
+        setProfile(mapped);
+        setFormData(mapped);
+      })
+      .catch((error) => console.error("Failed to load admin profile", error));
+  }, []);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -31,11 +53,21 @@ export default function AdminProfile() {
 
   const handleSave = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setProfile(formData);
-    setSaveSuccess(true);
-    setIsSaving(false);
+    try {
+      await adminApi.updateAdminProfile({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        bio: formData.bio,
+      });
+      setProfile(formData);
+      setSaveSuccess(true);
+      toast.success("Profile updated");
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Failed to update profile"));
+    } finally {
+      setIsSaving(false);
+    }
 
     setTimeout(() => setSaveSuccess(false), 3000);
   };
@@ -48,7 +80,7 @@ export default function AdminProfile() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-800 mb-2">
           Profile Settings
         </h1>
         <p className="text-gray-600">Manage your admin account information</p>
@@ -61,7 +93,7 @@ export default function AdminProfile() {
         transition={{ duration: 0.5, delay: 0.1 }}
         className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
       >
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-6">
+        <h2 className="text-xl  font-bold text-gray-800 mb-6">
           Profile Picture
         </h2>
 
@@ -69,7 +101,7 @@ export default function AdminProfile() {
           {/* Avatar */}
           <div className="relative">
             <div className="w-32 h-32 bg-linear-to-r from-rose-500 to-orange-500 rounded-full flex items-center justify-center text-white">
-              <span className="text-5xl font-Sofia font-bold">A</span>
+              <span className="text-5xl  font-bold">A</span>
             </div>
             <button className="absolute bottom-0 right-0 w-10 h-10 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center hover:bg-gray-50 transition-colors shadow-md">
               <Camera size={20} className="text-gray-600" />
@@ -98,7 +130,7 @@ export default function AdminProfile() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
       >
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-6">
+        <h2 className="text-xl  font-bold text-gray-800 mb-6">
           Personal Information
         </h2>
 
@@ -201,7 +233,7 @@ export default function AdminProfile() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
       >
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-6">
+        <h2 className="text-xl  font-bold text-gray-800 mb-6">
           Account Information
         </h2>
 
@@ -245,7 +277,7 @@ export default function AdminProfile() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8"
       >
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <h2 className="text-xl  font-bold text-gray-800 mb-6 flex items-center gap-2">
           <Lock size={20} />
           Security Settings
         </h2>
@@ -308,7 +340,7 @@ export default function AdminProfile() {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="bg-red-50 rounded-2xl border border-red-200 p-6 md:p-8"
       >
-        <h2 className="text-xl font-Sofia font-bold text-red-700 mb-6 flex items-center gap-2">
+        <h2 className="text-xl  font-bold text-red-700 mb-6 flex items-center gap-2">
           <AlertCircle size={20} />
           Danger Zone
         </h2>

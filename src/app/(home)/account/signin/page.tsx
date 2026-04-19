@@ -2,16 +2,14 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useAuth } from "../hooks/useAuth";
-import { FcGoogle } from "react-icons/fc";
-import axios from "axios";
-
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000/api/v1";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
+import { GoogleLoginButton } from "@/components/Auth/GoogleLoginButton";
+import { getStoredUser } from "@/services/authService";
+import { getRedirectPathByRole } from "@/utils/authRedirect";
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -25,7 +23,8 @@ const itemVariants = {
 
 export default function SignIn() {
   const router = useRouter();
-  const { login, verifyOtp, isLoading } = useAuth();
+  const searchParams = useSearchParams();
+  const { loginRequest, loginVerify, isLoading, isAuthenticated, user } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +34,26 @@ export default function SignIn() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {},
   );
+
+  const safeNextPath = (value: string | null) => {
+    if (!value) return null;
+    if (!value.startsWith("/")) return null;
+    if (value.startsWith("//")) return null;
+    return value;
+  };
+
+  useEffect(() => {
+    const rememberedEmail = window.localStorage.getItem("remembered_signin_email");
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+
+    const returnTo = safeNextPath(searchParams.get("next"));
+    if (isAuthenticated) {
+      router.replace(returnTo || getRedirectPathByRole(user?.role));
+    }
+  }, [isAuthenticated, router, searchParams, user?.role]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string } = {};
@@ -63,36 +82,20 @@ export default function SignIn() {
     const loadingToast = toast.loading("Sending OTP to your email...");
 
     try {
-      const result: any = await login({ email, password });
-      toast.dismiss(loadingToast);
-      toast.success(result.data.message || "Logged in successfully.");
-      setTimeout(() => router.push("/"), 1000);
-    } catch (err: any) {
-      toast.dismiss(loadingToast);
-      toast.error(err?.message);
-      console.error(err);
-    }
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      if (!email || !password) {
-        toast.error("Please fill in all fields");
-        return;
+      if (rememberMe) {
+        window.localStorage.setItem("remembered_signin_email", email);
+      } else {
+        window.localStorage.removeItem("remembered_signin_email");
       }
 
-      const res = await axios.post(
-        `${BASE_URL}/auth/login`,
-        { email, password },
-        { withCredentials: true },
-      );
-      toast.success(res.data.message || "Login successful!");
-      setTimeout(() => router.push("/"), 1000);
-    } catch (error) {
-      console.log(error);
-      toast.error("Login failed. Please try again.");
+      await loginRequest(email, password);
+      toast.dismiss(loadingToast);
+      toast.success("OTP sent successfully.");
+      setStep("otp");
+    } catch (err: any) {
+      toast.dismiss(loadingToast);
+      toast.error(err?.message || "Login failed. Please try again.");
+      console.error(err);
     }
   };
 
@@ -107,10 +110,13 @@ export default function SignIn() {
     const loadingToast = toast.loading("Verifying OTP...");
 
     try {
-      await verifyOtp({ email, otp });
+      await loginVerify(email, otp);
       toast.dismiss(loadingToast);
       toast.success("Login successful!");
-      setTimeout(() => router.push("/"), 1000);
+      const returnTo = safeNextPath(searchParams.get("next"));
+      const storedUser = getStoredUser();
+      const redirectPath = returnTo || getRedirectPathByRole(storedUser?.role ?? user?.role);
+      setTimeout(() => router.push(redirectPath), 500);
     } catch (err) {
       toast.dismiss(loadingToast);
       toast.error("Invalid OTP. Try again.");
@@ -188,10 +194,10 @@ export default function SignIn() {
 
               <button
                 type="button"
-                onClick={() => setStep("credentials")}
+                onClick={() => router.push("/contact")}
                 className="w-full text-rose-500 font-Sofia font-semibold hover:underline"
               >
-                Back to Login
+                Need help?
               </button>
             </form>
           </motion.div>
@@ -236,7 +242,7 @@ export default function SignIn() {
           </div>
 
           {/* Sign In Form */}
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignIn} className="space-y-6">
             {/* Email Field */}
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="block text-sm  font-semibold text-gray-800">
@@ -318,12 +324,12 @@ export default function SignIn() {
                 />
                 <span className="text-sm text-gray-600 ">Remember me</span>
               </label>
-              <button
-                onClick={() => setStep("credentials")}
-                className="text-sm text-rose-500 hover:text-rose-600  font-semibold transition-colors"
+              <Link
+                href="/contact"
+                className="text-sm text-rose-500 hover:text-rose-600 font-semibold transition-colors"
               >
-                Forgot password?
-              </button>
+                Need help?
+              </Link>
             </motion.div>
 
             {/* Sign In Button */}
@@ -363,14 +369,13 @@ export default function SignIn() {
           {/* Social Login */}
           <motion.div variants={itemVariants} className="space-y-3">
             <p className="text-center text-sm text-gray-600 ">Or</p>
-            <div>
-              <button className="py-2 w-full px-4 rounded-2xl bg-white/50 border border-gray-200 hover:bg-white transition-all flex items-center justify-center gap-2 ">
-                <FcGoogle className="text-xl" />
-                <span className="text-sm font-semibold">
-                  Continue with Google
-                </span>
-              </button>
-            </div>
+            <GoogleLoginButton
+              onSuccess={() => {
+                const returnTo = safeNextPath(searchParams.get("next"));
+                const storedUser = getStoredUser();
+                router.replace(returnTo || getRedirectPathByRole(storedUser?.role ?? user?.role));
+              }}
+            />
           </motion.div>
         </motion.div>
 

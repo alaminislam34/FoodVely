@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Plus,
@@ -17,6 +17,11 @@ import {
   Save,
   AlertCircle,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
 
 interface Banner {
   id: string;
@@ -31,30 +36,12 @@ interface Banner {
 }
 
 export default function BannersManagement() {
-  const [banners, setBanners] = useState<Banner[]>([
-    {
-      id: "BN-001",
-      title: "Summer Mega Sale",
-      description: "Get up to 50% off on all orders",
-      image: "",
-      position: "top",
-      status: "active",
-      startDate: "2024-01-20",
-      endDate: "2024-02-20",
-      clicks: 2450,
-    },
-    {
-      id: "BN-002",
-      title: "New Restaurants",
-      description: "Discover amazing new dining options",
-      image: "",
-      position: "middle",
-      status: "active",
-      startDate: "2024-01-15",
-      endDate: "2024-03-15",
-      clicks: 1820,
-    },
-  ]);
+  const [banners, setBanners] = useState<Banner[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   const [selectedId, setSelectedId] = useState<string | null>(
     banners[0]?.id || null,
@@ -62,25 +49,88 @@ export default function BannersManagement() {
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
 
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const { items, meta } = await adminApi.listBannersPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+        });
+
+        const mapped: Banner[] = items.map((item, index) => ({
+          id: String(item.id ?? `BN-${index + 1}`),
+          title: String(item.title ?? "Banner"),
+          description: String(item.description ?? ""),
+          image: String(item.imageUrl ?? item.image ?? ""),
+          position: (String(item.position ?? "top") as Banner["position"]),
+          status: (String(item.status ?? "inactive") as Banner["status"]),
+          startDate: String(item.startDate ?? item.startsAt ?? ""),
+          endDate: String(item.endDate ?? item.endsAt ?? ""),
+          clicks: Number(item.clicks ?? 0),
+        }));
+
+        setBanners(mapped);
+        setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+        setSelectedId((prev) =>
+          mapped.some((banner) => banner.id === prev)
+            ? prev
+            : (mapped[0]?.id ?? null),
+        );
+      } catch (fetchError) {
+        setError(getApiErrorMessage(fetchError, "Failed to load banners"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, [currentPage]);
+
   const currentBanner = useMemo(
     () => banners.find((b) => b.id === selectedId),
     [banners, selectedId],
   );
 
-  const handleToggleStatus = (id: string) => {
-    setBanners((prev) =>
-      prev.map((b) =>
-        b.id === id
-          ? { ...b, status: b.status === "active" ? "inactive" : "active" }
-          : b,
+  const handleToggleStatus = async (id: string) => {
+    const prev = banners;
+    const target = prev.find((banner) => banner.id === id);
+    if (!target) return;
+
+    const nextStatus = target.status === "active" ? "inactive" : "active";
+    setBanners((current) =>
+      current.map((banner) =>
+        banner.id === id ? { ...banner, status: nextStatus } : banner,
       ),
     );
+
+    try {
+      if (nextStatus === "active") {
+        await adminApi.activateBanner(id);
+      } else {
+        await adminApi.deactivateBanner(id);
+      }
+      toast.success(`Banner ${nextStatus === "active" ? "activated" : "deactivated"}`);
+    } catch (error) {
+      setBanners(prev);
+      toast.error(getApiErrorMessage(error, "Failed to update banner status"));
+    }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Delete this banner?")) {
-      setBanners((prev) => prev.filter((b) => b.id !== id));
-      setSelectedId(null);
+      const prev = banners;
+      setBanners((current) => current.filter((b) => b.id !== id));
+      if (selectedId === id) setSelectedId(null);
+      try {
+        await adminApi.deleteBanner(id);
+        toast.success("Banner deleted");
+      } catch (error) {
+        setBanners(prev);
+        toast.error(getApiErrorMessage(error, "Failed to delete banner"));
+      }
     }
   };
 
@@ -93,7 +143,7 @@ export default function BannersManagement() {
         className="flex justify-between items-end"
       >
         <div>
-          <h1 className="text-3xl font-Sofia font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Website Banners
           </h1>
           <p className="text-gray-500 font-medium">
@@ -115,11 +165,12 @@ export default function BannersManagement() {
         {/* Left Column: List */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-white/60 backdrop-blur-md rounded-3xl border border-gray-200 overflow-hidden h-150 overflow-y-auto custom-scrollbar shadow-sm">
-            {banners.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400 p-6 text-center">
-                <ImageIcon size={40} className="mb-2 opacity-20" />
-                <p className="text-sm font-medium">No banners found.</p>
-              </div>
+            {loading ? (
+              <AdminLoadingState label="Loading banners..." />
+            ) : error ? (
+              <AdminErrorState description={error} />
+            ) : banners.length === 0 ? (
+              <AdminEmptyState title="No banners found" description="Create a new banner to get started." />
             ) : (
               <AnimatePresence mode="popLayout">
                 {banners.map((banner) => (
@@ -172,6 +223,13 @@ export default function BannersManagement() {
                 ))}
               </AnimatePresence>
             )}
+          </div>
+          <div className="flex justify-end">
+            <AdminPaginator
+              page={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
 

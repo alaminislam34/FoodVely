@@ -6,36 +6,119 @@ import {
   Search,
   Star,
   ShoppingBag,
-  Clock,
   CheckCircle2,
-  MoreVertical,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
   User,
-  MapPin,
   ExternalLink,
-  Package,
   Trophy,
   TrendingUp,
   MessageSquare,
-  Medal,
 } from "lucide-react";
 import { Provider } from "@/types/provider";
+import { adminApi } from "@/api/adminApi";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 export default function BestSellersPage() {
   const [restaurants, setRestaurants] = useState<Provider[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState("all");
-  const [ratingFilter, setRatingFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRestaurants, setTotalRestaurants] = useState(0);
   const itemsPerPage = 10;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
   useEffect(() => {
-    fetch("/Restaurants.json")
-      .then((res) => res.json())
-      .then((data) => setRestaurants(data));
-  }, []);
+    setCurrentPage(1);
+  }, [debouncedSearch, statusFilter]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const { items, meta } = await adminApi.listBestSellerRestaurantsPaged({
+          page: currentPage,
+          limit: itemsPerPage,
+          search: debouncedSearch || undefined,
+          isActive:
+            statusFilter === "all"
+              ? undefined
+              : statusFilter === "true",
+        });
+
+        const mapped = items.map((item) => ({
+          id: String(item.id ?? ""),
+          name: String(item.name ?? "Restaurant"),
+          slug: String(item.slug ?? ""),
+          description: String(item.description ?? ""),
+          owner: (item.owner as Provider["owner"] | undefined) ?? {
+            name: "Unknown Owner",
+            phone: "",
+            email: "",
+          },
+          location: (item.location as Provider["location"] | undefined) ?? {
+            address: "",
+            city: "Unknown",
+            lat: 0,
+            lng: 0,
+          },
+          categories: (item.categories as string[] | undefined) ?? [],
+          images: (item.images as Provider["images"] | undefined) ?? {
+            logo: "",
+            cover: "",
+          },
+          rating: (item.rating as Provider["rating"] | undefined) ?? {
+            average: 0,
+            totalReviews: 0,
+          },
+          delivery: (item.delivery as Provider["delivery"] | undefined) ?? {
+            isAvailable: false,
+            deliveryTime: "",
+            deliveryFee: 0,
+            minimumOrder: 0,
+          },
+          openingHours:
+            (item.openingHours as Provider["openingHours"] | undefined) ?? {
+              open: "",
+              close: "",
+              isOpenNow: false,
+            },
+          status: (item.status as Provider["status"] | undefined) ?? {
+            isVerified: false,
+            isActive: false,
+            isSuspended: false,
+          },
+          stats: (item.stats as Provider["stats"] | undefined) ?? {
+            totalFoods: 0,
+            totalOrders: 0,
+          },
+          createdAt: String(item.createdAt ?? ""),
+          updatedAt: String(item.updatedAt ?? ""),
+        })) as Provider[];
+
+        setRestaurants(mapped);
+        setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+        setTotalRestaurants(meta?.total ?? mapped.length);
+      } catch (fetchError) {
+        setError(getApiErrorMessage(fetchError, "Failed to load top restaurants"));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, [currentPage, debouncedSearch, itemsPerPage, reloadKey, statusFilter]);
 
   // --- TOP 5 LOGIC ---
   const rankings = useMemo(() => {
@@ -67,29 +150,6 @@ export default function BestSellersPage() {
     return { topRated, topSellers, topReviewed, maxOrders };
   }, [restaurants]);
 
-  const filteredRestaurants = restaurants.filter((item) => {
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.owner.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all"
-        ? true
-        : item.status.isActive.toString() === statusFilter;
-    const matchesRating =
-      ratingFilter === "all"
-        ? true
-        : item.rating.average >= parseFloat(ratingFilter);
-
-    return matchesSearch && matchesStatus && matchesRating;
-  });
-
-  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredRestaurants.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
-
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen">
       {/* Header */}
@@ -99,11 +159,11 @@ export default function BestSellersPage() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-700">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-700">
             Top Restaurants
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Analyzing the performance of your top {restaurants.length}{" "}
+            Analyzing the performance of your top {totalRestaurants}{" "}
             restaurant partners.
           </p>
         </div>
@@ -114,7 +174,7 @@ export default function BestSellersPage() {
         {[
           {
             label: "Total Partners",
-            value: restaurants.length,
+            value: totalRestaurants,
             color: "text-blue-600",
             icon: User,
           },
@@ -146,7 +206,7 @@ export default function BestSellersPage() {
             transition={{ delay: i * 0.1 }}
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-6 shadow-lg backdrop-blur-xl"
           >
-            <p className={`text-2xl font-bold font-Sofia ${stat.color}`}>
+            <p className={`text-2xl font-bold ${stat.color}`}>
               {stat.value}
             </p>
             <p className="text-sm font-medium text-gray-500">{stat.label}</p>
@@ -168,8 +228,8 @@ export default function BestSellersPage() {
           <input
             type="text"
             placeholder="Search leaders..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white/60 focus:ring-4 focus:ring-rose-500/10 outline-none transition-all"
           />
         </div>
@@ -188,6 +248,16 @@ export default function BestSellersPage() {
 
       {/* Table Section */}
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden">
+        {loading ? (
+          <AdminLoadingState label="Loading top restaurants..." />
+        ) : error ? (
+          <AdminErrorState
+            description={error}
+            onAction={retry}
+          />
+        ) : restaurants.length === 0 ? (
+          <AdminEmptyState title="No top restaurants found" description="Try adjusting the filters." />
+        ) : null}
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
@@ -211,7 +281,7 @@ export default function BestSellersPage() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               <AnimatePresence mode="popLayout">
-                {paginatedData.map((item, idx) => {
+                {restaurants.map((item, idx) => {
                   const sellerRank = rankings.topSellers.find(
                     (r) => r.id === item.id,
                   );
@@ -335,22 +405,7 @@ export default function BestSellersPage() {
           <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
             Page {currentPage} of {totalPages}
           </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="p-2 rounded-xl border border-gray-200 bg-white disabled:opacity-20 hover:border-rose-300 transition-colors"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-xl border border-gray-200 bg-white disabled:opacity-20 hover:border-rose-300 transition-colors"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
+          <AdminPaginator page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
       </div>
     </div>

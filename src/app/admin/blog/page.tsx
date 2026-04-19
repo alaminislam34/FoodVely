@@ -14,10 +14,15 @@ import {
   Image as ImageIcon,
   Video,
   X,
-  Loader2,
   Link as LinkIcon,
   FileText,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 interface Blog {
   id: string;
@@ -38,29 +43,76 @@ interface Blog {
 export default function BlogManage() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page: currentPage,
+    setPage: setCurrentPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
 
   // State for Form/Editor
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [editingBlog, setEditingBlog] = useState<Partial<Blog> | null>(null);
 
+  const loadBlogs = async () => {
+    setLoading(true);
+    try {
+      setError(null);
+      const { items, meta } = await adminApi.listBlogPostsPaged({
+        page: currentPage,
+        limit: itemsPerPage,
+        search: debouncedSearch || undefined,
+      });
+
+      const mapped: Blog[] = items.map((item) => ({
+        id: String(item.id ?? ""),
+        title: String(item.title ?? "Untitled"),
+        slug: String(item.slug ?? ""),
+        excerpt: String(item.excerpt ?? item.summary ?? ""),
+        content: String(item.content ?? ""),
+        thumbnail: String(item.thumbnail ?? item.imageUrl ?? ""),
+        blog_video: String(item.blog_video ?? item.videoUrl ?? ""),
+        category: {
+          id: String((item.category as { id?: string } | undefined)?.id ?? "general"),
+          name: String((item.category as { name?: string } | undefined)?.name ?? "General"),
+          slug: String((item.category as { slug?: string } | undefined)?.slug ?? "general"),
+        },
+        author: {
+          id: String((item.author as { id?: string } | undefined)?.id ?? "admin"),
+          name: String((item.author as { name?: string } | undefined)?.name ?? "Admin"),
+          role: String((item.author as { role?: string } | undefined)?.role ?? "admin"),
+        },
+        publishedAt: String(item.publishedAt ?? new Date().toISOString()),
+        readingTime: String(item.readingTime ?? "5 min read"),
+        tags: ((item.tags as string[] | undefined) ?? []) as string[],
+        status: (String(item.status ?? "draft") as "published" | "draft"),
+      }));
+      setBlogs(mapped);
+      setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
+      setSelectedId((prev) =>
+        mapped.some((blog) => blog.id === prev) ? prev : (mapped[0]?.id ?? null),
+      );
+    } catch (loadError) {
+      setError(getApiErrorMessage(loadError, "Failed to load blog posts"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("/blogs.json");
-        const data = await response.json();
-        setBlogs(data);
-        if (data.length > 0) setSelectedId(data[0].id);
-      } catch (error) {
-        console.error("Error loading blogs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBlogs();
-  }, []);
+    loadBlogs();
+  }, [currentPage, debouncedSearch, reloadKey]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch]);
 
   // Helpers
   const generateSlug = (title: string) =>
@@ -73,14 +125,6 @@ export default function BlogManage() {
     () => blogs.find((b) => b.id === selectedId),
     [blogs, selectedId],
   );
-
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter(
-      (blog) =>
-        blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        blog.category.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [blogs, searchQuery]);
 
   const handleCreateNew = () => {
     setEditingBlog({
@@ -105,7 +149,7 @@ export default function BlogManage() {
     setIsEditorOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editingBlog || !editingBlog.title) return;
 
     const finalBlog = {
@@ -113,37 +157,55 @@ export default function BlogManage() {
       slug: editingBlog.slug || generateSlug(editingBlog.title),
     } as Blog;
 
-    const exists = blogs.find((b) => b.id === finalBlog.id);
-    if (exists) {
-      setBlogs(blogs.map((b) => (b.id === finalBlog.id ? finalBlog : b)));
-    } else {
-      setBlogs([finalBlog, ...blogs]);
+    const payload = {
+      title: finalBlog.title,
+      slug: finalBlog.slug,
+      summary: finalBlog.excerpt,
+      content: finalBlog.content,
+      status: finalBlog.status,
+      imageUrl: finalBlog.thumbnail,
+      videoUrl: finalBlog.blog_video,
+      readingTime: finalBlog.readingTime,
+      tags: finalBlog.tags,
+      category: finalBlog.category,
+    };
+
+    try {
+      const exists = blogs.find((b) => b.id === finalBlog.id);
+      if (exists) {
+        await adminApi.updateBlogPost(finalBlog.id, payload);
+        toast.success("Blog post updated");
+      } else {
+        await adminApi.createBlogPost(payload);
+        toast.success("Blog post created");
+      }
+      await loadBlogs();
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Failed to save blog post"));
     }
+
     setIsEditorOpen(false);
-    setSelectedId(finalBlog.id);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure? This action cannot be undone.")) {
-      const remaining = blogs.filter((b) => b.id !== id);
-      setBlogs(remaining);
-      setSelectedId(remaining[0]?.id || null);
+      try {
+        await adminApi.deleteBlogPost(id);
+        const remaining = blogs.filter((b) => b.id !== id);
+        setBlogs(remaining);
+        setSelectedId(remaining[0]?.id || null);
+        toast.success("Blog post deleted");
+      } catch (error) {
+        toast.error(getApiErrorMessage(error, "Failed to delete blog post"));
+      }
     }
   };
-
-  if (loading)
-    return (
-      <div className="h-[70vh] flex flex-col items-center justify-center gap-4 text-rose-500 font-bold font-Sofia">
-        <Loader2 className="animate-spin" size={40} />
-        Loading Admin Dashboard...
-      </div>
-    );
 
   return (
     <div className="relative space-y-6 lg:space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-Sofia font-bold text-gray-800 tracking-tight">
+          <h1 className="text-3xl  font-bold text-gray-800 tracking-tight">
             Admin Editorial
           </h1>
           <p className="text-gray-500 font-medium">
@@ -168,14 +230,25 @@ export default function BlogManage() {
             <input
               type="text"
               placeholder="Filter articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="w-full pl-12 pr-4 py-4 bg-white border border-gray-200 rounded-2xl outline-none focus:ring-4 focus:ring-rose-500/10 font-medium"
             />
           </div>
 
           <div className="bg-white/60 border border-gray-200 rounded-3xl h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
-            {filteredBlogs.map((blog) => (
+            {loading ? <AdminLoadingState label="Loading blog posts..." /> : null}
+            {error ? (
+              <AdminErrorState
+                description={error}
+                onAction={retry}
+              />
+            ) : null}
+            {!loading && !error && blogs.length === 0 ? (
+              <AdminEmptyState title="No blog posts found" description="Create a new article or adjust search query." />
+            ) : null}
+
+            {blogs.map((blog) => (
               <button
                 key={blog.id}
                 onClick={() => setSelectedId(blog.id)}
@@ -200,6 +273,13 @@ export default function BlogManage() {
                 </div>
               </button>
             ))}
+          </div>
+          <div className="flex justify-end">
+            <AdminPaginator
+              page={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </div>
 
@@ -443,7 +523,7 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-100 bg-white rounded-3xl border-2 border-dashed border-gray-100 text-gray-300">
       <FileText size={80} strokeWidth={1} className="mb-4 opacity-10" />
-      <p className="font-Sofia font-bold text-xl">Article Viewer</p>
+      <p className=" font-bold text-xl">Article Viewer</p>
       <p className="text-sm font-medium text-gray-400">
         Select an article to preview or edit.
       </p>

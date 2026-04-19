@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import * as authService from "@/services/authService";
+import { mergeGuestCommerceToUser } from "@/utils/commerceStorage";
 
 interface AuthError {
   message: string;
@@ -26,6 +27,35 @@ export interface UseAuthReturn {
 }
 
 export function useAuth(): UseAuthReturn {
+  const decodeUserFromToken = useCallback(
+    (token: string): authService.UserData | null => {
+      try {
+        const payload = token.split(".")[1];
+        if (!payload) return null;
+
+        const decoded = JSON.parse(atob(payload)) as {
+          sub?: string;
+          id?: string;
+          name?: string;
+          email?: string;
+          role?: string;
+          status?: string;
+        };
+
+        return {
+          id: String(decoded.sub ?? decoded.id ?? ""),
+          name: String(decoded.name ?? "User"),
+          email: String(decoded.email ?? ""),
+          role: String(decoded.role ?? "CUSTOMER"),
+          status: String(decoded.status ?? "active"),
+        };
+      } catch {
+        return null;
+      }
+    },
+    [],
+  );
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
   const [user, setUser] = useState<authService.UserData | null>(
@@ -105,6 +135,14 @@ export function useAuth(): UseAuthReturn {
           response.data.accessToken,
           response.data.refreshToken,
         );
+        const decodedUser = decodeUserFromToken(response.data.accessToken);
+        if (decodedUser) {
+          authService.storeUser(decodedUser);
+          if (decodedUser.id) {
+            mergeGuestCommerceToUser(String(decodedUser.id));
+          }
+          setUser(decodedUser);
+        }
         setIsAuthenticated(true);
       }
     } catch (err) {
@@ -115,7 +153,7 @@ export function useAuth(): UseAuthReturn {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [decodeUserFromToken]);
 
   const googleLogin = useCallback(async (token: string) => {
     setIsLoading(true);
@@ -127,6 +165,14 @@ export function useAuth(): UseAuthReturn {
           response.data.accessToken,
           response.data.refreshToken,
         );
+        const decodedUser = decodeUserFromToken(response.data.accessToken);
+        if (decodedUser) {
+          authService.storeUser(decodedUser);
+          if (decodedUser.id) {
+            mergeGuestCommerceToUser(String(decodedUser.id));
+          }
+          setUser(decodedUser);
+        }
         setIsAuthenticated(true);
       }
     } catch (err) {
@@ -137,7 +183,7 @@ export function useAuth(): UseAuthReturn {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [decodeUserFromToken]);
 
   const logout = useCallback(() => {
     authService.clearTokens();
@@ -149,11 +195,22 @@ export function useAuth(): UseAuthReturn {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
+      const storedUser = authService.getStoredUser();
+      if (storedUser) {
+        setUser(storedUser);
+      } else {
+        const decodedUser = decodeUserFromToken(token);
+        if (decodedUser) {
+          authService.storeUser(decodedUser);
+          setUser(decodedUser);
+        }
+      }
       setIsAuthenticated(true);
     } else {
+      setUser(null);
       setIsAuthenticated(false);
     }
-  }, []);
+  }, [decodeUserFromToken]);
 
   return {
     isLoading,

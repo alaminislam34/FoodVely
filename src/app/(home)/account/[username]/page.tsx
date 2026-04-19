@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import CustomerProfileSkeleton from "./components/Skeleton";
+import { useAuthContext } from "@/context/AuthContext";
+import { usePathname, useRouter } from "next/navigation";
 
 // --- TYPES ---
 
@@ -39,7 +41,17 @@ const SectionHeader = ({ title, icon }: SectionHeaderProps) => (
 );
 
 export default function CustomerProfilePage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.replace(`/account/signin?next=${encodeURIComponent(pathname)}`);
+    }
+  }, [authLoading, isAuthenticated, pathname, router]);
+
   useEffect(() => {
     setLoading(true);
     setTimeout(() => {
@@ -47,9 +59,12 @@ export default function CustomerProfilePage() {
     }, 1000);
   }, []);
 
-  if (loading) {
+  if (authLoading || loading) {
     return <CustomerProfileSkeleton />;
   }
+
+  if (!isAuthenticated) return null;
+
   return (
     <div className="min-h-screen">
       {/* --- TOP COVER & PROFILE HEADER --- */}

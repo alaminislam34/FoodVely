@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Swal from "sweetalert2";
 import {
@@ -18,6 +18,11 @@ import {
   ThumbsDown,
   History,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import { getApiErrorMessage } from "@/utils/apiError";
+import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import { AdminPaginator } from "@/components/admin/AdminPaginator";
+import { useAdminListControls } from "@/hooks/useAdminListControls";
 
 interface Report {
   id: string;
@@ -57,25 +62,89 @@ export default function ReportsManagement() {
   const [reports, setReports] = useState<Report[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(1);
+  const limit = 20;
+  const {
+    searchInput,
+    setSearchInput,
+    debouncedSearch,
+    page,
+    setPage,
+    reloadKey,
+    retry,
+  } = useAdminListControls({ debounceMs: 450 });
+
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, filterStatus]);
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await fetch("/reports.json");
-        const data = await res.json();
-        setReports(data);
-        if (data.length > 0) setSelectedId(data[0].id);
+        setIsLoading(true);
+        setError(null);
+        const { items, meta } = await adminApi.listReportsPaged({
+          page,
+          limit,
+          search: debouncedSearch || undefined,
+          status: filterStatus !== "all" ? filterStatus : undefined,
+        });
+        const mapped: Report[] = items.map((item) => ({
+          id: String(item.id ?? ""),
+          reportedBy: {
+            role: String(
+              (item.reportedBy as { role?: string } | undefined)?.role ??
+                "customer",
+            ),
+            id: String((item.reportedBy as { id?: string } | undefined)?.id ?? ""),
+            name: String(
+              (item.reportedBy as { name?: string } | undefined)?.name ??
+                "Unknown",
+            ),
+            avatar: String(
+              (item.reportedBy as { avatar?: string } | undefined)?.avatar ?? "",
+            ),
+            logo: String(
+              (item.reportedBy as { logo?: string } | undefined)?.logo ?? "",
+            ),
+          },
+          target: {
+            type: ((item.target as { type?: "product" | "restaurant" | "customer" } | undefined)?.type ??
+              "product") as "product" | "restaurant" | "customer",
+            product: (item.target as { product?: Report["target"]["product"] } | undefined)?.product,
+            restaurant: (item.target as { restaurant?: Report["target"]["restaurant"] } | undefined)?.restaurant,
+            customer: (item.target as { customer?: Report["target"]["customer"] } | undefined)?.customer,
+          },
+          issue: {
+            type: String((item.issue as { type?: string } | undefined)?.type ?? "report"),
+            reason: String((item.issue as { reason?: string } | undefined)?.reason ?? "No reason provided"),
+            tags: ((item.issue as { tags?: string[] } | undefined)?.tags ?? []) as string[],
+          },
+          evidence: (item.evidence as Report["evidence"] | undefined) ?? {},
+          status: {
+            current: ((item.status as { current?: Report["status"]["current"] } | undefined)
+              ?.current ?? "pending") as Report["status"]["current"],
+            action: (item.status as { action?: string } | undefined)?.action,
+            adminNote: (item.status as { adminNote?: string } | undefined)?.adminNote,
+            isResolved: Boolean((item.status as { isResolved?: boolean } | undefined)?.isResolved ?? false),
+          },
+          createdAt: String(item.createdAt ?? new Date().toISOString()),
+          updatedAt: String(item.updatedAt ?? new Date().toISOString()),
+        }));
+        setReports(mapped);
+        setTotalPages(Number(meta?.totalPages ?? 1));
+        if (mapped.length > 0) setSelectedId(mapped[0].id);
       } catch (error) {
-        console.error("Error loading reports:", error);
+        setError(getApiErrorMessage(error, "Error loading reports"));
       } finally {
         setIsLoading(false);
       }
     };
     fetchReports();
-  }, []);
+  }, [debouncedSearch, filterStatus, page, reloadKey]);
 
   // --- Handlers using SweetAlert2 ---
 
@@ -85,7 +154,7 @@ export default function ReportsManagement() {
     const actionText = isAccepting ? "Violation Confirmed" : "Report Rejected";
 
     const { value: adminNote } = await Swal.fire({
-      title: `<span class="font-Sofia">${title}</span>`,
+      title: `<span class="">${title}</span>`,
       input: "textarea",
       inputLabel: "Admin Resolution Notes",
       inputPlaceholder: "Enter the details/reason for this decision...",
@@ -107,33 +176,48 @@ export default function ReportsManagement() {
 
     if (adminNote) {
       setIsProcessing(true);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 800));
-
-      setReports((prev) =>
-        prev.map((r) =>
-          r.id === id
+      const prev = reports;
+      setReports((current) =>
+        current.map((report) =>
+          report.id === id
             ? {
-                ...r,
+                ...report,
                 status: {
                   current: "action_taken",
                   isResolved: true,
                   action: actionText,
-                  adminNote: adminNote,
+                  adminNote,
                 },
                 updatedAt: new Date().toISOString(),
               }
-            : r,
+            : report,
         ),
       );
 
-      setIsProcessing(false);
-      Swal.fire({
-        title: "Success!",
-        text: "The report has been processed.",
-        icon: "success",
-        confirmButtonColor: "#f43f5e",
-      });
+      try {
+        if (isAccepting) {
+          await adminApi.resolveReport(id, adminNote);
+        } else {
+          await adminApi.rejectReport(id, adminNote);
+        }
+
+        Swal.fire({
+          title: "Success!",
+          text: "The report has been processed.",
+          icon: "success",
+          confirmButtonColor: "#f43f5e",
+        });
+      } catch (error) {
+        setReports(prev);
+        Swal.fire({
+          title: "Failed",
+          text: getApiErrorMessage(error, "Could not process report"),
+          icon: "error",
+          confirmButtonColor: "#ef4444",
+        });
+      } finally {
+        setIsProcessing(false);
+      }
     }
   };
 
@@ -173,17 +257,7 @@ export default function ReportsManagement() {
   };
 
   // --- Filtering ---
-  const filteredReports = useMemo(() => {
-    return reports.filter((r) => {
-      const matchSearch =
-        r.reportedBy.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.issue.reason.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        r.id.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchStatus =
-        filterStatus === "all" || r.status.current === filterStatus;
-      return matchSearch && matchStatus;
-    });
-  }, [reports, searchQuery, filterStatus]);
+  const filteredReports = reports;
 
   const currentReport = reports.find((r) => r.id === selectedId);
 
@@ -227,8 +301,8 @@ export default function ReportsManagement() {
                 type="text"
                 placeholder="Search reports..."
                 className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 bg-white outline-none focus:ring-2 focus:ring-rose-500/20"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
             <select
@@ -245,13 +319,19 @@ export default function ReportsManagement() {
 
           <div className="bg-white rounded-3xl border border-gray-200 overflow-hidden h-150 overflow-y-auto shadow-sm p-2">
             {isLoading ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400">
-                <Loader2 className="animate-spin mb-2" />
+              <div className="p-3">
+                <AdminLoadingState label="Loading reports..." />
+              </div>
+            ) : error ? (
+              <div className="p-3">
+                <AdminErrorState
+                  description={error}
+                  onAction={retry}
+                />
               </div>
             ) : filteredReports.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-400 p-6 text-center">
-                <XCircle size={40} className="mb-2 opacity-20" />
-                <p>No reports found.</p>
+              <div className="p-3">
+                <AdminEmptyState description="No reports found." />
               </div>
             ) : (
               <AnimatePresence mode="popLayout">
@@ -285,6 +365,9 @@ export default function ReportsManagement() {
                 ))}
               </AnimatePresence>
             )}
+          </div>
+          <div className="flex items-center justify-end mt-2">
+            <AdminPaginator page={page} totalPages={totalPages} onPageChange={setPage} />
           </div>
         </div>
 

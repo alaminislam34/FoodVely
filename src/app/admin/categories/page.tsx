@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -14,6 +14,9 @@ import {
   Package,
   Layers,
 } from "lucide-react";
+import { adminApi } from "@/api/adminApi";
+import toast from "react-hot-toast";
+import { getApiErrorMessage } from "@/utils/apiError";
 
 // --- Types ---
 interface Category {
@@ -26,45 +29,6 @@ interface Category {
   revenue: string;
 }
 
-// --- Mock Data ---
-const initialCategories: Category[] = [
-  {
-    id: 1,
-    name: "Burgers",
-    slug: "burgers",
-    products: 156,
-    image: "🍔",
-    trending: true,
-    revenue: "12,450",
-  },
-  {
-    id: 2,
-    name: "Pizza",
-    slug: "pizza",
-    products: 98,
-    image: "🍕",
-    trending: true,
-    revenue: "18,900",
-  },
-  {
-    id: 3,
-    name: "Sushi",
-    slug: "sushi",
-    products: 67,
-    image: "🍣",
-    trending: false,
-    revenue: "9,200",
-  },
-  {
-    id: 4,
-    name: "Desserts",
-    slug: "desserts",
-    products: 112,
-    image: "🍰",
-    trending: true,
-    revenue: "7,600",
-  },
-];
 
 // --- Component: Add Category Form (Modal) ---
 const AddCategoryModal = ({
@@ -127,7 +91,7 @@ const AddCategoryModal = ({
           >
             <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden pointer-events-auto border border-gray-100">
               <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h2 className="text-xl font-Sofia font-bold text-gray-800">
+                <h2 className="text-xl  font-bold text-gray-800">
                   New Category
                 </h2>
                 <button
@@ -243,21 +207,68 @@ const AddCategoryModal = ({
 
 // --- Main Page Component ---
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    adminApi
+      .listCategories({ limit: 200 })
+      .then((data) => {
+        const mapped: Category[] = data.map((item, index) => ({
+          id: Number(item.id ?? index + 1),
+          name: String(item.title ?? item.name ?? "Category"),
+          slug: String(item.slug ?? "category"),
+          products: Number(item.products ?? item.productsCount ?? 0),
+          image: String(item.icon ?? "🍽️"),
+          trending: Boolean(item.trending ?? false),
+          revenue: String(item.revenue ?? "0"),
+        }));
+        setCategories(mapped);
+      })
+      .catch((error) => console.error("Failed to load categories", error));
+  }, []);
 
   const filteredCategories = categories.filter((cat) =>
     cat.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleAddCategory = (newCat: Category) => {
-    setCategories((prev) => [newCat, ...prev]);
+  const handleAddCategory = async (newCat: Category) => {
+    const optimistic = [newCat, ...categories];
+    setCategories(optimistic);
+    try {
+      const created = await adminApi.createCategory({
+        title: newCat.name,
+        slug: newCat.slug,
+        icon: newCat.image,
+        trending: newCat.trending,
+      });
+      const createdRecord = created as { id?: string | number };
+      setCategories((prev) => [
+        {
+          ...newCat,
+          id: Number(createdRecord.id ?? newCat.id),
+        },
+        ...prev.filter((item) => item.id !== newCat.id),
+      ]);
+      toast.success("Category created");
+    } catch (error) {
+      setCategories(categories);
+      toast.error(getApiErrorMessage(error, "Failed to create category"));
+    }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (confirm("Are you sure you want to delete this category?")) {
-      setCategories((prev) => prev.filter((c) => c.id !== id));
+      const prev = categories;
+      setCategories((current) => current.filter((c) => c.id !== id));
+      try {
+        await adminApi.deleteCategory(String(id));
+        toast.success("Category deleted");
+      } catch (error) {
+        setCategories(prev);
+        toast.error(getApiErrorMessage(error, "Failed to delete category"));
+      }
     }
   };
 
@@ -275,7 +286,7 @@ export default function CategoriesPage() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800 mb-2">
             Categories
           </h1>
           <p className="text-gray-500 font-medium">
@@ -328,7 +339,7 @@ export default function CategoriesPage() {
             >
               <stat.icon size={64} />
             </div>
-            <p className={`text-4xl font-bold font-Sofia ${stat.color} mb-1`}>
+            <p className={`text-4xl font-bold  ${stat.color} mb-1`}>
               {stat.value}
             </p>
             <p className="text-sm font-medium text-gray-600">{stat.label}</p>
@@ -385,7 +396,7 @@ export default function CategoriesPage() {
 
                   <div className="flex flex-col gap-2">
                     {/* Info */}
-                    <h3 className="font-Sofia font-bold text-gray-800 text-xl mb-1 group-hover:text-rose-600 transition-colors">
+                    <h3 className=" font-bold text-gray-800 text-xl mb-1 group-hover:text-rose-600 transition-colors">
                       {category.name}
                     </h3>
                     <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-6">

@@ -12,6 +12,18 @@ interface AuthResponse<T> {
   data: T;
 }
 
+const readErrorMessage = async (response: Response, fallback: string) => {
+  try {
+    const payload = (await response.json()) as
+      | { message?: string; error?: { message?: string } }
+      | undefined;
+
+    return payload?.message || payload?.error?.message || fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 export interface UserData {
   id: string;
   name: string;
@@ -41,7 +53,7 @@ export async function registerUser(
   });
 
   if (!response.ok) {
-    throw new Error('Registration failed');
+    throw new Error(await readErrorMessage(response, 'Registration failed'));
   }
 
   return response.json();
@@ -61,7 +73,7 @@ export async function verifyAccount(
   });
 
   if (!response.ok) {
-    throw new Error('Account verification failed');
+    throw new Error(await readErrorMessage(response, 'Account verification failed'));
   }
 
   return response.json();
@@ -81,7 +93,7 @@ export async function loginRequest(
   });
 
   if (!response.ok) {
-    throw new Error('Login request failed');
+    throw new Error(await readErrorMessage(response, 'Login request failed'));
   }
 
   return response.json();
@@ -101,7 +113,7 @@ export async function loginVerify(
   });
 
   if (!response.ok) {
-    throw new Error('Login verification failed');
+    throw new Error(await readErrorMessage(response, 'Login verification failed'));
   }
 
   return response.json();
@@ -120,7 +132,7 @@ export async function googleLogin(
   });
 
   if (!response.ok) {
-    throw new Error('Google login failed');
+    throw new Error(await readErrorMessage(response, 'Google login failed'));
   }
 
   return response.json();
