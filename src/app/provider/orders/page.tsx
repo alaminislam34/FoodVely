@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -14,8 +14,14 @@ import {
   ShoppingBag,
   ExternalLink,
   Loader2,
+  CheckCheck,
 } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { providerApi } from "@/api/providerApi";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { TableSkeleton } from "@/components/shared/TableSkeleton";
 
 // --- Updated Interface based on your JSON structure ---
 interface Order {
@@ -52,34 +58,144 @@ interface Order {
   };
 }
 
+const normalizeOrders = (items: Record<string, unknown>[]): Order[] => {
+  return items.map((item) => {
+    const user = (item.user as Record<string, unknown> | undefined) ?? {};
+    const pricing = (item.pricing as Record<string, unknown> | undefined) ?? {};
+    const payment = (item.payment as Record<string, unknown> | undefined) ?? {};
+    const delivery =
+      (item.delivery as Record<string, unknown> | undefined) ?? {};
+    const timestamps =
+      (item.timestamps as Record<string, unknown> | undefined) ?? {};
+    const rawItems = Array.isArray(item.items)
+      ? (item.items as Record<string, unknown>[])
+      : [];
+
+    return {
+      orderId: String(item.orderId ?? item.id ?? ""),
+      orderNumber: String(item.orderNumber ?? item.orderId ?? "N/A"),
+      user: {
+        name: String(user.name ?? "Unknown User"),
+        phone: String(user.phone ?? ""),
+        email: String(user.email ?? ""),
+      },
+      items: rawItems.map((row) => ({
+        foodId: String(row.foodId ?? row.productId ?? ""),
+        name: String(row.name ?? "Item"),
+        thumbnail: String(row.thumbnail ?? "/images/food.png"),
+        quantity: Number(row.quantity ?? 1),
+        totalPrice: Number(row.totalPrice ?? 0),
+      })),
+      pricing: {
+        totalAmount: Number(pricing.totalAmount ?? pricing.total ?? 0),
+        currency: String(pricing.currency ?? "BDT"),
+      },
+      payment: {
+        method: String(payment.method ?? "Unknown"),
+        status: String(payment.status ?? "pending"),
+      },
+      delivery: {
+        address: String(delivery.address ?? ""),
+        city: String(delivery.city ?? "N/A"),
+        estimatedTime: String(delivery.estimatedTime ?? "N/A"),
+      },
+      orderStatus: String(item.orderStatus ?? "pending"),
+      timestamps: {
+        orderedAt: String(
+          timestamps.orderedAt ?? item.createdAt ?? new Date().toISOString(),
+        ),
+      },
+    };
+  });
+};
+
 export default function OrderManage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // --- FETCHING LOGIC ---
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
+  const loadOrders = useCallback(
+    async (mode: "initial" | "refresh" = "initial") => {
+      if (mode === "initial") {
         setLoading(true);
-        const response = await fetch("/orders.json"); // Fetching from your public folder
-        const data = await response.json();
-        // Assuming your JSON might be an array or an object containing the array
-        const orderList = Array.isArray(data) ? data : [data];
-        setOrders(orderList);
-      } catch (error) {
-        console.error("Error loading orders:", error);
+      } else {
+        setIsRefreshing(true);
+      }
+
+      setError(null);
+
+      try {
+        const response = await providerApi.listOrders({ page: 1, limit: 200 });
+
+        if (response.items.length > 0) {
+          setOrders(
+            normalizeOrders(
+              response.items as unknown as Record<string, unknown>[],
+            ),
+          );
+          setUsingFallback(false);
+          return;
+        }
+
+        const fallbackResponse = await fetch("/orders.json");
+        const fallbackData = await fallbackResponse.json();
+        const orderList = Array.isArray(fallbackData)
+          ? fallbackData
+          : fallbackData.orders || [];
+
+        setOrders(normalizeOrders(orderList as Record<string, unknown>[]));
+        setUsingFallback(true);
+      } catch {
+        setError("Failed to load orders from API and fallback source.");
       } finally {
         setLoading(false);
+        setIsRefreshing(false);
       }
-    };
+    },
+    [],
+  );
 
-    fetchOrders();
-  }, []);
+  useEffect(() => {
+    loadOrders("initial");
+  }, [loadOrders]);
+
+  const markDelivered = async (order: Order) => {
+    if (order.orderStatus.toLowerCase() === "delivered") {
+      return;
+    }
+
+    setUpdatingOrderId(order.orderId);
+    const previousOrders = orders;
+
+    setOrders((prev) =>
+      prev.map((row) =>
+        row.orderId === order.orderId
+          ? { ...row, orderStatus: "delivered" }
+          : row,
+      ),
+    );
+
+    try {
+      await providerApi.updateOrderStatus(order.orderId, {
+        status: "delivered",
+      });
+      toast.success(`Order ${order.orderNumber} marked as delivered`);
+      await loadOrders("refresh");
+    } catch {
+      setOrders(previousOrders);
+      toast.error("Could not update order status.");
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
 
   const processedOrders = useMemo(() => {
     let result = [...orders];
@@ -135,14 +251,11 @@ export default function OrderManage() {
   ];
 
   if (loading) {
-    return (
-      <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-gray-400">
-        <Loader2 className="animate-spin text-rose-500" size={40} />
-        <p className="font-Sofia font-bold animate-pulse">
-          Loading FoodVally Orders...
-        </p>
-      </div>
-    );
+    return <TableSkeleton rows={6} columns={6} />;
+  }
+
+  if (error) {
+    return <ErrorState message={error} onRetry={() => loadOrders("initial")} />;
   }
 
   return (
@@ -158,6 +271,14 @@ export default function OrderManage() {
         <p className="text-gray-500 font-medium mt-1">
           Real-time order tracking for FoodVally Kitchen.
         </p>
+        {usingFallback ? (
+          <p className="text-xs text-amber-600 mt-2">
+            Running in fallback mode using local data.
+          </p>
+        ) : null}
+        {isRefreshing ? (
+          <p className="text-xs text-blue-600 mt-1">Syncing latest orders...</p>
+        ) : null}
       </motion.div>
 
       {/* Analytics Cards */}
@@ -316,9 +437,26 @@ export default function OrderManage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button className="p-2.5 hover:bg-rose-600 rounded-2xl text-gray-400 hover:text-white transition-all shadow-sm bg-white border border-gray-100 group-hover:scale-110">
-                        <Eye size={18} />
-                      </button>
+                      <div className="flex justify-end gap-2">
+                        <button className="p-2.5 hover:bg-rose-600 rounded-2xl text-gray-400 hover:text-white transition-all shadow-sm bg-white border border-gray-100 group-hover:scale-110">
+                          <Eye size={18} />
+                        </button>
+                        <button
+                          onClick={() => markDelivered(order)}
+                          disabled={
+                            updatingOrderId === order.orderId ||
+                            order.orderStatus.toLowerCase() === "delivered"
+                          }
+                          className="p-2.5 rounded-2xl text-gray-400 bg-white border border-gray-100 hover:bg-green-600 hover:text-white transition-all disabled:opacity-40"
+                          title="Mark delivered"
+                        >
+                          {updatingOrderId === order.orderId ? (
+                            <Loader2 size={18} className="animate-spin" />
+                          ) : (
+                            <CheckCheck size={18} />
+                          )}
+                        </button>
+                      </div>
                     </td>
                   </motion.tr>
                 ))}
@@ -358,6 +496,20 @@ export default function OrderManage() {
                   <ExternalLink size={16} />
                 </button>
               </div>
+              <button
+                onClick={() => markDelivered(order)}
+                disabled={
+                  updatingOrderId === order.orderId ||
+                  order.orderStatus.toLowerCase() === "delivered"
+                }
+                className="mt-3 w-full py-2 text-xs font-bold rounded-xl bg-green-50 text-green-700 disabled:opacity-40"
+              >
+                {updatingOrderId === order.orderId
+                  ? "Updating..."
+                  : order.orderStatus.toLowerCase() === "delivered"
+                    ? "Delivered"
+                    : "Mark Delivered"}
+              </button>
             </div>
           ))}
         </div>
@@ -444,6 +596,15 @@ export default function OrderManage() {
             </button>
           </div>
         </div>
+
+        {!loading && currentOrders.length === 0 ? (
+          <div className="p-6 border-t border-gray-100">
+            <EmptyState
+              title="No orders found"
+              description="Try changing filters or check again after a few minutes."
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   );

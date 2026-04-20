@@ -56,7 +56,7 @@ export default function AdminLayout({
         "/admin/profile",
         "/admin/analytics",
       ]),
-    []
+    [],
   );
 
   const userPermissionSet = useMemo(() => {
@@ -73,18 +73,18 @@ export default function AdminLayout({
           return "";
         })
         .filter(Boolean)
-        .map((permission) => String(permission).toUpperCase())
+        .map((permission) => String(permission).toUpperCase()),
     );
   }, [user]);
 
   const hasMenuPermission = (requiredPermissions?: string[]) => {
     if (!requiredPermissions || requiredPermissions.length === 0) return true;
 
-    const isAdminRole = String(user?.role ?? "").toUpperCase() === "ADMIN";
+    const isAdminRole = String(user?.role ?? "").toUpperCase() === "";
     if (isAdminRole && userPermissionSet.size === 0) return true;
 
     return requiredPermissions.some((permission) =>
-      userPermissionSet.has(permission.toUpperCase())
+      userPermissionSet.has(permission.toUpperCase()),
     );
   };
 
@@ -101,34 +101,6 @@ export default function AdminLayout({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setAuthReady(false);
-      router.replace("/account/signin");
-      return;
-    }
-
-    if (user?.role && String(user.role).toUpperCase() !== "ADMIN") {
-      logout();
-      setAuthReady(false);
-      router.replace("/account/signin");
-      return;
-    }
-
-    setAuthReady(true);
-  }, [isAuthenticated, logout, router, user?.role]);
-
-  if (!authReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="flex items-center gap-3 text-gray-600">
-          <Loader2 className="animate-spin text-rose-500" size={20} />
-          <span className="font-medium">Checking admin access...</span>
-        </div>
-      </div>
-    );
-  }
-
   const menuItems = [
     {
       label: "Dashboard",
@@ -141,44 +113,100 @@ export default function AdminLayout({
       label: "Users & Access",
       icon: Users,
       submenu: [
-        { label: "All Users", href: "/admin/users", permissions: ["USERS_VIEW"] },
-        { label: "User Roles", href: "/admin/user-roles", permissions: ["ROLES_VIEW"] },
-        { label: "Banned Users", href: "/admin/banned-users", permissions: ["USERS_VIEW"] },
-        { label: "Activity Log", href: "/admin/activity-log", permissions: ["ACTIVITY_LOG_VIEW"] },
+        {
+          label: "All Users",
+          href: "/admin/users",
+          permissions: ["USERS_VIEW"],
+        },
+        {
+          label: "User Roles",
+          href: "/admin/user-roles",
+          permissions: ["ROLES_VIEW"],
+        },
+        {
+          label: "Banned Users",
+          href: "/admin/banned-users",
+          permissions: ["USERS_VIEW"],
+        },
+        {
+          label: "Activity Log",
+          href: "/admin/activity-log",
+          permissions: ["ACTIVITY_LOG_VIEW"],
+        },
       ],
     },
     {
       label: "Products",
       icon: Package,
       submenu: [
-        { label: "All Products", href: "/admin/products", permissions: ["PRODUCTS_VIEW"] },
-        { label: "Categories", href: "/admin/categories", permissions: ["CATEGORIES_VIEW"] },
-        { label: "Out of Stock", href: "/admin/stock", permissions: ["PRODUCTS_VIEW"] },
+        {
+          label: "All Products",
+          href: "/admin/products",
+          permissions: ["PRODUCTS_VIEW"],
+        },
+        {
+          label: "Categories",
+          href: "/admin/categories",
+          permissions: ["CATEGORIES_VIEW"],
+        },
+        {
+          label: "Out of Stock",
+          href: "/admin/stock",
+          permissions: ["PRODUCTS_VIEW"],
+        },
       ],
     },
     {
       label: "Restaurants",
       icon: UtensilsCrossed,
       submenu: [
-        { label: "All Restaurants", href: "/admin/restaurants", permissions: ["RESTAURANTS_VIEW"] },
-        { label: "Best Restaurants", href: "/admin/best-sellers", permissions: ["RESTAURANTS_VIEW"] },
+        {
+          label: "All Restaurants",
+          href: "/admin/restaurants",
+          permissions: ["RESTAURANTS_VIEW"],
+        },
+        {
+          label: "Best Restaurants",
+          href: "/admin/best-sellers",
+          permissions: ["RESTAURANTS_VIEW"],
+        },
       ],
     },
     {
       label: "Reviews & Feedback",
       icon: MessageCircle,
       submenu: [
-        { label: "Customer Reviews", href: "/admin/reviews", permissions: ["REVIEWS_VIEW"] },
-        { label: "Report Manage", href: "/admin/reports", permissions: ["REPORTS_VIEW"] },
+        {
+          label: "Customer Reviews",
+          href: "/admin/reviews",
+          permissions: ["REVIEWS_VIEW"],
+        },
+        {
+          label: "Report Manage",
+          href: "/admin/reports",
+          permissions: ["REPORTS_VIEW"],
+        },
       ],
     },
     {
       label: "Content Management",
       icon: Images,
       submenu: [
-        { label: "Banners", href: "/admin/banners", permissions: ["BANNERS_VIEW"] },
-        { label: "Image Slider", href: "/admin/slider", permissions: ["BANNERS_VIEW"] },
-        { label: "Blog Management", href: "/admin/blog", permissions: ["BLOG_VIEW"] },
+        {
+          label: "Banners",
+          href: "/admin/banners",
+          permissions: ["BANNERS_VIEW"],
+        },
+        {
+          label: "Image Slider",
+          href: "/admin/slider",
+          permissions: ["BANNERS_VIEW"],
+        },
+        {
+          label: "Blog Management",
+          href: "/admin/blog",
+          permissions: ["BLOG_VIEW"],
+        },
         { label: "FAQs", href: "/admin/faqs", permissions: ["FAQS_VIEW"] },
       ],
     },
@@ -186,20 +214,52 @@ export default function AdminLayout({
       label: "Promotions",
       icon: Zap,
       submenu: [
-        { label: "Coupons", href: "/admin/coupons", permissions: ["COUPONS_VIEW"] },
-        { label: "Events", href: "/admin/events", permissions: ["COUPONS_VIEW"] },
-        { label: "Discounts", href: "/admin/discounts", permissions: ["COUPONS_VIEW"] },
-        { label: "Active Campaigns", href: "/admin/campaigns", permissions: ["COUPONS_VIEW"] },
+        {
+          label: "Coupons",
+          href: "/admin/coupons",
+          permissions: ["COUPONS_VIEW"],
+        },
+        {
+          label: "Events",
+          href: "/admin/events",
+          permissions: ["COUPONS_VIEW"],
+        },
+        {
+          label: "Discounts",
+          href: "/admin/discounts",
+          permissions: ["COUPONS_VIEW"],
+        },
+        {
+          label: "Active Campaigns",
+          href: "/admin/campaigns",
+          permissions: ["COUPONS_VIEW"],
+        },
       ],
     },
     {
       label: "Settings",
       icon: Settings,
       submenu: [
-        { label: "Profile", href: "/admin/profile", permissions: ["ADMIN_PROFILE_VIEW"] },
-        { label: "Website Settings", href: "/admin/settings", permissions: ["SETTINGS_VIEW"] },
-        { label: "Analytics", href: "/admin/analytics", permissions: ["ANALYTICS_VIEW"] },
-        { label: "Security", href: "/admin/security", permissions: ["SETTINGS_VIEW"] },
+        {
+          label: "Profile",
+          href: "/admin/profile",
+          permissions: ["ADMIN_PROFILE_VIEW"],
+        },
+        {
+          label: "Website Settings",
+          href: "/admin/settings",
+          permissions: ["SETTINGS_VIEW"],
+        },
+        {
+          label: "Analytics",
+          href: "/admin/analytics",
+          permissions: ["ANALYTICS_VIEW"],
+        },
+        {
+          label: "Security",
+          href: "/admin/security",
+          permissions: ["SETTINGS_VIEW"],
+        },
       ],
     },
   ];
@@ -210,7 +270,7 @@ export default function AdminLayout({
         const allowedSubmenu = item.submenu.filter(
           (subitem) =>
             existingAdminRoutes.has(subitem.href) &&
-            hasMenuPermission(subitem.permissions)
+            hasMenuPermission(subitem.permissions),
         );
         return {
           ...item,
@@ -226,7 +286,7 @@ export default function AdminLayout({
     })
     .filter(
       (item): item is NonNullable<typeof item> =>
-        item !== null && (!item.submenu || item.submenu.length > 0)
+        item !== null && (!item.submenu || item.submenu.length > 0),
     );
 
   const toggleMenu = (label: string) => {
@@ -371,8 +431,12 @@ export default function AdminLayout({
             </h1>
             <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <p className="font-semibold text-gray-800">{user?.name ?? "Admin User"}</p>
-                <p className="text-xs text-gray-600">{String(user?.role ?? "ADMIN")}</p>
+                <p className="font-semibold text-gray-800">
+                  {user?.name ?? "Admin User"}
+                </p>
+                <p className="text-xs text-gray-600">
+                  {String(user?.role ?? "ADMIN")}
+                </p>
               </div>
               <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-full" />
             </div>

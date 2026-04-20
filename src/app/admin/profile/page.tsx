@@ -42,7 +42,7 @@ export default function AdminProfile() {
   }, []);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -249,7 +249,9 @@ export default function AdminProfile() {
           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div>
               <p className="text-sm text-gray-600">Department</p>
-              <p className="font-semibold text-gray-800">{profile.department}</p>
+              <p className="font-semibold text-gray-800">
+                {profile.department}
+              </p>
             </div>
             <span className="text-2xl">🏢</span>
           </div>
@@ -331,27 +333,6 @@ export default function AdminProfile() {
             </button>
           </div>
         </div>
-      </motion.div>
-
-      {/* Danger Zone */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="bg-red-50 rounded-2xl border border-red-200 p-6 md:p-8"
-      >
-        <h2 className="text-xl  font-bold text-red-700 mb-6 flex items-center gap-2">
-          <AlertCircle size={20} />
-          Danger Zone
-        </h2>
-
-        <button className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors">
-          Delete Account
-        </button>
-        <p className="text-sm text-red-600 mt-3">
-          This action cannot be undone. Your account and all associated data
-          will be permanently deleted.
-        </p>
       </motion.div>
     </div>
   );

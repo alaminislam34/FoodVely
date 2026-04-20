@@ -1,26 +1,23 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion } from "motion/react";
 import {
   Upload,
   Plus,
-  X,
   Clock,
-  Tag,
-  FileText,
-  ChefHat,
   ChevronLeft,
   Save,
   Leaf,
   Flame,
-  Star,
   Heart,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { providerApi } from "@/api/providerApi";
 
 export default function AddNewFood() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -33,6 +30,7 @@ export default function AddNewFood() {
     isAvailable: true,
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -53,14 +51,81 @@ export default function AddNewFood() {
     }
   };
 
+  const validateForm = () => {
+    if (!formData.name.trim()) {
+      return "Food name is required";
+    }
+    if (!formData.description.trim()) {
+      return "Description is required";
+    }
+    const basePrice = Number(formData.basePrice);
+    if (!Number.isFinite(basePrice) || basePrice <= 0) {
+      return "Base price must be greater than 0";
+    }
+    if (formData.discountPrice) {
+      const discountPrice = Number(formData.discountPrice);
+      if (!Number.isFinite(discountPrice) || discountPrice <= 0) {
+        return "Discount price must be a valid amount";
+      }
+      if (discountPrice >= basePrice) {
+        return "Discount price must be lower than base price";
+      }
+    }
+    const prepTime = Number(formData.prepTime);
+    if (!Number.isFinite(prepTime) || prepTime <= 0) {
+      return "Prep time must be greater than 0";
+    }
+    return null;
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const validationError = validateForm();
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await providerApi.createProduct({
+        name: formData.name.trim(),
+        description: formData.description.trim(),
+        price: Number(formData.basePrice),
+        discountPrice: formData.discountPrice
+          ? Number(formData.discountPrice)
+          : undefined,
+        category: formData.category,
+        prepTime: Number(formData.prepTime),
+        isVeg: formData.isVeg,
+        isSpicy: formData.isSpicy,
+        isAvailable: formData.isAvailable,
+        thumbnail: imagePreview || undefined,
+      });
+
+      toast.success("Product published successfully");
+      router.push("/provider/products");
+    } catch {
+      toast.error("Could not publish product. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <Toaster position="top-center" />
 
       {/* --- HEADER --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pt-6">
         <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-all border border-gray-100 bg-white">
+          <button
+            type="button"
+            onClick={() => router.push("/provider/products")}
+            className="p-2 hover:bg-gray-100 rounded-full transition-all border border-gray-100 bg-white"
+          >
             <ChevronLeft size={24} className="text-gray-600" />
           </button>
           <div>
@@ -73,11 +138,19 @@ export default function AddNewFood() {
           </div>
         </div>
         <div className="flex gap-3">
-          <button className="px-6 py-3 rounded-2xl bg-white border border-gray-200 font-bold text-gray-500 hover:bg-gray-50 transition-all">
+          <button
+            type="button"
+            onClick={() => router.push("/provider/products")}
+            className="px-6 py-3 rounded-2xl bg-white border border-gray-200 font-bold text-gray-500 hover:bg-gray-50 transition-all"
+          >
             Cancel
           </button>
-          <button className="px-8 py-3 rounded-2xl bg-rose-600 text-white font-bold hover:bg-rose-700 shadow-lg shadow-rose-200 transition-all flex items-center gap-2">
-            <Save size={18} /> Publish Dish
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-8 py-3 rounded-2xl bg-rose-600 text-white font-bold hover:bg-rose-700 shadow-lg shadow-rose-200 transition-all flex items-center gap-2 disabled:opacity-60"
+          >
+            <Save size={18} /> {isSubmitting ? "Publishing..." : "Publish Dish"}
           </button>
         </div>
       </div>
@@ -130,6 +203,7 @@ export default function AddNewFood() {
                 </label>
                 <input
                   type="text"
+                  value={formData.name}
                   className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-Sofia font-bold"
                   placeholder="e.g. Traditional Beef Kala Bhuna"
                   onChange={(e) =>
@@ -144,6 +218,7 @@ export default function AddNewFood() {
                 </label>
                 <input
                   type="number"
+                  value={formData.basePrice}
                   className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
                   placeholder="0.00"
                   onChange={(e) =>
@@ -158,6 +233,7 @@ export default function AddNewFood() {
                 </label>
                 <input
                   type="number"
+                  value={formData.discountPrice}
                   className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold text-green-600"
                   placeholder="0.00"
                   onChange={(e) =>
@@ -172,6 +248,7 @@ export default function AddNewFood() {
                 </label>
                 <input
                   type="number"
+                  value={formData.prepTime}
                   className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
                   placeholder="20"
                   onChange={(e) =>
@@ -185,6 +262,7 @@ export default function AddNewFood() {
                   Category
                 </label>
                 <select
+                  value={formData.category}
                   className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
                   onChange={(e) =>
                     setFormData({ ...formData, category: e.target.value })
@@ -201,6 +279,7 @@ export default function AddNewFood() {
             {/* Toggles */}
             <div className="flex flex-wrap gap-4 pt-4">
               <button
+                type="button"
                 onClick={() =>
                   setFormData({ ...formData, isVeg: !formData.isVeg })
                 }
@@ -209,6 +288,7 @@ export default function AddNewFood() {
                 <Leaf size={16} /> Vegetarian
               </button>
               <button
+                type="button"
                 onClick={() =>
                   setFormData({ ...formData, isSpicy: !formData.isSpicy })
                 }
@@ -279,7 +359,7 @@ export default function AddNewFood() {
                       {formData.name || "Dish Title Here"}
                     </h3>
                     <p className="text-gray-400 text-xs mt-0.5 line-clamp-1 italic">
-                      Sample description...
+                      {formData.description || "Sample description..."}
                     </p>
                   </div>
                   <button className="shrink-0 p-2 rounded-2xl bg-slate-50 text-slate-400">
@@ -315,6 +395,6 @@ export default function AddNewFood() {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

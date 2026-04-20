@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -15,6 +15,11 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { providerApi } from "@/api/providerApi";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { TableSkeleton } from "@/components/shared/TableSkeleton";
 
 // --- Interfaces ---
 interface Review {
@@ -27,9 +32,41 @@ interface Review {
   reply?: string; // New field to track replies
 }
 
+const normalizeReviews = (items: Record<string, unknown>[]): Review[] => {
+  return items.map((item) => {
+    const rating = (item.rating as Record<string, unknown> | undefined) ?? {};
+    const customer =
+      (item.customer as Record<string, unknown> | undefined) ?? {};
+    const product = (item.product as Record<string, unknown> | undefined) ?? {};
+
+    return {
+      id: String(item.id ?? ""),
+      rating: {
+        value: Number(rating.value ?? 0),
+        outOf: Number(rating.outOf ?? 5),
+      },
+      comment: String(item.comment ?? ""),
+      customer: {
+        id: String(customer.id ?? ""),
+        name: String(customer.name ?? "Anonymous"),
+        avatar: String(customer.avatar ?? "/images/profile.jpg"),
+      },
+      product: {
+        id: String(product.id ?? ""),
+        name: String(product.name ?? "Unknown Item"),
+        category: String(product.category ?? "General"),
+      },
+      createdAt: String(item.createdAt ?? new Date().toISOString()),
+      reply: item.reply ? String(item.reply) : undefined,
+    };
+  });
+};
+
 export default function ReviewManage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [usingFallback, setUsingFallback] = useState(false);
 
   // State for Reply Modal
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
@@ -41,39 +78,66 @@ export default function ReviewManage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        setLoading(true);
-        // Using your provided JSON structure logic
-        const response = await fetch("/reviews.json");
-        const data = await response.json();
-        setReviews(Array.isArray(data) ? data : [data]);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
+  const loadReviews = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await providerApi.listReviews({ page: 1, limit: 200 });
+
+      if (response.items.length > 0) {
+        setReviews(
+          normalizeReviews(
+            response.items as unknown as Record<string, unknown>[],
+          ),
+        );
+        setUsingFallback(false);
+        return;
       }
-    };
-    fetchReviews();
+
+      const fallbackRes = await fetch("/reviews.json");
+      const fallbackJson = await fallbackRes.json();
+      const fallbackArray = Array.isArray(fallbackJson)
+        ? fallbackJson
+        : fallbackJson.reviews || [];
+
+      setReviews(normalizeReviews(fallbackArray as Record<string, unknown>[]));
+      setUsingFallback(true);
+    } catch {
+      setError("Failed to load reviews from API and fallback source.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadReviews();
+  }, [loadReviews]);
 
   // --- Reply Handler ---
   const handleSendReply = async () => {
     if (!selectedReview || !replyText.trim()) return;
 
     setIsSubmitting(true);
-    // Simulate API Call
-    setTimeout(() => {
+    try {
+      await providerApi.replyToReview(selectedReview.id, {
+        message: replyText,
+      });
+
       setReviews((prev) =>
         prev.map((r) =>
           r.id === selectedReview.id ? { ...r, reply: replyText } : r,
         ),
       );
+
+      toast.success("Reply sent successfully");
       setIsSubmitting(false);
       setSelectedReview(null);
       setReplyText("");
-    }, 1000);
+    } catch {
+      toast.error("Failed to send reply. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   const processedReviews = useMemo(() => {
@@ -94,13 +158,9 @@ export default function ReviewManage() {
     currentPage * itemsPerPage,
   );
 
-  if (loading)
-    return (
-      <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
-        <Loader2 className="animate-spin text-rose-500" size={40} />
-        <p className="font-Sofia font-bold text-gray-400">Loading Reviews...</p>
-      </div>
-    );
+  if (loading) return <TableSkeleton rows={6} columns={6} />;
+
+  if (error) return <ErrorState message={error} onRetry={loadReviews} />;
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen pb-10 relative">
@@ -111,6 +171,11 @@ export default function ReviewManage() {
         <p className="text-gray-500 font-medium">
           Engage with your customers' feedback.
         </p>
+        {usingFallback ? (
+          <p className="text-xs text-amber-600 mt-2">
+            Running in fallback mode using local data.
+          </p>
+        ) : null}
       </header>
 
       {/* Main Table Container */}
@@ -247,6 +312,15 @@ export default function ReviewManage() {
             </button>
           </div>
         </footer>
+
+        {!loading && currentReviews.length === 0 ? (
+          <div className="p-6 border-t border-gray-100">
+            <EmptyState
+              title="No reviews found"
+              description="Try changing filters or check back later for new customer feedback."
+            />
+          </div>
+        ) : null}
       </div>
 
       {/* --- REPLY MODAL --- */}
