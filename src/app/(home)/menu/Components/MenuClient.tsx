@@ -29,7 +29,19 @@ const containerVariants = {
   },
 };
 
-export default function MenuClient({ initialSlug }: { initialSlug: string }) {
+type MenuClientProps = {
+  initialSlug: string;
+  title?: string;
+  description?: string;
+  basePath?: string;
+};
+
+export default function MenuClient({
+  initialSlug,
+  title = "Our Menu",
+  description = "Discover our delicious selection of fresh meals",
+  basePath = "/menu",
+}: MenuClientProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +51,6 @@ export default function MenuClient({ initialSlug }: { initialSlug: string }) {
     "newest",
   );
   const [showFilters, setShowFilters] = useState(false);
-
   useEffect(() => {
     fetch("/FoodProducts.json")
       .then((res) => res.json())
@@ -108,7 +119,7 @@ export default function MenuClient({ initialSlug }: { initialSlug: string }) {
     setSelectedCategory("");
     setPriceRange([0, 1000]);
     setSortBy("newest");
-    router.push("/menu");
+    router.push(basePath);
   };
 
   return (
@@ -121,11 +132,9 @@ export default function MenuClient({ initialSlug }: { initialSlug: string }) {
           className="mb-8 sm:mb-12 lg:mb-16 text-center"
         >
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-Sofia bg-linear-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent mb-3">
-            Our Menu
+            {title}
           </h1>
-          <p className="text-gray-600 text-sm sm:text-base">
-            Discover our delicious selection of fresh meals
-          </p>
+          <p className="text-gray-600 text-sm sm:text-base">{description}</p>
           <div className="flex justify-center gap-2 mt-4 flex-wrap">
             <span className="bg-white text-orange-500 px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
               {filtered.length} Items{" "}
@@ -328,7 +337,7 @@ export default function MenuClient({ initialSlug }: { initialSlug: string }) {
                   whileHover={{ y: -8, transition: { duration: 0.2 } }}
                   className="h-full"
                 >
-                  <ProductCard product={product} />
+                  <ProductCard product={product} basePath={basePath} />
                 </motion.div>
               ))}
             </motion.div>

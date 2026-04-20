@@ -328,8 +328,9 @@ export default function CustomerProfilePage() {
             <div className="space-y-4">
               {orderHistory.length > 0 ? (
                 orderHistory.map((order) => (
-                  <div
+                  <Link
                     key={order.id}
+                    href={`/account/orders/${encodeURIComponent(order.id)}`}
                     className="flex items-center justify-between p-5 bg-white border border-rose-50 rounded-2xl hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-center gap-4">
@@ -344,7 +345,7 @@ export default function CustomerProfilePage() {
                     <div className="text-right font-black text-slate-700">
                       BDT {order.total.toFixed(2)}
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 <div className="rounded-2xl border border-dashed border-rose-200 bg-white p-6 text-sm text-slate-500">
@@ -410,7 +411,15 @@ export default function CustomerProfilePage() {
           </div>
 
           <div className="bg-white border border-rose-50 rounded-4xl p-6">
-            <h4 className="font-bold mb-4">Payment Method</h4>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-bold">Payment Method</h4>
+              <Link
+                href="/account/payment-methods"
+                className="text-xs font-semibold text-rose-600"
+              >
+                Manage
+              </Link>
+            </div>
             <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
               <CreditCard size={20} className="text-slate-400" />
               <span className="text-sm font-medium">•••• •••• •••• 4421</span>
@@ -424,10 +433,27 @@ export default function CustomerProfilePage() {
               </div>
               <div className="rounded-xl bg-amber-50 p-3">
                 <p className="text-xs text-slate-500">Orders</p>
-                <p className="text-lg font-black text-amber-600">
+                <Link
+                  href="/account/orders"
+                  className="text-lg font-black text-amber-600 underline-offset-2 hover:underline"
+                >
                   {orders.length}
-                </p>
+                </Link>
               </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Link
+                href="/account/addresses"
+                className="text-xs text-center rounded-lg bg-slate-50 py-2 font-semibold text-slate-600 hover:bg-slate-100"
+              >
+                Addresses
+              </Link>
+              <Link
+                href="/account/settings"
+                className="text-xs text-center rounded-lg bg-slate-50 py-2 font-semibold text-slate-600 hover:bg-slate-100"
+              >
+                Settings
+              </Link>
             </div>
           </div>
         </div>

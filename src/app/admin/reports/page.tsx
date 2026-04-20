@@ -20,7 +20,11 @@ import {
 } from "lucide-react";
 import { adminApi } from "@/api/adminApi";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminErrorState,
+  AdminLoadingState,
+  AdminReportsEmptyState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
 
@@ -99,37 +103,68 @@ export default function ReportsManagement() {
               (item.reportedBy as { role?: string } | undefined)?.role ??
                 "customer",
             ),
-            id: String((item.reportedBy as { id?: string } | undefined)?.id ?? ""),
+            id: String(
+              (item.reportedBy as { id?: string } | undefined)?.id ?? "",
+            ),
             name: String(
               (item.reportedBy as { name?: string } | undefined)?.name ??
                 "Unknown",
             ),
             avatar: String(
-              (item.reportedBy as { avatar?: string } | undefined)?.avatar ?? "",
+              (item.reportedBy as { avatar?: string } | undefined)?.avatar ??
+                "",
             ),
             logo: String(
               (item.reportedBy as { logo?: string } | undefined)?.logo ?? "",
             ),
           },
           target: {
-            type: ((item.target as { type?: "product" | "restaurant" | "customer" } | undefined)?.type ??
-              "product") as "product" | "restaurant" | "customer",
-            product: (item.target as { product?: Report["target"]["product"] } | undefined)?.product,
-            restaurant: (item.target as { restaurant?: Report["target"]["restaurant"] } | undefined)?.restaurant,
-            customer: (item.target as { customer?: Report["target"]["customer"] } | undefined)?.customer,
+            type: ((
+              item.target as
+                | { type?: "product" | "restaurant" | "customer" }
+                | undefined
+            )?.type ?? "product") as "product" | "restaurant" | "customer",
+            product: (
+              item.target as
+                | { product?: Report["target"]["product"] }
+                | undefined
+            )?.product,
+            restaurant: (
+              item.target as
+                | { restaurant?: Report["target"]["restaurant"] }
+                | undefined
+            )?.restaurant,
+            customer: (
+              item.target as
+                | { customer?: Report["target"]["customer"] }
+                | undefined
+            )?.customer,
           },
           issue: {
-            type: String((item.issue as { type?: string } | undefined)?.type ?? "report"),
-            reason: String((item.issue as { reason?: string } | undefined)?.reason ?? "No reason provided"),
-            tags: ((item.issue as { tags?: string[] } | undefined)?.tags ?? []) as string[],
+            type: String(
+              (item.issue as { type?: string } | undefined)?.type ?? "report",
+            ),
+            reason: String(
+              (item.issue as { reason?: string } | undefined)?.reason ??
+                "No reason provided",
+            ),
+            tags: ((item.issue as { tags?: string[] } | undefined)?.tags ??
+              []) as string[],
           },
           evidence: (item.evidence as Report["evidence"] | undefined) ?? {},
           status: {
-            current: ((item.status as { current?: Report["status"]["current"] } | undefined)
-              ?.current ?? "pending") as Report["status"]["current"],
+            current: ((
+              item.status as
+                | { current?: Report["status"]["current"] }
+                | undefined
+            )?.current ?? "pending") as Report["status"]["current"],
             action: (item.status as { action?: string } | undefined)?.action,
-            adminNote: (item.status as { adminNote?: string } | undefined)?.adminNote,
-            isResolved: Boolean((item.status as { isResolved?: boolean } | undefined)?.isResolved ?? false),
+            adminNote: (item.status as { adminNote?: string } | undefined)
+              ?.adminNote,
+            isResolved: Boolean(
+              (item.status as { isResolved?: boolean } | undefined)
+                ?.isResolved ?? false,
+            ),
           },
           createdAt: String(item.createdAt ?? new Date().toISOString()),
           updatedAt: String(item.updatedAt ?? new Date().toISOString()),
@@ -324,14 +359,11 @@ export default function ReportsManagement() {
               </div>
             ) : error ? (
               <div className="p-3">
-                <AdminErrorState
-                  description={error}
-                  onAction={retry}
-                />
+                <AdminErrorState description={error} onAction={retry} />
               </div>
             ) : filteredReports.length === 0 ? (
               <div className="p-3">
-                <AdminEmptyState description="No reports found." />
+                <AdminReportsEmptyState />
               </div>
             ) : (
               <AnimatePresence mode="popLayout">
@@ -367,7 +399,11 @@ export default function ReportsManagement() {
             )}
           </div>
           <div className="flex items-center justify-end mt-2">
-            <AdminPaginator page={page} totalPages={totalPages} onPageChange={setPage} />
+            <AdminPaginator
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
           </div>
         </div>
 

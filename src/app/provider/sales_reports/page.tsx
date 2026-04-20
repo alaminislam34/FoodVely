@@ -24,9 +24,9 @@ import {
   Pie,
 } from "recharts";
 import { providerApi } from "@/api/providerApi";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { ProviderReportsEmptyState } from "@/components/provider/ProviderEmptyStates";
 
 type SalesOrder = {
   id: string;
@@ -372,9 +372,11 @@ export default function SalesReport() {
           </div>
 
           {monthlySales.length === 0 ? (
-            <EmptyState
+            <ProviderReportsEmptyState
               title="No revenue trend yet"
               description="Completed orders will appear here once transactions start coming in."
+              actionLabel="Open Order Reports"
+              actionHref="/provider/order_reports"
             />
           ) : (
             <div className="h-75 w-full">
@@ -534,9 +536,11 @@ export default function SalesReport() {
 
         {recentTransactions.length === 0 ? (
           <div className="p-6">
-            <EmptyState
+            <ProviderReportsEmptyState
               title="No transactions available"
               description="Completed orders will appear as transactions in this report."
+              actionLabel="Open Order Reports"
+              actionHref="/provider/order_reports"
             />
           </div>
         ) : (

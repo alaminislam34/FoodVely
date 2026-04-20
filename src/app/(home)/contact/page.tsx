@@ -185,7 +185,10 @@ export default function Contact() {
             variants={itemVariants}
             className="lg:col-span-2 bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl p-8 shadow-xl"
           >
-            <form onSubmit={handleSubmit} className="space-y-6 flex flex-col justify-between">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6 flex flex-col justify-between"
+            >
               {/* Name & Email Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <motion.div variants={itemVariants} className="space-y-2">
@@ -306,13 +309,25 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Map Placeholder */}
-            <div className="bg-linear-to-br from-rose-200/30 to-rose-200/10 rounded-2xl h-64 flex items-center justify-center border border-rose-300/30">
-              <div className="text-center">
-                <MapPin size={48} className="text-rose-500 mx-auto mb-2" />
-                <p className="text-gray-600 font-Poppins">
-                  Interactive map coming soon
-                </p>
+            {/* Embedded Map */}
+            <div className="rounded-2xl overflow-hidden border border-rose-200 shadow-lg bg-white">
+              <div className="relative h-64 md:h-80">
+                <iframe
+                  title="FoodVely location map"
+                  src="https://maps.google.com/maps?q=123%20Food%20Street,%20New%20York,%20NY%2010001&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                  className="absolute inset-0 h-full w-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+                <div className="absolute left-4 top-4 rounded-2xl bg-white/95 backdrop-blur px-4 py-3 shadow-lg border border-rose-100">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-500">
+                    Visit Us
+                  </p>
+                  <p className="font-semibold text-slate-900">
+                    123 Food Street
+                  </p>
+                  <p className="text-sm text-slate-500">New York, NY 10001</p>
+                </div>
               </div>
             </div>
           </div>

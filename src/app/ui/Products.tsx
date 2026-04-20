@@ -5,7 +5,11 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Product } from "@/types/product";
 import Link from "next/link";
-import { addToCart, isWishlisted, toggleWishlist } from "@/utils/commerceStorage";
+import {
+  addToCart,
+  isWishlisted,
+  toggleWishlist,
+} from "@/utils/commerceStorage";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -18,7 +22,13 @@ const cardVariants = {
   },
 };
 
-export const ProductCard = ({ product }: { product: Product }) => {
+export const ProductCard = ({
+  product,
+  basePath = "/menu",
+}: {
+  product: Product;
+  basePath?: string;
+}) => {
   // Safety checks for required properties
   if (!product || !product.images || product.images.length === 0) {
     return null;
@@ -45,7 +55,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
     >
       {/* --- IMAGE SECTION --- */}
       <div className="relative aspect-square w-full rounded-4xl overflow-hidden mb-4 bg-slate-50">
-        <Link href={`/menu/${product.slug}`}>
+        <Link href={`${basePath}/${product.slug}`}>
           <Image
             src={product.images[0] || "/images/food.png"}
             alt={product.name || "Product"}
@@ -137,11 +147,16 @@ export const ProductCard = ({ product }: { product: Product }) => {
               const nextWished = !wished;
               toggleWishlist(String(product.id), "product");
               setWished(nextWished);
-              toast.success(nextWished ? "Added to wishlist" : "Removed from wishlist");
+              toast.success(
+                nextWished ? "Added to wishlist" : "Removed from wishlist",
+              );
             }}
             className="shrink-0 p-2 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all"
           >
-            <Heart size={18} className={wished ? "fill-rose-500 text-rose-500" : ""} />
+            <Heart
+              size={18}
+              className={wished ? "fill-rose-500 text-rose-500" : ""}
+            />
           </button>
         </div>
 

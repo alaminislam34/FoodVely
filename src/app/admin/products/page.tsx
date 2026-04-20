@@ -15,7 +15,11 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { adminApi } from "@/api/adminApi";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminErrorState,
+  AdminLoadingState,
+  AdminProductsEmptyState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
@@ -92,9 +96,7 @@ export default function ProductsManagement() {
           search: debouncedSearch || undefined,
           category: selectedCategory !== "All" ? selectedCategory : undefined,
           inStock:
-            stockFilter === "all"
-              ? undefined
-              : stockFilter === "in-stock",
+            stockFilter === "all" ? undefined : stockFilter === "in-stock",
           minRating:
             ratingFilter === "all"
               ? undefined
@@ -113,27 +115,54 @@ export default function ProductsManagement() {
         const mappedProducts: Product[] = items.map((item) => ({
           id: String(item.id ?? ""),
           name: String(item.name ?? item.title ?? "Unnamed Product"),
-          shortDescription: String(item.shortDescription ?? item.description ?? ""),
+          shortDescription: String(
+            item.shortDescription ?? item.description ?? "",
+          ),
           price: Number(item.price ?? 0),
           thumbnail: String(item.thumbnail ?? item.image ?? ""),
           category: {
-            name: String((item.category as { name?: string } | undefined)?.name ?? "Uncategorized"),
-            slug: String((item.category as { slug?: string } | undefined)?.slug ?? "uncategorized"),
+            name: String(
+              (item.category as { name?: string } | undefined)?.name ??
+                "Uncategorized",
+            ),
+            slug: String(
+              (item.category as { slug?: string } | undefined)?.slug ??
+                "uncategorized",
+            ),
           },
           provider: {
-            name: String((item.provider as { name?: string } | undefined)?.name ?? "Unknown Provider"),
+            name: String(
+              (item.provider as { name?: string } | undefined)?.name ??
+                "Unknown Provider",
+            ),
           },
           rating: {
-            average: Number((item.rating as { average?: number } | undefined)?.average ?? 0),
-            totalReviews: Number((item.rating as { totalReviews?: number } | undefined)?.totalReviews ?? 0),
+            average: Number(
+              (item.rating as { average?: number } | undefined)?.average ?? 0,
+            ),
+            totalReviews: Number(
+              (item.rating as { totalReviews?: number } | undefined)
+                ?.totalReviews ?? 0,
+            ),
           },
           availability: {
-            stock: Number((item.availability as { stock?: number } | undefined)?.stock ?? 0),
-            status: String((item.availability as { status?: string } | undefined)?.status ?? "inactive"),
-            isAvailable: Boolean((item.availability as { isAvailable?: boolean } | undefined)?.isAvailable ?? false),
+            stock: Number(
+              (item.availability as { stock?: number } | undefined)?.stock ?? 0,
+            ),
+            status: String(
+              (item.availability as { status?: string } | undefined)?.status ??
+                "inactive",
+            ),
+            isAvailable: Boolean(
+              (item.availability as { isAvailable?: boolean } | undefined)
+                ?.isAvailable ?? false,
+            ),
           },
           foodInfo: {
-            calories: Number((item.foodInfo as { calories?: number } | undefined)?.calories ?? 0),
+            calories: Number(
+              (item.foodInfo as { calories?: number } | undefined)?.calories ??
+                0,
+            ),
           },
         }));
 
@@ -148,7 +177,16 @@ export default function ProductsManagement() {
     };
 
     fetchProducts();
-  }, [currentPage, debouncedSearch, itemsPerPage, ratingFilter, reloadKey, selectedCategory, sortBy, stockFilter]);
+  }, [
+    currentPage,
+    debouncedSearch,
+    itemsPerPage,
+    ratingFilter,
+    reloadKey,
+    selectedCategory,
+    sortBy,
+    stockFilter,
+  ]);
 
   useEffect(() => {
     adminApi
@@ -199,7 +237,6 @@ export default function ProductsManagement() {
             {uniqueCategories.length - 1} categories.
           </p>
         </div>
-        
       </motion.div>
 
       {/* Analytics Cards */}
@@ -260,16 +297,10 @@ export default function ProductsManagement() {
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden">
         {loading ? <AdminLoadingState label="Loading products..." /> : null}
         {error ? (
-          <AdminErrorState
-            description={error}
-            onAction={retry}
-          />
+          <AdminErrorState description={error} onAction={retry} />
         ) : null}
         {!loading && !error && products.length === 0 ? (
-          <AdminEmptyState
-            title="No products found"
-            description="Try adjusting search and filters."
-          />
+          <AdminProductsEmptyState />
         ) : null}
 
         {/* Toolbar */}
@@ -522,7 +553,8 @@ export default function ProductsManagement() {
         {/* Pagination Footer */}
         <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">
           <p className="text-sm text-gray-500 font-medium">
-            Page <span className="text-gray-800 font-bold">{currentPage}</span> of {totalPages}
+            Page <span className="text-gray-800 font-bold">{currentPage}</span>{" "}
+            of {totalPages}
           </p>
 
           <AdminPaginator

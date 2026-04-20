@@ -19,9 +19,9 @@ import {
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { providerApi } from "@/api/providerApi";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { ProviderOrdersEmptyState } from "@/components/provider/ProviderEmptyStates";
 
 // --- Updated Interface based on your JSON structure ---
 interface Order {
@@ -599,10 +599,7 @@ export default function OrderManage() {
 
         {!loading && currentOrders.length === 0 ? (
           <div className="p-6 border-t border-gray-100">
-            <EmptyState
-              title="No orders found"
-              description="Try changing filters or check again after a few minutes."
-            />
+            <ProviderOrdersEmptyState />
           </div>
         ) : null}
       </div>

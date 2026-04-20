@@ -24,9 +24,9 @@ import {
   AreaChart,
 } from "recharts";
 import { providerApi } from "@/api/providerApi";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { ProviderReportsEmptyState } from "@/components/provider/ProviderEmptyStates";
 
 type ReportOrder = {
   id: string;
@@ -616,10 +616,7 @@ export default function OrderReports() {
 
         {tableRows.length === 0 ? (
           <div className="p-6">
-            <EmptyState
-              title="No report rows available"
-              description="Try changing status filter or refresh the report data."
-            />
+            <ProviderReportsEmptyState />
           </div>
         ) : (
           <div className="overflow-x-auto">

@@ -24,9 +24,15 @@ import {
 
 interface MenuDetailsPageProps {
   params: Promise<{ slug: string }>;
+  catalogPath?: string;
+  catalogLabel?: string;
 }
 
-export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
+export default function MenuDetailsPage({
+  params,
+  catalogPath = "/menu",
+  catalogLabel = "Menu",
+}: MenuDetailsPageProps) {
   const [slug, setSlug] = useState<string>("");
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -116,10 +122,10 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
               The product you&apos;re looking for doesn&apos;t exist.
             </p>
             <Link
-              href="/menu"
+              href={catalogPath}
               className="px-6 py-3 bg-linear-to-r from-rose-500 to-orange-500 text-white rounded-2xl font-Sofia font-semibold hover:shadow-lg transition-shadow"
             >
-              Back to Menu
+              Back to {catalogLabel}
             </Link>
           </div>
         </div>
@@ -145,8 +151,11 @@ export default function MenuDetailsPage({ params }: MenuDetailsPageProps) {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-2 mb-8 text-sm text-gray-600"
         >
-          <Link href="/menu" className="hover:text-rose-500 transition-colors">
-            Menu
+          <Link
+            href={catalogPath}
+            className="hover:text-rose-500 transition-colors"
+          >
+            {catalogLabel}
           </Link>
           <span>/</span>
           <span className="text-rose-600 font-semibold">{product.name}</span>

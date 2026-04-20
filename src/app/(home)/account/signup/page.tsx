@@ -22,6 +22,8 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
 // --- Components & Constants ---
 
@@ -176,7 +178,7 @@ export default function SignUp() {
       >
         <div className="rounded-3xl border border-rose-100 bg-white/95 p-6 lg:p-12 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.35)]">
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-500">
+            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-500 text-rose-50">
               <User size={20} />
             </div>
             <h1 className="text-2xl font-semibold text-gray-900">
@@ -186,6 +188,18 @@ export default function SignUp() {
               Join Foodvely in seconds
             </p>
           </div>
+          <motion.div variants={itemVariants} className="space-y-3 pb-4">
+            <div className="flex items-center gap-4 justify-center">
+              <Button size={"lg"} className="px-5" variant={"outline"}>
+                <FcGoogle />
+                Google
+              </Button>
+              <Button size={"lg"} className="px-5" variant={"outline"}>
+                <FaFacebook />
+                Facebook
+              </Button>
+            </div>
+          </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <motion.div variants={itemVariants} className="space-y-2">

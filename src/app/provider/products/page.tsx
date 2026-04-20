@@ -19,8 +19,8 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { providerApi } from "@/api/providerApi";
 import { ErrorState } from "@/components/shared/ErrorState";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
+import { ProviderProductsEmptyState } from "@/components/provider/ProviderEmptyStates";
 
 // --- Interface ---
 interface Product {
@@ -790,12 +790,7 @@ export default function ProductsManagement() {
 
         {!loading && currentProducts.length === 0 ? (
           <div className="p-6 border-t border-gray-100">
-            <EmptyState
-              title="No products found"
-              description="Try changing your filters or add a new product to your menu."
-              actionLabel="Add Product"
-              actionHref="/provider/addFood"
-            />
+            <ProviderProductsEmptyState />
           </div>
         ) : null}
       </div>
