@@ -49,6 +49,37 @@ export interface PasswordResetVerifyData {
   email?: string;
 }
 
+export interface ProviderRestaurantPayload {
+  restaurantName: string;
+  city: string;
+  address: string;
+  contactNumber?: string;
+  cuisine?: string;
+  openingHours?: string;
+  logo?: string;
+  coverImage?: string;
+  description?: string;
+  foodCategories?: string[];
+}
+
+export interface CreateProviderPayload {
+  password: string;
+  user: {
+    name: string;
+    email: string;
+    role: "PROVIDER";
+  };
+  restaurant: ProviderRestaurantPayload;
+}
+
+export interface CreateProviderResponseData {
+  accessToken?: string;
+  refreshToken?: string;
+  user?: UserData;
+  message?: string;
+  [key: string]: unknown;
+}
+
 const FAKE_LOGIN = {
   email: "user@gmail.com",
   password: "alamin",
@@ -98,6 +129,26 @@ export async function verifyAccount(
   if (!response.ok) {
     throw new Error(
       await readErrorMessage(response, "Account verification failed"),
+    );
+  }
+
+  return response.json();
+}
+
+export async function createProviderAccount(
+  payload: CreateProviderPayload,
+): Promise<AuthResponse<CreateProviderResponseData>> {
+  const response = await fetch(`${AUTH_ENDPOINT}/create-provider`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      await readErrorMessage(response, "Provider account creation failed"),
     );
   }
 

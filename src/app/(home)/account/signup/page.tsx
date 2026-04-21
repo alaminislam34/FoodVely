@@ -48,7 +48,6 @@ export default function SignUp() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -66,8 +65,6 @@ export default function SignUp() {
       newErrors.email = "Invalid email address";
     if (formData.password.length < 8)
       newErrors.password = "Password must be 8+ characters";
-    if (formData.confirmPassword !== formData.password)
-      newErrors.confirmPassword = "Passwords do not match";
     if (!acceptTerms) newErrors.terms = "You must accept the terms to continue";
 
     setErrors(newErrors);
@@ -120,7 +117,7 @@ export default function SignUp() {
     return (
       <section className="flex items-center justify-center px-4 py-10 lg:py-14">
         <div className="w-full max-w-md">
-          <div className="rounded-3xl border border-rose-100 bg-white/95 p-6 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.35)]">
+          <div className="rounded-3xl bg-white/95 p-6 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.15)]">
             <h1 className="text-center text-2xl font-semibold text-gray-900">
               Verify Account
             </h1>
@@ -176,7 +173,7 @@ export default function SignUp() {
         animate="visible"
         className="w-full max-w-lg"
       >
-        <div className="rounded-3xl border border-rose-100 bg-white/95 p-6 lg:p-12 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.35)]">
+        <div className="rounded-3xl border border-gray-100 bg-white/95 p-6 lg:p-12 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.15)]">
           <div className="mb-6 text-center">
             <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-500 text-rose-50">
               <User size={20} />
@@ -188,18 +185,6 @@ export default function SignUp() {
               Join Foodvely in seconds
             </p>
           </div>
-          <motion.div variants={itemVariants} className="space-y-3 pb-4">
-            <div className="flex items-center gap-4 justify-center">
-              <Button size={"lg"} className="px-5" variant={"outline"}>
-                <FcGoogle />
-                Google
-              </Button>
-              <Button size={"lg"} className="px-5" variant={"outline"}>
-                <FaFacebook />
-                Facebook
-              </Button>
-            </div>
-          </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <motion.div variants={itemVariants} className="space-y-2">
@@ -279,35 +264,12 @@ export default function SignUp() {
             </motion.div>
 
             <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="••••••••"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={`${inputClassName} pl-10 ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
-                />
-              </div>
-              {errors.confirmPassword && (
-                <p className="text-xs text-red-500">{errors.confirmPassword}</p>
-              )}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="flex cursor-pointer items-start gap-3 text-sm text-gray-600">
+              <label className="flex items-center gap-3 text-sm text-gray-600">
                 <input
                   type="checkbox"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="mt-1 h-4 w-4 text-xs rounded border-gray-300 text-rose-500 focus:ring-rose-500"
+                  className="h-4 w-4 text-[10px] border-gray-300 text-rose-500 focus:ring-rose-500"
                 />
                 <span>
                   I agree to the{" "}
@@ -324,7 +286,7 @@ export default function SignUp() {
                 <p className="ml-7 text-xs text-red-500">{errors.terms}</p>
               )}
             </motion.div>
-
+            <br />
             <Button
               size="lg"
               disabled={isLoading || !acceptTerms}
@@ -340,6 +302,29 @@ export default function SignUp() {
               )}
             </Button>
           </form>
+          <motion.div className="text-black">
+            <p className="text-sm text-center text-gray-600 mt-4">
+              Want to sell your food?{" "}
+              <Link
+                href="/account/signup/provider"
+                className="font-semibold text-rose-500 hover:underline"
+              >
+                Become a Food Provider
+              </Link>
+            </p>
+          </motion.div>
+          <motion.div variants={itemVariants} className="space-y-3 py-4">
+            <div className="grid grid-cols-2 items-center gap-4 justify-center">
+              <Button size={"lg"} className="px-5" variant={"outline"}>
+                <FcGoogle />
+                Google
+              </Button>
+              <Button size={"lg"} className="px-5" variant={"outline"}>
+                <FaFacebook />
+                Facebook
+              </Button>
+            </div>
+          </motion.div>
 
           <motion.div variants={itemVariants} className="mt-6 text-center">
             <p className="text-sm text-gray-600">
