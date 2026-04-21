@@ -152,23 +152,6 @@ export function ProviderSignupFlow() {
     toast.success("OTP verified successfully.");
     setErrors({});
     setStep(3);
-    // setIsLoading(true);
-    // const loadingToast = toast.loading("Verifying OTP...");
-
-    // try {
-    //   //   await verifyProviderOtp(accountValues.email, otp.trim());
-    //   toast.dismiss(loadingToast);
-    //   toast.success("Email verified successfully.");
-    //   setErrors({});
-    //   setStep(3);
-    // } catch (error) {
-    //   toast.dismiss(loadingToast);
-    //   toast.error(
-    //     error instanceof Error ? error.message : "OTP verification failed.",
-    //   );
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   const handleSubmitRestaurantStep = async (
@@ -241,25 +224,13 @@ export function ProviderSignupFlow() {
   };
 
   return (
-    <section className="px-4 py-10 lg:py-14">
-      <div className="mx-auto w-full max-w-2xl">
+    <section className="flex min-h-180 items-center px-4 py-10 lg:py-14">
+      <div className="mx-auto max-w-xl w-full">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_-35px_rgba(15,23,42,0.22)] lg:p-10"
+          className="rounded-[1.75rem] border border-slate-200 bg-white p-8 shadow-[0_24px_70px_-35px_rgba(15,23,42,0.22)] lg:p-12"
         >
-          <div className="mb-8 space-y-4 text-center">
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-[#202020] md:text-4xl">
-                Join as a Provider
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#808080] md:text-base">
-                Complete the owner details, verify your email, and submit your
-                restaurant profile to finish setup.
-              </p>
-            </div>
-          </div>
-
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
@@ -312,16 +283,6 @@ export function ProviderSignupFlow() {
               ) : null}
             </motion.div>
           </AnimatePresence>
-
-          <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-            <Link
-              href="/account/signin"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 hover:underline"
-            >
-              Already registered? Sign in
-              <ArrowRight size={16} />
-            </Link>
-          </div>
         </motion.div>
       </div>
     </section>

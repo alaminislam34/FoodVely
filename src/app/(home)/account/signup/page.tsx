@@ -82,16 +82,21 @@ export default function SignUp() {
     e.preventDefault();
     if (!validate()) return;
 
-    const loadingToast = toast.loading("Creating account...");
-    try {
-      await register(formData.name, formData.email, formData.password);
-      toast.dismiss(loadingToast);
+    toast.loading("Creating account...");
+
+    setTimeout(() => {
       toast.success("Account created. Check your email for OTP.");
       setStep("verify");
-    } catch (error: any) {
-      toast.dismiss(loadingToast);
-      toast.error(error?.message || "Registration failed");
-    }
+    }, 1000);
+    // try {
+    //   await register(formData.name, formData.email, formData.password);
+    //   toast.dismiss(loadingToast);
+    //   toast.success("Account created. Check your email for OTP.");
+    //   setStep("verify");
+    // } catch (error: any) {
+    //   toast.dismiss(loadingToast);
+    //   toast.error(error?.message || "Registration failed");
+    // }
   };
 
   const handleVerify = async (e: React.FormEvent) => {
@@ -115,9 +120,9 @@ export default function SignUp() {
 
   if (step === "verify") {
     return (
-      <section className="flex items-center justify-center px-4 py-10 lg:py-14">
+      <section className="flex items-center min-h-180 justify-center px-4 py-10 lg:py-14">
         <div className="w-full max-w-md">
-          <div className="rounded-3xl bg-white/95 p-6 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.15)]">
+          <div className="rounded-3xl border border-gray-200 bg-white/95 p-8 lg:p-12 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.15)]">
             <h1 className="text-center text-2xl font-semibold text-gray-900">
               Verify Account
             </h1>
@@ -130,19 +135,38 @@ export default function SignUp() {
                 <label className="text-sm font-medium text-gray-700">
                   OTP Code
                 </label>
-                <div className="flex justify-center">
+                <div className="w-full">
                   <InputOTP
                     maxLength={6}
                     value={otp}
                     onChange={(value) => setOtp(value.toUpperCase())}
+                    className="w-full"
                   >
-                    <InputOTPGroup className="rounded-xl border border-rose-100 bg-white shadow-sm">
-                      <InputOTPSlot index={0} className="size-10 border-none" />
-                      <InputOTPSlot index={1} className="size-10 border-none" />
-                      <InputOTPSlot index={2} className="size-10 border-none" />
-                      <InputOTPSlot index={3} className="size-10 border-none" />
-                      <InputOTPSlot index={4} className="size-10 border-none" />
-                      <InputOTPSlot index={5} className="size-10 border-none" />
+                    <InputOTPGroup className="grid w-full grid-cols-6 gap-2 rounded-none">
+                      <InputOTPSlot
+                        index={0}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
+                      <InputOTPSlot
+                        index={1}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
+                      <InputOTPSlot
+                        index={2}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
+                      <InputOTPSlot
+                        index={3}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
+                      <InputOTPSlot
+                        index={4}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
+                      <InputOTPSlot
+                        index={5}
+                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
+                      />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
@@ -167,7 +191,7 @@ export default function SignUp() {
   }
 
   return (
-    <section className="flex items-center justify-center px-4 py-10 lg:py-14">
+    <section className="flex min-h-full items-center justify-center px-4 py-10 lg:py-14">
       <motion.div
         initial="hidden"
         animate="visible"
