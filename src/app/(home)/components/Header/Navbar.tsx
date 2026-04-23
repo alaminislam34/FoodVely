@@ -19,8 +19,7 @@ import {
   HelpCircle,
   ChevronDown,
 } from "lucide-react";
-import { useAuthContext } from "@/context/AuthContext";
-import { useCommerceState } from "@/hooks/useCommerceState";
+import { useAuth } from "@/hooks/useAuth";
 
 const links = [
   { name: "Home", href: "/" },
@@ -35,8 +34,7 @@ function Navbar() {
   const [openModal, setOpenModal] = useState(false);
   const pathName: string = usePathname();
   const [sticky, setSticky] = useState(false);
-  const { isAuthenticated, logout, user } = useAuthContext();
-  const { cartCount, wishlistCount } = useCommerceState();
+  const { isAuthenticated, logout, user } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
 
@@ -128,7 +126,7 @@ function Navbar() {
                 >
                   <Heart />
                   <span className="absolute text-xs -top-1 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
-                    {wishlistCount}
+                    0
                   </span>
                 </Link>
               </motion.div>
@@ -143,7 +141,7 @@ function Navbar() {
                 >
                   <ShoppingCart />{" "}
                   <span className="absolute text-xs -top-1 right-0 bg-rose-600 text-white py-0.5 px-1 rounded-full">
-                    {cartCount}
+                    0
                   </span>
                 </Link>
               </motion.div>
@@ -158,7 +156,11 @@ function Navbar() {
                       className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1.5 shadow-sm transition hover:border-rose-200"
                     >
                       <span className="flex py-0.5 px-2 items-center justify-center rounded-full bg-linear-to-br from-rose-500 to-orange-500 text-sm font-semibold text-white">
-                        {(user?.name ?? "F").slice(0, 1).toUpperCase()}
+                        {user?.name ? (
+                          user.name.charAt(0).toUpperCase()
+                        ) : (
+                          <User size={16} />
+                        )}
                       </span>
                       <ChevronDown size={16} className="text-gray-500" />
                     </motion.button>
@@ -176,10 +178,10 @@ function Navbar() {
                         <div className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                           <div>
                             <p className="text-sm font-semibold text-gray-900">
-                              {user?.name ?? "Foodvely Member"}
+                              {user?.name}
                             </p>
                             <p className="text-xs text-gray-500">
-                              {user?.email ?? "user@gmail.com"}
+                              {user?.email}
                             </p>
                           </div>
                           <span className="rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-600">
@@ -366,7 +368,7 @@ function Navbar() {
                       onClick={() => setOpenModal(false)}
                       className="px-4 py-3 rounded-lg w-full block font-Sofia font-semibold text-gray-700 hover:bg-orange-100/50 hover:text-rose-600 transition-all duration-300"
                     >
-                      Wishlist ({wishlistCount})
+                      Wishlist 0
                     </Link>
                     {/* Search Bar */}
                     <div className="flex flex-wrap gap-2 justify-end">

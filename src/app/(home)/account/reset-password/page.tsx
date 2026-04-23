@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { ArrowRight, Eye, EyeOff, KeyRound, Loader2, Lock } from "lucide-react";
-import { resetPassword } from "@/services/authService";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -24,77 +24,42 @@ const inputClassName =
 
 export default function ResetPassword() {
   const router = useRouter();
+  const { resetPassword } = useAuth();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
-  const [resetToken, setResetToken] = useState<string | null>(null);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const queryEmail = searchParams.get("email") || "";
-    const queryToken = searchParams.get("token") || "";
     const storedEmail = window.sessionStorage.getItem(storageKeys.email) || "";
-    const storedToken = window.sessionStorage.getItem(storageKeys.token) || "";
-
     const initialEmail = queryEmail || storedEmail;
-    const initialToken = queryToken || storedToken;
-
     if (!initialEmail) {
       router.replace("/account/forgot-password");
       return;
     }
-
     setEmail(initialEmail);
-    setResetToken(initialToken || null);
   }, [router, searchParams]);
-
-  const validate = () => {
-    if (password.length < 8) {
-      toast.error("Password must be at least 8 characters long");
-      return false;
-    }
-
-    if (confirmPassword !== password) {
-      toast.error("Passwords do not match");
-      return false;
-    }
-
-    return true;
-  };
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validate()) return;
-
-    setIsSubmitting(true);
-    const loadingToast = toast.loading("Updating password...");
-
     try {
-      await resetPassword({
-        email,
-        resetToken: resetToken || undefined,
-        password,
-      });
+      const res = await resetPassword(email, oldPassword, newPassword);
 
-      window.sessionStorage.removeItem(storageKeys.email);
-      window.sessionStorage.removeItem(storageKeys.token);
-
-      toast.dismiss(loadingToast);
-      toast.success("Password updated successfully.");
-      router.replace(
-        `/account/signin?email=${encodeURIComponent(email)}&reset=success`,
-      );
-    } catch (error) {
-      toast.dismiss(loadingToast);
-      toast.error(
-        error instanceof Error ? error.message : "Unable to reset password.",
-      );
-    } finally {
-      setIsSubmitting(false);
+      if (res.success) {
+        toast.success(res.message);
+        router.replace("/account/login");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      throw error;
     }
   };
 
@@ -129,7 +94,7 @@ export default function ResetPassword() {
           <form onSubmit={handleReset} className="space-y-4">
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                New Password
+                Old Password
               </label>
               <div className="relative">
                 <Lock
@@ -138,8 +103,8 @@ export default function ResetPassword() {
                 />
                 <input
                   type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
                   placeholder="••••••••"
                   className={inputClassName}
                 />
@@ -155,7 +120,7 @@ export default function ResetPassword() {
 
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Confirm Password
+                New Password
               </label>
               <div className="relative">
                 <Lock
@@ -163,22 +128,18 @@ export default function ResetPassword() {
                   size={18}
                 />
                 <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="••••••••"
                   className={inputClassName}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowNewPassword(!showNewPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
+                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </motion.div>

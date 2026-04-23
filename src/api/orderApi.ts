@@ -1,4 +1,4 @@
-import api from "@/api/Base_Api";
+import api from "@/api/httpClient";
 
 type ApiResponse<T> = {
   success: boolean;

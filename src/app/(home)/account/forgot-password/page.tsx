@@ -13,16 +13,14 @@ import {
   Mail,
   ShieldCheck,
 } from "lucide-react";
-import {
-  requestPasswordReset,
-  verifyPasswordResetOtp,
-} from "@/services/authService";
+
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useAuth } from "@/hooks/useAuth";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -37,10 +35,14 @@ const storageKeys = {
 export default function ForgotPassword() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [step, setStep] = useState<"email" | "otp">("otp");
+  const [step, setStep] = useState<"email" | "otp">("email");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    forgotPassword: requestPasswordReset,
+    verifyOtp: verifyPasswordResetOtp,
+  } = useAuth();
 
   useEffect(() => {
     const queryEmail = searchParams.get("email") || "";
@@ -73,7 +75,6 @@ export default function ForgotPassword() {
     if (!validateEmail()) return;
 
     setIsSubmitting(true);
-    const loadingToast = toast.loading("Sending reset code...");
 
     try {
       await requestPasswordReset(email);
@@ -81,10 +82,8 @@ export default function ForgotPassword() {
       window.sessionStorage.removeItem(storageKeys.token);
       setStep("otp");
       setOtp("");
-      toast.dismiss(loadingToast);
       toast.success("OTP sent to your email.");
     } catch (error) {
-      toast.dismiss(loadingToast);
       toast.error(
         error instanceof Error ? error.message : "Unable to send OTP.",
       );
@@ -102,31 +101,36 @@ export default function ForgotPassword() {
     }
 
     setIsSubmitting(true);
-    const loadingToast = toast.loading("Verifying code...");
 
     try {
       const response = await verifyPasswordResetOtp(email, otp);
-      const resetToken = response.data?.resetToken;
+
+      const resetToken = response.resetToken;
 
       if (resetToken) {
         window.sessionStorage.setItem(storageKeys.token, resetToken);
       }
 
       window.sessionStorage.setItem(storageKeys.email, email);
-      toast.dismiss(loadingToast);
+
       toast.success("Code verified. Continue to reset your password.");
       router.push(
         `/account/reset-password?email=${encodeURIComponent(email)}` +
           (resetToken ? `&token=${encodeURIComponent(resetToken)}` : ""),
       );
     } catch (error) {
-      toast.dismiss(loadingToast);
       toast.error(
         error instanceof Error ? error.message : "OTP verification failed.",
       );
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleResendOtp = async () => {
+    if (!validateEmail()) return;
+
+    await requestPasswordReset(email);
   };
 
   return (
@@ -207,14 +211,38 @@ export default function ForgotPassword() {
                         index={0}
                         className="size-12 w-full outline-none"
                       />
-                      <InputOTPSlot index={1} className="size-12 w-full outline-none" />
-                      <InputOTPSlot index={2} className="size-12 w-full outline-none" />
-                      <InputOTPSlot index={3} className="size-12 w-full outline-none" />
-                      <InputOTPSlot index={4} className="size-12 w-full outline-none" />
-                      <InputOTPSlot index={5} className="size-12 w-full outline-none" />
+                      <InputOTPSlot
+                        index={1}
+                        className="size-12 w-full outline-none"
+                      />
+                      <InputOTPSlot
+                        index={2}
+                        className="size-12 w-full outline-none"
+                      />
+                      <InputOTPSlot
+                        index={3}
+                        className="size-12 w-full outline-none"
+                      />
+                      <InputOTPSlot
+                        index={4}
+                        className="size-12 w-full outline-none"
+                      />
+                      <InputOTPSlot
+                        index={5}
+                        className="size-12 w-full outline-none"
+                      />
                     </InputOTPGroup>
                   </InputOTP>
                 </div>
+              </div>
+              <div className="border">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  className="text-sm font-medium text-rose-500 hover:underline"
+                >
+                  Resend Code
+                </button>
               </div>
 
               <Button

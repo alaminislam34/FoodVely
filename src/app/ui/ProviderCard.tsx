@@ -5,7 +5,6 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { Provider } from "@/types/provider";
 import { useRouter } from "next/navigation";
-import { isWishlisted, toggleWishlist } from "@/utils/commerceStorage";
 import { useState } from "react";
 
 // Animation Variants
@@ -21,9 +20,7 @@ const cardVariants = {
 
 export const RestaurantCard = ({ provider }: { provider: Provider }) => {
   const route = useRouter();
-  const [wished, setWished] = useState(
-    isWishlisted(String(provider.id), "restaurant"),
-  );
+
   return (
     <motion.div
       variants={cardVariants}
@@ -51,13 +48,10 @@ export const RestaurantCard = ({ provider }: { provider: Provider }) => {
 
         {/* Favorite Button */}
         <button
-          onClick={() => {
-            toggleWishlist(String(provider.id), "restaurant");
-            setWished((prev) => !prev);
-          }}
+         
           className="absolute top-3 right-3 bg-white/90 text-rose-500 p-2 rounded-full shadow-md hover:bg-rose-50 transition"
         >
-          <Heart size={18} className={wished ? "fill-rose-500" : ""} />
+          <Heart size={18} className={ ""} />
         </button>
       </div>
 

@@ -1,247 +1,160 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as authService from "@/services/authService";
-import { mergeGuestCommerceToUser } from "@/utils/commerceStorage";
+import { httpClient } from "@/api/httpClient";
+import API_ENDPOINTS from "@/api/ApiEndpoints";
+import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
-interface AuthError {
-  message: string;
-  code?: string;
+export interface LoginPayload {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+  [key: string]: unknown;
 }
 
-export interface UseAuthReturn {
-  // States
-  isLoading: boolean;
-  error: AuthError | null;
-  user: authService.UserData | null;
-  isAuthenticated: boolean;
+const AUTH_QUERY_KEY = ["authUser"];
 
-  // Auth Methods
-  register: (name: string, email: string, password: string) => Promise<void>;
-  verifyAccount: (email: string, otp: string) => Promise<void>;
-  loginRequest: (email: string, password: string) => Promise<void>;
-  loginVerify: (email: string, otp: string) => Promise<void>;
-  googleLogin: (token: string) => Promise<void>;
-  logout: () => void;
-  clearError: () => void;
-}
+export function useAuth() {
+  const queryClient = useQueryClient();
+  const [error, setError] = useState<string | null>(null);
 
-export function useAuth(): UseAuthReturn {
-  const decodeUserFromToken = useCallback(
-    (token: string): authService.UserData | null => {
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: AUTH_QUERY_KEY,
+    queryFn: async () => {
       try {
-        const payload = token.split(".")[1];
-        if (!payload) return null;
-
-        const decoded = JSON.parse(atob(payload)) as {
-          sub?: string;
-          id?: string;
-          name?: string;
-          email?: string;
-          role?: string;
-          status?: string;
-        };
-
-        return {
-          id: String(decoded.sub ?? decoded.id ?? ""),
-          name: String(decoded.name ?? "User"),
-          email: String(decoded.email ?? ""),
-          role: String(decoded.role ?? "CUSTOMER"),
-          status: String(decoded.status ?? "active"),
-        };
+        const profile = await authService.getProfile();
+        return profile;
       } catch {
+        Cookies.remove("better-auth.session_token");
         return null;
       }
     },
-    [],
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 60,
+    retry: false,
+    enabled: true,
+  });
+
+  // After login/register/verify, refetch user profile to update user store
+  const handleAuthSuccess = useCallback(
+    async () => {
+      await queryClient.invalidateQueries({ queryKey: AUTH_QUERY_KEY });
+    },
+    [queryClient],
   );
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<AuthError | null>(null);
-  const [user, setUser] = useState<authService.UserData | null>(
-    authService.getStoredUser(),
-  );
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    authService.isAuthenticated(),
-  );
+  const registerMutation = useMutation({
+    mutationFn: authService.registerUser,
+    onSuccess: () => handleAuthSuccess(),
+    onError: (err: any) => {
+      setError(err?.message || "Registration failed");
+    },
+  });
 
-  const clearError = useCallback(() => {
-    setError(null);
+  const loginMutation = useMutation({
+    mutationFn: async (payload: LoginPayload) => {
+      const response = await authService.loginUser(payload);
+      return (
+        response.data?.user ??
+        (response.data as unknown as authService.UserData) ??
+        null
+      );
+    },
+    onSuccess: () => handleAuthSuccess(),
+    onError: (err: any) => {
+      setError(err?.message || "Login failed");
+    },
+  });
+
+  const verifyEmailMutation = useMutation({
+    mutationFn: (vars: { email: string; otp: string }) =>
+      authService.verifyEmail(vars.email, vars.otp),
+    onSuccess: () => handleAuthSuccess(),
+    onError: (err: any) => {
+      setError(err?.message || "Verification failed");
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: authService.logoutApi,
+    onSettled: () => {
+      authService.clearAuthTokens();
+      queryClient.setQueryData(AUTH_QUERY_KEY, null);
+      queryClient.clear();
+      window.location.href = "/";
+    },
+  });
+
+  const forgotPassword = useCallback(async (email: string) => {
+    const res = await httpClient.post(API_ENDPOINTS.FORGOT_PASSWORD, { email });
+    if (!res.success) {
+      toast.error(res.message);
+      throw new Error(res.message);
+    }
+    return res;
   }, []);
 
-  const register = useCallback(
-    async (name: string, email: string, password: string) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await authService.registerUser(name, email, password);
-        if (response.success) {
-          setUser(response.data);
-          authService.storeUser(response.data);
-        }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Registration failed";
-        setError({ message: errorMessage });
-        throw err;
-      } finally {
-        setIsLoading(false);
+  const verifyOtp = useCallback(
+    async (email: string, otp: string): Promise<{ resetToken?: string }> => {
+      const res = await httpClient.post(
+        API_ENDPOINTS.VERIFY_PASSWORD_RESET_OTP,
+        {
+          email,
+          otp,
+        },
+      );
+      if (!res.success) {
+        toast.error(res.message);
+        throw new Error(res.message);
       }
+      return { resetToken: res.data as string };
     },
     [],
   );
 
-  const verifyAccount = useCallback(async (email: string, otp: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await authService.verifyAccount(email, otp);
-      if (response.success) {
-        setUser(response.data);
-        authService.storeUser(response.data);
-      }
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Account verification failed";
-      setError({ message: errorMessage });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const loginRequest = useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      await authService.loginRequest(email, password);
-      const demoUser: authService.UserData = {
-        id: "demo-user",
-        name: "Foodvely Member",
+  const resetPassword = useCallback(
+    async (email: string, oldPassword: string, newPassword: string) => {
+      const res = await httpClient.post(API_ENDPOINTS.RESET_PASSWORD, {
         email,
-        role: "CUSTOMER",
-        status: "active",
-      };
-
-      authService.storeTokens("demo-access-token", "demo-refresh-token");
-      authService.storeUser(demoUser);
-      mergeGuestCommerceToUser(demoUser.id);
-      setUser(demoUser);
-      setIsAuthenticated(true);
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Login request failed";
-      setError({ message: errorMessage });
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const loginVerify = useCallback(
-    async (email: string, otp: string) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await authService.loginVerify(email, otp);
-        if (response.success) {
-          authService.storeTokens(
-            response.data.accessToken,
-            response.data.refreshToken,
-          );
-          const decodedUser = decodeUserFromToken(response.data.accessToken);
-          if (decodedUser) {
-            authService.storeUser(decodedUser);
-            if (decodedUser.id) {
-              mergeGuestCommerceToUser(String(decodedUser.id));
-            }
-            setUser(decodedUser);
-          }
-          setIsAuthenticated(true);
-        }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Login verification failed";
-        setError({ message: errorMessage });
-        throw err;
-      } finally {
-        setIsLoading(false);
+        oldPassword,
+        newPassword,
+      });
+      if (!res.success) {
+        toast.error(res.message);
+        throw new Error(res.message);
       }
+      return res;
     },
-    [decodeUserFromToken],
+    [],
   );
-
-  const googleLogin = useCallback(
-    async (token: string) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await authService.googleLogin(token);
-        if (response.success) {
-          authService.storeTokens(
-            response.data.accessToken,
-            response.data.refreshToken,
-          );
-          const decodedUser = decodeUserFromToken(response.data.accessToken);
-          if (decodedUser) {
-            authService.storeUser(decodedUser);
-            if (decodedUser.id) {
-              mergeGuestCommerceToUser(String(decodedUser.id));
-            }
-            setUser(decodedUser);
-          }
-          setIsAuthenticated(true);
-        }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "Google login failed";
-        setError({ message: errorMessage });
-        throw err;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [decodeUserFromToken],
-  );
-
-  const logout = useCallback(() => {
-    authService.clearTokens();
-    setUser(null);
-    setIsAuthenticated(false);
-    setError(null);
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      const storedUser = authService.getStoredUser();
-      if (storedUser) {
-        setUser(storedUser);
-      } else {
-        const decodedUser = decodeUserFromToken(token);
-        if (decodedUser) {
-          authService.storeUser(decodedUser);
-          setUser(decodedUser);
-        }
-      }
-      setIsAuthenticated(true);
-    } else {
-      setUser(null);
-      setIsAuthenticated(false);
-    }
-  }, [decodeUserFromToken]);
 
   return {
-    isLoading,
+    user: user ?? null,
+    isAuthenticated: !!user,
+    isLoading: isLoading || isFetching,
+    isProcessing:
+      registerMutation.isPending ||
+      loginMutation.isPending ||
+      logoutMutation.isPending ||
+      verifyEmailMutation.isPending,
+    login: loginMutation.mutateAsync,
+    loginRequest: async (email: string, password: string) =>
+      loginMutation.mutateAsync({ email, password }),
+    register: registerMutation.mutateAsync,
+    verifyEmail: verifyEmailMutation.mutateAsync,
+    verifyAccount: verifyEmailMutation.mutateAsync,
+    logout: logoutMutation.mutate,
+    forgotPassword,
+    verifyOtp,
+    resetPassword,
     error,
-    user,
-    isAuthenticated,
-    register,
-    verifyAccount,
-    loginRequest,
-    loginVerify,
-    googleLogin,
-    logout,
-    clearError,
+    clearError: () => setError(null),
   };
 }

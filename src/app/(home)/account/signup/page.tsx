@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import React, { useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -12,10 +12,15 @@ import {
   Eye,
   EyeOff,
   Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { useAuthContext } from "@/context/AuthContext";
+
+// Hooks & Utils
+import { useAuth } from "@/hooks/useAuth";
 import { getRedirectPathByRole } from "@/utils/authRedirect";
+
+// UI Components
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
@@ -24,345 +29,333 @@ import {
 } from "@/components/ui/input-otp";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
+import z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { httpClient } from "@/api/httpClient";
+import API_ENDPOINTS from "@/api/ApiEndpoints";
 
-// --- Components & Constants ---
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 15 },
-  visible: { opacity: 1, y: 0 },
+const variants = {
+  initial: { opacity: 0, x: 10 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -10 },
 };
 
-const inputClassName =
-  "h-11 w-full rounded-xl border border-rose-100 bg-white px-3 text-sm text-gray-900 outline-none transition focus:border-rose-400 focus:ring-4 focus:ring-rose-100";
+export const SignUpSchemaValidation = z.object({
+  name: z.string().min(2, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .uppercase()
+    .lowercase()
+    .regex(/[0-9]/, "Password must contain a number")
+    .regex(/[@$!%*?&]/, "Password must contain a special character"),
+});
+export interface ISignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+  rememberMe: boolean;
+  [key: string]: unknown; // Index signature to allow extra fields if needed
+}
 
 export default function SignUp() {
   const router = useRouter();
-  const { register, verifyAccount, isLoading, isAuthenticated, user } =
-    useAuthContext();
-  const [showPassword, setShowPassword] = useState(false);
+  const { register, isAuthenticated, isProcessing, user, verifyEmail } =
+    useAuth();
+
+  // Local State
+  const [isPending, setIsPending] = useState(false);
+
+  // Local State
   const [step, setStep] = useState<"register" | "verify">("register");
+  const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
-
+  const [resendDisabled, setResendDisabled] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  /**
+   * 1. FIXED REDIRECT LOGIC
+   * We only redirect if authenticated AND we are not currently in the verification step.
+   */
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && step !== "verify") {
       router.replace(getRedirectPathByRole(user?.role));
     }
-  }, [isAuthenticated, router, user?.role]);
+  }, [isAuthenticated, step, user?.role, router]);
 
+  // 2. Validation Logic
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (formData.name.length < 2) newErrors.name = "Full name is required";
+    const errs: Record<string, string> = {};
+    if (formData.name.length < 2) errs.name = "Full name is required";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Invalid email address";
+      errs.email = "Invalid email";
     if (formData.password.length < 8)
-      newErrors.password = "Password must be 8+ characters";
-    if (!acceptTerms) newErrors.terms = "You must accept the terms to continue";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+      errs.password = "Min. 8 characters required";
+    if (!acceptTerms) errs.terms = "Please accept terms";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: "" });
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // 3. Handlers
+  const onRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
-    toast.loading("Creating account...");
-
-    setTimeout(() => {
-      toast.success("Account created. Check your email for OTP.");
+    try {
+      await register(formData);
+      toast.success("Account created! Check your email for OTP.");
       setStep("verify");
-    }, 1000);
-    // try {
-    //   await register(formData.name, formData.email, formData.password);
-    //   toast.dismiss(loadingToast);
-    //   toast.success("Account created. Check your email for OTP.");
-    //   setStep("verify");
-    // } catch (error: any) {
-    //   toast.dismiss(loadingToast);
-    //   toast.error(error?.message || "Registration failed");
-    // }
+    } catch (error: any) {
+      toast.error(error?.message || "Registration failed");
+    }
   };
 
-  const handleVerify = async (e: React.FormEvent) => {
+  const onVerifySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!otp.trim()) {
-      toast.error("Please enter OTP");
-      return;
-    }
+    if (otp.length < 6) return toast.error("Enter full OTP");
 
-    const loadingToast = toast.loading("Verifying account...");
     try {
-      await verifyAccount(formData.email, otp);
-      toast.dismiss(loadingToast);
-      toast.success("Account verified. Please sign in.");
-      router.push("/account/signin");
+      await verifyEmail({ email: formData.email, otp });
+      toast.success("Verified successfully!");
+      // Redirect to home/dashboard since user is already logged in
+      router.push(getRedirectPathByRole(user?.role));
     } catch (error: any) {
-      toast.dismiss(loadingToast);
       toast.error(error?.message || "Verification failed");
     }
   };
 
-  if (step === "verify") {
-    return (
-      <section className="flex items-center min-h-180 justify-center px-4 py-10 lg:py-14">
-        <div className="w-full max-w-md">
-          <div className="rounded-3xl border border-gray-200 bg-white/95 p-8 lg:p-12 shadow-[0_24px_60px_-24px_rgba(190,24,93,0.15)]">
-            <h1 className="text-center text-2xl font-semibold text-gray-900">
-              Verify Account
-            </h1>
-            <p className="mb-6 mt-2 text-center text-sm text-gray-600">
-              Enter the OTP sent to {formData.email}
-            </p>
+  const handleResendOtp = async () => {
+    try {
+      await register(formData);
+      toast.success("OTP resent to your email.");
+      setResendDisabled(true);
+      setTimeout(() => setResendDisabled(false), 60000);
+    } catch (error: any) {
+      toast.error(error?.message);
+    }
+  };
 
-            <form onSubmit={handleVerify} className="space-y-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-gray-700">
-                  OTP Code
-                </label>
-                <div className="w-full">
-                  <InputOTP
-                    maxLength={6}
-                    value={otp}
-                    onChange={(value) => setOtp(value.toUpperCase())}
-                    className="w-full"
-                  >
-                    <InputOTPGroup className="grid w-full grid-cols-6 gap-2 rounded-none">
-                      <InputOTPSlot
-                        index={0}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                      <InputOTPSlot
-                        index={1}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                      <InputOTPSlot
-                        index={2}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                      <InputOTPSlot
-                        index={3}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                      <InputOTPSlot
-                        index={4}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                      <InputOTPSlot
-                        index={5}
-                        className="h-12 w-full rounded-md border text-lg font-semibold first:rounded-md first:border"
-                      />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </div>
-              </div>
+  // --- AUTH LOGIC (from useAuth) ---
 
-              <Button
-                size="lg"
-                disabled={isLoading}
-                className="h-11 w-full rounded-xl bg-rose-500 text-white hover:bg-rose-600"
-              >
-                {isLoading ? (
-                  <Loader2 className="animate-spin" size={20} />
-                ) : (
-                  "Verify Account"
-                )}
-              </Button>
-            </form>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const {
+    register: signup,
+    handleSubmit,
+    getValues,
+    formState: { errors: formErrors },
+  } = useForm<ISignUpFormData>({
+    resolver: zodResolver(SignUpSchemaValidation as any),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
+
+  const handleRegisterUser = async (payload: ISignUpFormData) => {
+    setIsPending(true);
+
+    try {
+      const res = await httpClient.post(API_ENDPOINTS.REGISTER_API, payload);
+      if (!res.success) {
+        setIsPending(false);
+        throw new Error(res.message);
+      }
+      toast.success("Registration successful! Please verify your email.");
+      setStep("verify");
+    } catch (error: any) {
+      setIsPending(false);
+      throw new Error(error.message);
+    }
+  };
 
   return (
-    <section className="flex min-h-full items-center justify-center px-4 py-10 lg:py-14">
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        className="w-full max-w-lg"
-      >
-        <div className="rounded-3xl border border-gray-100 bg-white/95 p-6 lg:p-12 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.15)]">
-          <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-500 text-rose-50">
-              <User size={20} />
-            </div>
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Create Account
-            </h1>
-            <p className="mt-2 text-sm text-gray-600">
-              Join Foodvely in seconds
-            </p>
-          </div>
+    <section className="flex min-h-screen items-center justify-center px-4 py-12 lg:py-20 bg-slate-50/50">
+      <AnimatePresence mode="wait">
+        <motion.div key="register" {...variants} className="w-full max-w-lg">
+          <div className="rounded-[2.5rem] border border-gray-100 bg-white p-8 lg:p-12 shadow-2xl shadow-rose-100/40">
+            <Header
+              title="Create Account"
+              subtitle="Join Foodvely in seconds"
+            />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <div className="relative">
-                <User
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="John Doe"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className={`${inputClassName} pl-10 ${errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
-                />
+            <form onSubmit={onRegisterSubmit} className="space-y-5">
+              <InputGroup
+                label="Full Name"
+                name="name"
+                icon={<User size={18} />}
+                value={formData.name}
+                onChange={handleChange}
+                error={errors.name}
+                placeholder="John Doe"
+              />
+
+              <InputGroup
+                label="Email Address"
+                name="email"
+                type="email"
+                icon={<Mail size={18} />}
+                value={formData.email}
+                onChange={handleChange}
+                error={errors.email}
+                placeholder="name@example.com"
+              />
+
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
+                  />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`h-12 w-full rounded-xl border pl-10 pr-10 outline-none transition focus:ring-4 ${
+                      errors.password
+                        ? "border-red-500 focus:ring-red-50"
+                        : "border-slate-100 focus:border-rose-400 focus:ring-rose-50"
+                    }`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-rose-500"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-xs text-red-500 font-medium">
+                    {errors.password}
+                  </p>
+                )}
               </div>
-              {errors.name && (
-                <p className="text-xs text-red-500">{errors.name}</p>
-              )}
-            </motion.div>
 
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="name@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`${inputClassName} pl-10 ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-xs text-red-500">{errors.email}</p>
-              )}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="relative">
-                <Lock
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  size={18}
-                />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`${inputClassName} pl-10 pr-10 ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-100" : ""}`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-xs text-red-500">{errors.password}</p>
-              )}
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-2">
-              <label className="flex items-center gap-3 text-sm text-gray-600">
+              <div className="flex items-start gap-3 py-2">
                 <input
                   type="checkbox"
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="h-4 w-4 text-[10px] border-gray-300 text-rose-500 focus:ring-rose-500"
+                  className="mt-1 h-4 w-4 rounded border-slate-300 text-rose-500 focus:ring-rose-500"
                 />
-                <span>
+                <span className="text-sm text-slate-500">
                   I agree to the{" "}
                   <Link
                     href="/terms"
-                    className="font-semibold text-rose-500 hover:underline"
+                    className="font-bold text-rose-500 hover:underline"
                   >
-                    Terms & Conditions
+                    Terms
                   </Link>{" "}
-                  and privacy policy.
+                  and Privacy Policy.
+                  {errors.terms && (
+                    <p className="text-xs text-red-500 mt-1">{errors.terms}</p>
+                  )}
                 </span>
-              </label>
-              {errors.terms && (
-                <p className="ml-7 text-xs text-red-500">{errors.terms}</p>
-              )}
-            </motion.div>
-            <br />
-            <Button
-              size="lg"
-              disabled={isLoading || !acceptTerms}
-              className="h-11 w-full rounded-xl bg-rose-500 text-white hover:bg-rose-600"
-            >
-              {isLoading ? (
-                <Loader2 className="animate-spin" size={18} />
-              ) : (
-                <>
-                  Create Free Account
-                  <ArrowRight size={18} />
-                </>
-              )}
-            </Button>
-          </form>
-          <motion.div className="text-black">
-            <p className="text-sm text-center text-gray-600 mt-4">
-              Want to sell your food?{" "}
-              <Link
-                href="/account/signup/provider"
-                className="font-semibold text-rose-500 hover:underline"
-              >
-                Become a Food Provider
-              </Link>
-            </p>
-          </motion.div>
-          <motion.div variants={itemVariants} className="space-y-3 py-4">
-            <div className="grid grid-cols-2 items-center gap-4 justify-center">
-              <Button size={"lg"} className="px-5" variant={"outline"}>
-                <FcGoogle />
-                Google
-              </Button>
-              <Button size={"lg"} className="px-5" variant={"outline"}>
-                <FaFacebook />
-                Facebook
-              </Button>
-            </div>
-          </motion.div>
+              </div>
 
-          <motion.div variants={itemVariants} className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+              <Button
+                disabled={isProcessing}
+                className="h-12 w-full rounded-xl bg-rose-500 text-white hover:bg-rose-600 font-bold text-base shadow-lg shadow-rose-200"
+              >
+                {isProcessing ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <>
+                    Create Account <ArrowRight size={18} className="ml-2" />
+                  </>
+                )}
+              </Button>
+            </form>
+
+            <SocialAuth />
+
+            <p className="mt-8 text-center text-sm text-slate-500">
               Already a member?{" "}
               <Link
                 href="/account/signin"
-                className="font-semibold text-rose-500 hover:underline"
+                className="font-bold text-rose-500 hover:underline"
               >
                 Sign In
               </Link>
             </p>
-          </motion.div>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 }
+
+// --- HELPER COMPONENTS ---
+
+const Header = ({ title, subtitle }: { title: string; subtitle: string }) => (
+  <div className="mb-8 text-center">
+    <h1 className="text-3xl font-black text-slate-800">{title}</h1>
+    <p className="mt-2 text-slate-500 font-medium">{subtitle}</p>
+  </div>
+);
+
+const InputGroup = ({ label, name, icon, error, ...props }: any) => (
+  <div className="space-y-2">
+    <label className="text-sm font-semibold text-slate-700">{label}</label>
+    <div className="relative">
+      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+        {icon}
+      </div>
+      <input
+        name={name}
+        className={`h-12 w-full rounded-xl border pl-10 outline-none transition focus:ring-4 ${
+          error
+            ? "border-red-500 focus:ring-red-50"
+            : "border-slate-100 focus:border-rose-400 focus:ring-rose-50"
+        }`}
+        {...props}
+      />
+    </div>
+    {error && <p className="text-xs text-red-500 font-medium">{error}</p>}
+  </div>
+);
+
+const SocialAuth = () => (
+  <div className="mt-8 space-y-4">
+    <div className="relative flex items-center justify-center">
+      <span className="absolute inset-x-0 h-px bg-slate-100"></span>
+      <span className="relative bg-white px-4 text-xs font-bold uppercase tracking-widest text-slate-400">
+        Or continue with
+      </span>
+    </div>
+    <div className="grid grid-cols-2 gap-4">
+      <Button
+        variant="outline"
+        className="h-12 rounded-xl border-slate-100 font-bold hover:bg-slate-50"
+      >
+        <FcGoogle className="mr-2" /> Google
+      </Button>
+      <Button
+        variant="outline"
+        className="h-12 rounded-xl border-slate-100 font-bold hover:bg-slate-50 text-blue-600"
+      >
+        <FaFacebook className="mr-2" /> Facebook
+      </Button>
+    </div>
+  </div>
+);

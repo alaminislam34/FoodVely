@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import axios from "axios";
-import api from "@/api/Base_Api";
+import api from "@/api/httpClient";
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 
 export interface RegisterPayload {

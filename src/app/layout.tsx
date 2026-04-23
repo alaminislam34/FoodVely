@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ToastProvider } from "@/providers/ToastProvider";
-import { AuthProvider } from "@/context/AuthContext";
-import { CommerceProvider } from "@/context/CommerceContext";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getSiteUrl } from "@/lib/site";
+import TanstackProvider from "@/providers/TanStackProvider";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -23,12 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body>
-        <AuthProvider>
-          <CommerceProvider>
-            <ToastProvider />
-            {children}
-          </CommerceProvider>
-        </AuthProvider>
+        <TanstackProvider>
+          <ToastProvider />
+          {children}
+        </TanstackProvider>
       </body>
     </html>
   );

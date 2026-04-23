@@ -1,10 +1,52 @@
-/**
- * Auth Service - Handles all authentication API calls
- * Base URL: http://localhost:5000/api/v1/auth
- */
+"use client";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-const AUTH_ENDPOINT = `${API_BASE_URL}/api/v1/auth`;
+import API_ENDPOINTS from "@/api/ApiEndpoints";
+import { httpClient } from "@/api/httpClient";
+
+const ACCESS_TOKEN_KEY = "auth_access_token";
+const REFRESH_TOKEN_KEY = "auth_refresh_token";
+
+const storeAuthTokens = (payload: unknown) => {
+  if (typeof window === "undefined") return;
+  const parsed = (payload as { data?: any } | undefined)?.data ?? payload;
+  const accessToken =
+    parsed?.token?.accesssToken ?? parsed?.accessToken ?? null;
+  const refreshToken = parsed?.token?.refreshToken ?? parsed?.refreshToken ?? null;
+
+  if (accessToken) {
+    window.localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  }
+  if (refreshToken) {
+    window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  }
+};
+
+export const getStoredAccessToken = () => {
+  if (typeof window === "undefined") return null;
+  return window.localStorage.getItem(ACCESS_TOKEN_KEY);
+};
+
+export const clearAuthTokens = () => {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(ACCESS_TOKEN_KEY);
+  window.localStorage.removeItem(REFRESH_TOKEN_KEY);
+};
+
+// --- Interfaces ---
+export interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  [key: string]: unknown;
+}
 
 interface AuthResponse<T> {
   success: boolean;
@@ -12,338 +54,95 @@ interface AuthResponse<T> {
   data: T;
 }
 
-const readErrorMessage = async (response: Response, fallback: string) => {
+
+export async function registerUser(
+  payload: RegisterRequest,
+): Promise<AuthResponse<UserData>> {
   try {
-    const payload = (await response.json()) as
-      | { message?: string; error?: { message?: string } }
-      | undefined;
-
-    return payload?.message || payload?.error?.message || fallback;
-  } catch {
-    return fallback;
+    const res = await httpClient.post<UserData>(API_ENDPOINTS.REGISTER_API, payload);
+    storeAuthTokens(res);
+    return res;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Registration failed");
   }
-};
+}
 
-export interface UserData {
-  id: string;
-  name: string;
+export interface LoginPayload {
   email: string;
-  role: string;
-  status: string;
-  [key: string]: any;
-}
-
-export interface TokenData {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface PasswordResetRequestData {
-  message?: string;
-  email?: string;
-}
-
-export interface PasswordResetVerifyData {
-  message?: string;
-  resetToken?: string;
-  email?: string;
-}
-
-export interface ProviderRestaurantPayload {
-  restaurantName: string;
-  city: string;
-  address: string;
-  contactNumber?: string;
-  cuisine?: string;
-  openingHours?: string;
-  logo?: string;
-  coverImage?: string;
-  description?: string;
-  foodCategories?: string[];
-}
-
-export interface CreateProviderPayload {
   password: string;
-  user: {
-    name: string;
-    email: string;
-    role: "PROVIDER";
-  };
-  restaurant: ProviderRestaurantPayload;
-}
-
-export interface CreateProviderResponseData {
-  accessToken?: string;
-  refreshToken?: string;
-  user?: UserData;
-  message?: string;
+  rememberMe?: boolean;
   [key: string]: unknown;
 }
 
-const FAKE_LOGIN = {
-  email: "user@gmail.com",
-  password: "alamin",
-  user: {
-    id: "demo-user",
-    name: "Foodvely Member",
-    email: "user@gmail.com",
-    role: "CUSTOMER",
-    status: "active",
-  } satisfies UserData,
+export async function loginUser(
+  payload: LoginPayload,
+): Promise<AuthResponse<{ user: UserData }>> {
+  try {
+    const res = await httpClient.post<{ user: UserData }>(
+      API_ENDPOINTS.LOGIN_API,
+      payload,
+    );
+    storeAuthTokens(res);
+    return res;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Login failed");
+  }
+}
+
+export async function verifyEmail(
+  email: string,
+  otp: string,
+): Promise<AuthResponse<UserData>> {
+  try {
+    const res = await httpClient.post<UserData>(API_ENDPOINTS.VERIFY_EMAIL, {
+      email,
+      otp,
+    });
+    storeAuthTokens(res);
+    return res;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Verification failed");
+  }
+}
+
+export async function logoutApi(): Promise<void> {
+  try {
+    await httpClient.post(API_ENDPOINTS.LOGOUT_API);
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Logout failed");
+  } finally {
+    clearAuthTokens();
+  }
+}
+
+
+export async function getProfile(): Promise<UserData> {
+  const response = await httpClient.get<Record<string, unknown>>(API_ENDPOINTS.GET_CUSTOMER_PROFILE);
+  const data = response.data as Record<string, unknown> | null;
+  if (!data) {
+    throw new Error("Failed to load profile");
+  }
+  return (data.user ?? data) as UserData;
+}
+
+export async function forgotPassword(email: string) {
+  try {
+    await httpClient.post(API_ENDPOINTS.FORGOT_PASSWORD, { email });
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to request password reset",
+    );
+  }
+}
+
+export const verifyOtp = async (email: string, otp: string) => {
+  try {
+    const response = await httpClient.post<{ resetToken?: string }>(
+      API_ENDPOINTS.VERIFY_PASSWORD_RESET_OTP,
+      { email, otp },
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error?.message);
+  }
 };
-
-// Register User
-export async function registerUser(
-  name: string,
-  email: string,
-  password: string,
-): Promise<AuthResponse<UserData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, email, password }),
-  });
-
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, "Registration failed"));
-  }
-
-  return response.json();
-}
-
-// Verify Account (OTP verification after registration)
-export async function verifyAccount(
-  email: string,
-  otp: string,
-): Promise<AuthResponse<UserData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/verify-account`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, otp }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      await readErrorMessage(response, "Account verification failed"),
-    );
-  }
-
-  return response.json();
-}
-
-export async function createProviderAccount(
-  payload: CreateProviderPayload,
-): Promise<AuthResponse<CreateProviderResponseData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/create-provider`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      await readErrorMessage(response, "Provider account creation failed"),
-    );
-  }
-
-  return response.json();
-}
-
-// Login Request (Step 1 - Send OTP)
-export async function loginRequest(
-  email: string,
-  password: string,
-): Promise<AuthResponse<{ message: string }>> {
-  if (email === FAKE_LOGIN.email && password === FAKE_LOGIN.password) {
-    return {
-      success: true,
-      message: "Login accepted",
-      data: { message: "Login accepted" },
-    };
-  }
-
-  throw new Error("Invalid email or password");
-}
-
-// Login Verify (Step 2 - Verify OTP and get tokens)
-export async function loginVerify(
-  email: string,
-  otp: string,
-): Promise<AuthResponse<TokenData>> {
-  if (email === FAKE_LOGIN.email && otp.trim()) {
-    return {
-      success: true,
-      message: "OTP verified",
-      data: {
-        accessToken: "demo-access-token",
-        refreshToken: "demo-refresh-token",
-      },
-    };
-  }
-
-  throw new Error("OTP verification failed");
-}
-
-// Password Reset Request (Step 1 - Send OTP)
-export async function requestPasswordReset(
-  email: string,
-): Promise<AuthResponse<PasswordResetRequestData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/forgot-password`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      await readErrorMessage(response, "Password reset request failed"),
-    );
-  }
-
-  return response.json();
-}
-
-// Password Reset OTP Verification (Step 2)
-export async function verifyPasswordResetOtp(
-  email: string,
-  otp: string,
-): Promise<AuthResponse<PasswordResetVerifyData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/forgot-password/verify`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, otp }),
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      await readErrorMessage(response, "Password reset verification failed"),
-    );
-  }
-
-  return response.json();
-}
-
-// Password Reset (Step 3 - Update password)
-export async function resetPassword(payload: {
-  email?: string;
-  resetToken?: string;
-  password: string;
-}): Promise<AuthResponse<{ message?: string }>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/reset-password`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, "Password reset failed"));
-  }
-
-  return response.json();
-}
-
-// Google Login
-export async function googleLogin(
-  token: string,
-): Promise<AuthResponse<TokenData>> {
-  const response = await fetch(`${AUTH_ENDPOINT}/google`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ token }),
-  });
-
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, "Google login failed"));
-  }
-
-  return response.json();
-}
-
-// Store tokens in localStorage
-export function storeTokens(accessToken: string, refreshToken: string): void {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-  }
-}
-
-// Get stored access token
-export function getAccessToken(): string | null {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("accessToken");
-  }
-  return null;
-}
-
-// Get stored refresh token
-export function getRefreshToken(): string | null {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("refreshToken");
-  }
-  return null;
-}
-
-// Clear tokens (Logout)
-export function clearTokens(): void {
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("user");
-  }
-}
-
-// Get stored user data
-export function getStoredUser(): UserData | null {
-  if (typeof window !== "undefined") {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
-  }
-  return null;
-}
-
-// Store user data
-export function storeUser(user: UserData): void {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("user", JSON.stringify(user));
-  }
-}
-
-// Check if user is authenticated
-export function isAuthenticated(): boolean {
-  return getAccessToken() !== null;
-}
-
-// Make authenticated API requests with token
-export async function authenticatedFetch(
-  url: string,
-  options: RequestInit = {},
-): Promise<Response> {
-  const token = getAccessToken();
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-  };
-
-  if (token) {
-    (headers as any)["Authorization"] = `Bearer ${token}`;
-  }
-
-  return fetch(url, {
-    ...options,
-    headers,
-  });
-}

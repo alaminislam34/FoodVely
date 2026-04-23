@@ -16,11 +16,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  addToCart,
-  isWishlisted,
-  toggleWishlist,
-} from "@/utils/commerceStorage";
 
 interface MenuDetailsPageProps {
   params: Promise<{ slug: string }>;
@@ -73,12 +68,6 @@ export default function MenuDetailsPage({
 
     fetchProduct();
   }, [slug]);
-
-  const handleAddToCart = () => {
-    if (product) {
-      addToCart(String(product.id), quantity);
-    }
-  };
 
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,8 +128,6 @@ export default function MenuDetailsPage({
         ((product.price - product.discountPrice) / product.price) * 100,
       )
     : 0;
-
-  const wished = isWishlisted(String(product.id), "product");
 
   return (
     <section className="min-h-screen py-8 md:py-12">
@@ -385,7 +372,6 @@ export default function MenuDetailsPage({
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={handleAddToCart}
                 className="flex-1 flex items-center justify-center gap-2 bg-white border-2 border-rose-500 text-rose-500 py-2.5 px-5 rounded-lg font-Sofia font-semibold hover:bg-rose-50 transition-colors"
               >
                 <ShoppingCart size={18} />

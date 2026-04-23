@@ -7,8 +7,6 @@ import { Product } from "@/types/product";
 import Link from "next/link";
 import {
   addToCart,
-  isWishlisted,
-  toggleWishlist,
 } from "@/utils/commerceStorage";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -37,13 +35,7 @@ export const ProductCard = ({
   const displayPrice = product.discountPrice || product.price;
   const hasDiscount = !!product.discountPrice;
   const categoryName = product.category?.title || "Uncategorized";
-  const [wished, setWished] = useState(
-    isWishlisted(String(product.id), "product"),
-  );
-
-  useEffect(() => {
-    setWished(isWishlisted(String(product.id), "product"));
-  }, [product.id]);
+  
 
   return (
     <motion.div
@@ -143,19 +135,12 @@ export const ProductCard = ({
             </p>
           </div>
           <button
-            onClick={() => {
-              const nextWished = !wished;
-              toggleWishlist(String(product.id), "product");
-              setWished(nextWished);
-              toast.success(
-                nextWished ? "Added to wishlist" : "Removed from wishlist",
-              );
-            }}
+            
             className="shrink-0 p-2 rounded-2xl bg-slate-50 text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all"
           >
             <Heart
               size={18}
-              className={wished ? "fill-rose-500 text-rose-500" : ""}
+              className={"fill-rose-500 text-rose-500" }
             />
           </button>
         </div>
