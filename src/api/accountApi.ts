@@ -1,4 +1,5 @@
-import api from "@/api/httpClient";
+import { httpClient } from "./httpClient";
+
 
 type ApiResponse<T> = {
   success: boolean;
@@ -41,14 +42,14 @@ const normalizeArray = <T>(raw: unknown): T[] => {
 
 export const accountApi = {
   listAddresses: async (): Promise<AccountAddress[]> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/account/addresses",
     );
     return normalizeArray<AccountAddress>(data.data);
   },
 
   createAddress: async (payload: AccountAddress): Promise<AccountAddress> => {
-    const { data } = await api.post<ApiResponse<AccountAddress>>(
+    const { data } = await httpClient.post<ApiResponse<AccountAddress>>(
       "/api/v1/account/addresses",
       payload,
     );
@@ -56,11 +57,11 @@ export const accountApi = {
   },
 
   deleteAddress: async (id: string): Promise<void> => {
-    await api.delete(`/api/v1/account/addresses/${id}`);
+    await httpClient.delete(`/api/v1/account/addresses/${id}`);
   },
 
   listPaymentMethods: async (): Promise<AccountPaymentMethod[]> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/account/payment-methods",
     );
     return normalizeArray<AccountPaymentMethod>(data.data);
@@ -69,7 +70,7 @@ export const accountApi = {
   createPaymentMethod: async (
     payload: AccountPaymentMethod,
   ): Promise<AccountPaymentMethod> => {
-    const { data } = await api.post<ApiResponse<AccountPaymentMethod>>(
+    const { data } = await httpClient.post<ApiResponse<AccountPaymentMethod>>(
       "/api/v1/account/payment-methods",
       payload,
     );
@@ -77,11 +78,11 @@ export const accountApi = {
   },
 
   deletePaymentMethod: async (id: string): Promise<void> => {
-    await api.delete(`/api/v1/account/payment-methods/${id}`);
+    await httpClient.delete(`/api/v1/account/payment-methods/${id}`);
   },
 
   getSettings: async (): Promise<AccountSettings> => {
-    const { data } = await api.get<ApiResponse<AccountSettings>>(
+    const { data } = await httpClient.get<ApiResponse<AccountSettings>>(
       "/api/v1/account/settings",
     );
     return data.data;
@@ -90,7 +91,7 @@ export const accountApi = {
   updateSettings: async (
     payload: AccountSettings,
   ): Promise<AccountSettings> => {
-    const { data } = await api.patch<ApiResponse<AccountSettings>>(
+    const { data } = await httpClient.patch<ApiResponse<AccountSettings>>(
       "/api/v1/account/settings",
       payload,
     );
