@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { CreditCard, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext";
 import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
 import toast from "react-hot-toast";
 import { accountApi } from "@/api/accountApi";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 type PaymentMethod = {
   id: string;
@@ -21,7 +21,7 @@ const STORAGE_KEY = "foodvaly.account.payments";
 
 export default function AccountPaymentMethodsPage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading } = useAuth();
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [label, setLabel] = useState("Personal");
   const [brand, setBrand] = useState("VISA");

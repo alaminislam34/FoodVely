@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
-import { useAuthContext } from "@/context/AuthContext";
 import { accountApi } from "@/api/accountApi";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 const STORAGE_KEY = "foodvaly.account.settings";
 
@@ -19,7 +19,7 @@ type AccountSettings = {
 
 export default function AccountSettingsPage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading, user } = useAuthContext();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [settings, setSettings] = useState<AccountSettings>({
     name: "",
     phone: "",

@@ -1,4 +1,4 @@
-import api from "@/api/httpClient";
+import { httpClient } from "./httpClient";
 
 type ApiResponse<T> = {
   success: boolean;
@@ -61,7 +61,7 @@ export const orderApi = {
   createOrder: async (
     payload: CreateOrderPayload,
   ): Promise<CreateOrderResult> => {
-    const { data } = await api.post<ApiResponse<CreateOrderResult>>(
+    const { data } = await httpClient.post<ApiResponse<CreateOrderResult>>(
       "/api/v1/orders",
       payload,
     );
@@ -69,12 +69,13 @@ export const orderApi = {
   },
 
   listMyOrders: async (): Promise<OrderListResult> => {
-    const { data } = await api.get<ApiResponse<unknown>>("/api/v1/orders/me");
+    const { data } =
+      await httpClient.get<ApiResponse<unknown>>("/api/v1/orders/me");
     return normalizeItems<Record<string, unknown>>(data.data);
   },
 
   getMyOrder: async (orderId: string): Promise<OrderDetailResult> => {
-    const { data } = await api.get<ApiResponse<OrderDetailResult>>(
+    const { data } = await httpClient.get<ApiResponse<OrderDetailResult>>(
       `/api/v1/orders/${orderId}`,
     );
     return data.data;
@@ -84,7 +85,7 @@ export const orderApi = {
     orderId: string,
     note?: string,
   ): Promise<OrderDetailResult> => {
-    const { data } = await api.patch<ApiResponse<OrderDetailResult>>(
+    const { data } = await httpClient.patch<ApiResponse<OrderDetailResult>>(
       `/api/v1/orders/${orderId}/cancel`,
       { note },
     );
@@ -92,7 +93,7 @@ export const orderApi = {
   },
 
   reorder: async (orderId: string): Promise<ReorderResult> => {
-    const { data } = await api.post<ApiResponse<ReorderResult>>(
+    const { data } = await httpClient.post<ApiResponse<ReorderResult>>(
       `/api/v1/orders/${orderId}/reorder`,
       {},
     );

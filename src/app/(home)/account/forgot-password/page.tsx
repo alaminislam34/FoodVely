@@ -20,7 +20,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },

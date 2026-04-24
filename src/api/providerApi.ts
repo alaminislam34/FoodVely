@@ -1,4 +1,4 @@
-import api from "@/api/httpClient";
+import { httpClient } from "./httpClient";
 
 type ApiMeta = {
   page?: number;
@@ -224,7 +224,7 @@ export const providerApi = {
   listProducts: async (
     params?: ProviderListParams,
   ): Promise<ProviderListResult<ProviderProduct>> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/provider/products",
       {
         params: sanitizeParams(params),
@@ -240,7 +240,7 @@ export const providerApi = {
   createProduct: async (
     payload: ProviderProductPayload,
   ): Promise<ProviderProduct> => {
-    const { data } = await api.post<ApiResponse<ProviderProduct>>(
+    const { data } = await httpClient.post<ApiResponse<ProviderProduct>>(
       "/api/v1/provider/products",
       payload,
     );
@@ -248,14 +248,14 @@ export const providerApi = {
   },
 
   deleteProduct: async (id: string): Promise<void> => {
-    await api.delete(`/api/v1/provider/products/${id}`);
+    await httpClient.delete(`/api/v1/provider/products/${id}`);
   },
 
   updateProduct: async (
     id: string,
     payload: ProviderProductUpdatePayload,
   ): Promise<ProviderProduct> => {
-    const { data } = await api.patch<ApiResponse<ProviderProduct>>(
+    const { data } = await httpClient.patch<ApiResponse<ProviderProduct>>(
       `/api/v1/provider/products/${id}`,
       payload,
     );
@@ -266,7 +266,7 @@ export const providerApi = {
     id: string,
     payload: { isAvailable?: boolean; stock?: number; reason?: string },
   ): Promise<ProviderProduct> => {
-    const { data } = await api.patch<ApiResponse<ProviderProduct>>(
+    const { data } = await httpClient.patch<ApiResponse<ProviderProduct>>(
       `/api/v1/provider/products/${id}/stock`,
       payload,
     );
@@ -276,7 +276,7 @@ export const providerApi = {
   listOrders: async (
     params?: ProviderOrderListParams,
   ): Promise<ProviderListResult<ProviderOrder>> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/provider/orders",
       {
         params,
@@ -293,7 +293,7 @@ export const providerApi = {
     orderId: string,
     payload: { status: string; note?: string },
   ): Promise<ProviderOrder> => {
-    const { data } = await api.patch<ApiResponse<ProviderOrder>>(
+    const { data } = await httpClient.patch<ApiResponse<ProviderOrder>>(
       `/api/v1/provider/orders/${orderId}/status`,
       payload,
     );
@@ -303,7 +303,7 @@ export const providerApi = {
   listReviews: async (
     params?: ProviderReviewListParams,
   ): Promise<ProviderListResult<ProviderReview>> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/provider/reviews",
       {
         params,
@@ -320,7 +320,7 @@ export const providerApi = {
     reviewId: string,
     payload: { message: string },
   ): Promise<ProviderReview> => {
-    const { data } = await api.post<ApiResponse<ProviderReview>>(
+    const { data } = await httpClient.post<ApiResponse<ProviderReview>>(
       `/api/v1/provider/reviews/${reviewId}/reply`,
       payload,
     );
@@ -330,7 +330,7 @@ export const providerApi = {
   listCoupons: async (
     params?: ProviderCouponListParams,
   ): Promise<ProviderListResult<ProviderCoupon>> => {
-    const { data } = await api.get<ApiResponse<unknown>>(
+    const { data } = await httpClient.get<ApiResponse<unknown>>(
       "/api/v1/provider/coupons",
       {
         params,
@@ -346,7 +346,7 @@ export const providerApi = {
   createCoupon: async (
     payload: ProviderCouponPayload,
   ): Promise<ProviderCoupon> => {
-    const { data } = await api.post<ApiResponse<ProviderCoupon>>(
+    const { data } = await httpClient.post<ApiResponse<ProviderCoupon>>(
       "/api/v1/provider/coupons",
       payload,
     );
@@ -354,11 +354,11 @@ export const providerApi = {
   },
 
   deleteCoupon: async (id: string): Promise<void> => {
-    await api.delete(`/api/v1/provider/coupons/${id}`);
+    await httpClient.delete(`/api/v1/provider/coupons/${id}`);
   },
 
   activateCoupon: async (id: string): Promise<ProviderCoupon> => {
-    const { data } = await api.post<ApiResponse<ProviderCoupon>>(
+    const { data } = await httpClient.post<ApiResponse<ProviderCoupon>>(
       `/api/v1/provider/coupons/${id}/activate`,
       {},
     );
@@ -366,7 +366,7 @@ export const providerApi = {
   },
 
   deactivateCoupon: async (id: string): Promise<ProviderCoupon> => {
-    const { data } = await api.post<ApiResponse<ProviderCoupon>>(
+    const { data } = await httpClient.post<ApiResponse<ProviderCoupon>>(
       `/api/v1/provider/coupons/${id}/deactivate`,
       {},
     );

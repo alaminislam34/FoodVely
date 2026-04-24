@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { ArrowRight, Eye, EyeOff, KeyRound, Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 12 },

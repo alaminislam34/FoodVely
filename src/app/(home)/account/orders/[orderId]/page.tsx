@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, CreditCard, MapPin, Truck } from "lucide-react";
-import { useAuthContext } from "@/context/AuthContext";
 import AccountNav from "../../components/AccountNav";
 import AccountFallbackNotice from "../../components/AccountFallbackNotice";
 import toast from "react-hot-toast";
 import { orderApi } from "@/api/orderApi";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 type OrderItem = {
   name: string;
@@ -79,7 +79,7 @@ const normalizeOrder = (item: Record<string, unknown>): OrderDetail => {
 export default function AccountOrderDetailPage() {
   const params = useParams<{ orderId: string }>();
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<OrderDetail | null>(null);
   const [isCancelling, setIsCancelling] = useState(false);

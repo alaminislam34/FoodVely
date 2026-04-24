@@ -19,7 +19,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 export default function AdminLayout({
   children,
@@ -32,7 +32,7 @@ export default function AdminLayout({
   const [authReady, setAuthReady] = useState(false);
   const pathName = usePathname();
   const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuthContext();
+  const { isAuthenticated, user, logout } = useAuth();
 
   const existingAdminRoutes = useMemo(
     () =>

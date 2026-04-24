@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronRight, Search } from "lucide-react";
-import { useAuthContext } from "@/context/AuthContext";
 import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
 import { orderApi } from "@/api/orderApi";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 type OrderRow = {
   orderId: string;
@@ -48,7 +48,7 @@ const normalizeOrders = (items: Record<string, unknown>[]): OrderRow[] => {
 
 export default function AccountOrdersPage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading } = useAuth();
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");

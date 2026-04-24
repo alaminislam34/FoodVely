@@ -19,7 +19,7 @@ import {
   HelpCircle,
   ChevronDown,
 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 const links = [
   { name: "Home", href: "/" },

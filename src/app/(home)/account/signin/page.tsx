@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 // Hooks & Utils
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/hooks/useAuth";
 import { getRedirectPathByRole } from "@/utils/authRedirect";
 import { Button } from "@/components/ui/button";
 

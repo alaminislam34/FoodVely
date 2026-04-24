@@ -55,17 +55,6 @@ interface AuthResponse<T> {
 }
 
 
-export async function registerUser(
-  payload: RegisterRequest,
-): Promise<AuthResponse<UserData>> {
-  try {
-    const res = await httpClient.post<UserData>(API_ENDPOINTS.REGISTER_API, payload);
-    storeAuthTokens(res);
-    return res;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Registration failed");
-  }
-}
 
 export interface LoginPayload {
   email: string;

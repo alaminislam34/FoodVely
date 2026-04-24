@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext";
 import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
 import toast from "react-hot-toast";
 import { accountApi } from "@/api/accountApi";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 type AddressItem = {
   id: string;
@@ -21,7 +21,7 @@ const STORAGE_KEY = "foodvaly.account.addresses";
 
 export default function AccountAddressesPage() {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading } = useAuth();
   const [addresses, setAddresses] = useState<AddressItem[]>([]);
   const [label, setLabel] = useState("Home");
   const [line, setLine] = useState("");

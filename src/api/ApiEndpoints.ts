@@ -1,5 +1,5 @@
 const API_ENDPOINTS = {
-  REGISTER_API: `/auth/signup/customer`,
+  REGISTER_API: `/auth/signup`,
   VERIFY_EMAIL: "/auth/verify-email",
   RESEND_VERIFICATION: "/auth/resend-otp",
   LOGIN_API: `/auth/login`,
@@ -11,7 +11,9 @@ const API_ENDPOINTS = {
   FORGOT_PASSWORD: `/auth/forgot-password`,
   VERIFY_PASSWORD_RESET_OTP: `/auth/verify-otp`,
   RESET_PASSWORD: `/auth/reset-password`,
-
+  GET_ME: `/auth/me`,
+  CREATE_RESTAURANT: `/restaurants`,
+  GET_RESTAURANT: (slug: string) => `/restaurants/${slug}`,
 };
 
 export default API_ENDPOINTS;

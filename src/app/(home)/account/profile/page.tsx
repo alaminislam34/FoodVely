@@ -18,7 +18,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { motion } from "motion/react";
 
 // Hooks
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/hooks/useAuth";
 
 // Components
 import CustomerProfileSkeleton from "./components/Skeleton";
