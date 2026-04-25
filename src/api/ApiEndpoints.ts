@@ -14,6 +14,22 @@ const API_ENDPOINTS = {
   GET_ME: `/auth/me`,
   CREATE_RESTAURANT: `/restaurants`,
   GET_RESTAURANT: (slug: string) => `/restaurants/${slug}`,
+
+  FOOD: {
+    CREATE: `/foods`,
+    GET_ALL: `/foods`,
+    GET_BY_ID: (id: string) => `/foods/${id}`,
+    UPDATE: (id: string) => `/foods/${id}`,
+    DELETE: (id: string) => `/foods/${id}`,
+  },
+  CATEGORY: {
+    GET_ALL_FOR_PUBLIC: `/food-categories/public`,
+    GET_ALL_FOR_ADMIN: `/food-categories`,
+    CREATE: `/food-categories`,
+    GET_BY_ID: (id: string) => `/food-categories/${id}`,
+    UPDATE: (id: string) => `/food-categories/${id}`,
+    DELETE: (id: string) => `/food-categories/${id}`,
+  },
 };
 
 export default API_ENDPOINTS;

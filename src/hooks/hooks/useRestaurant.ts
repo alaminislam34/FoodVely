@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   restaurantService,
-  RestaurantSubmitPayload,
+  RestaurantPayload,
 } from "../services/restaurant.service";
 
 export function useRestaurant() {
@@ -14,7 +14,7 @@ export function useRestaurant() {
   });
 
   const createRestaurant = useMutation({
-    mutationFn: async (payload: RestaurantSubmitPayload) =>
+    mutationFn: async (payload: RestaurantPayload) =>
       restaurantService.createRestaurant(payload),
     onSuccess: (data) => {
       console.log("Restaurant created successfully:", data);

@@ -45,10 +45,12 @@ const inputClassName =
 export default function SignIn() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { isLoading, isAuthenticated, user, login } = useAuth();
+  const { isLoading, isAuthenticated, user, loginRequest } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const {
+    setError,
     register,
     handleSubmit,
     setValue,
@@ -70,9 +72,7 @@ export default function SignIn() {
 
   useEffect(() => {
     // Check remembered email
-    const rememberedEmail = window.localStorage.getItem(
-      "remembered_signin_email",
-    );
+    const rememberedEmail = sessionStorage.getItem("remembered_signin_email");
     if (rememberedEmail) {
       setValue("email", rememberedEmail);
       setValue("rememberMe", true);
@@ -93,18 +93,33 @@ export default function SignIn() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       if (data.rememberMe) {
-        window.localStorage.setItem("remembered_signin_email", data.email);
+        sessionStorage.setItem("remembered_signin_email", data.email);
       } else {
-        window.localStorage.removeItem("remembered_signin_email");
+        sessionStorage.removeItem("remembered_signin_email");
       }
 
-      await login({ email: data.email, password: data.password });
+      const res = await loginRequest({
+        email: data.email,
+        password: data.password,
+        rememberMe: data.rememberMe,
+      });
+      if (!res.success) {
+        throw new Error(res.message);
+      }
       toast.success("Login successful!");
+      router.push("/");
     } catch (err: any) {
-      // API response mapping based on your shared JSON structure
-      const apiError =
-        err?.response?.data?.message || err?.message || "Something went wrong";
-      toast.error(apiError);
+      const errorData = err?.response?.data?.error;
+
+      if (errorData?.details && Array.isArray(errorData.details)) {
+        errorData.details.forEach((err: { path: string; message: string }) => {
+          setError(err.path as any, {
+            type: "manual",
+            message: err.message,
+          });
+        });
+      }
+      setServerError(err.message);
     }
   };
 
@@ -150,6 +165,11 @@ export default function SignIn() {
 
           {/* Form Section */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {serverError && (
+              <div className="text-red-500 text-sm">
+                {serverError}
+              </div>
+            )}
             <div className="space-y-4">
               {/* Email */}
               <div className="space-y-1">
@@ -237,7 +257,6 @@ export default function SignIn() {
             </Button>
           </form>
 
-          {/* Footer Link */}
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               Don&apos;t have an account?{" "}

@@ -49,13 +49,18 @@ export default function ResetPassword() {
     e.preventDefault();
 
     try {
-      const res = await resetPassword(email, oldPassword, newPassword);
+      const payload = {
+        email,
+        oldPassword,
+        newPassword,
+      }
+      const res = await resetPassword(payload);
 
-      if (res.success) {
-        toast.success(res.message);
+      if (res) {
+        toast.success(res);
         router.replace("/account/login");
       } else {
-        toast.error(res.message);
+        toast.error(res);
       }
     } catch (error: any) {
       toast.error(error.message);

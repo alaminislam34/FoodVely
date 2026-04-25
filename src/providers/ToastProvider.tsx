@@ -14,8 +14,11 @@ export function ToastProvider() {
           background: "#ffffff",
           color: "#1c1917",
           borderRadius: "0.5rem",
-          boxShadow: "0 20px 35px rgba(0, 0, 0, 0.35)",
-          padding: "1rem",
+          boxShadow: "0 20px 35px rgba(0, 0, 0, 0.25)",
+          paddingLeft: "8px",
+          paddingRight: "8px",
+          paddingTop: "6px",
+          paddingBottom: "6px",
         },
         success: {
           style: {
@@ -30,13 +33,13 @@ export function ToastProvider() {
         },
         error: {
           style: {
-            background: "#fef2f2",
-            color: "#b91c1c",
+            background: "#b91c1c",
+            color: "#fef2f2",
             border: "1px solid #fecaca",
           },
           iconTheme: {
-            primary: "#ef4444",
-            secondary: "#fef2f2",
+            primary: "#fef2f2",
+            secondary: "#ef4444",
           },
         },
         loading: {

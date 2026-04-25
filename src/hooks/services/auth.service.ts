@@ -56,10 +56,7 @@ export interface APIResponse<T, M> {
 const Register = async (
   payload: IRegisterPayload,
 ): Promise<APIResponse<unknown, unknown>> => {
-  const res = await httpClient.post(
-    API_ENDPOINTS.REGISTER_API,
-    payload,
-  );
+  const res = await httpClient.post(API_ENDPOINTS.REGISTER_API, payload);
   return res;
 };
 
@@ -97,6 +94,7 @@ const ResetPassword = async (
   payload: IResetPasswordPayload,
 ): Promise<APIResponse<unknown, unknown>> => {
   const res = await httpClient.post(API_ENDPOINTS.RESET_PASSWORD, payload);
+
   return res;
 };
 

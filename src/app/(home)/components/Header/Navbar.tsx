@@ -28,6 +28,23 @@ const links = [
   { name: "Restaurant", href: "/restaurant" },
   { name: "Contact", href: "/contact" },
 ];
+export interface IUserProfileData {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: string;
+  isDeleted: boolean;
+  emailVerified: boolean;
+  deletedAt: string | null;
+  image: string | null;
+  needPasswordReset: boolean;
+  createdAt: string;
+  updatedAt: string;
+  restaurant: unknown | null;
+  reviews: unknown[];
+  orders: unknown[];
+}
 
 function Navbar() {
   const router = useRouter();
@@ -37,7 +54,7 @@ function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
-
+  console.log(user);
   useEffect(() => {
     const handleSticky = () => {
       if (window.scrollY > 100) {

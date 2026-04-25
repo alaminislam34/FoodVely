@@ -73,7 +73,7 @@ export function useAuth() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: async (payload: { email: string; password: string }) => {
+    mutationFn: async (payload: { email: string; password: string, rememberMe?: boolean }) => {
       const response = await AuthServices.loginUser(payload);
       return response;
     },
@@ -118,7 +118,6 @@ export function useAuth() {
       loginMutation.isPending ||
       logoutMutation.isPending ||
       verifyEmailMutation.isPending,
-    login: loginMutation.mutateAsync,
     loginRequest: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
     verifyEmail: verifyEmailMutation.mutateAsync,

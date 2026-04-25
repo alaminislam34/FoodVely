@@ -174,7 +174,7 @@ export default function SignUp() {
                   activeRole === "CUSTOMER" ? "Full Name" : "Owner Full Name"
                 }
                 icon={<User size={18} />}
-                placeholder="Alamin Islam"
+                placeholder="Enter your full name"
                 error={formErrors.name?.message}
                 registration={signup("name")}
               />
@@ -183,7 +183,7 @@ export default function SignUp() {
                 label="Email Address"
                 type="email"
                 icon={<Mail size={18} />}
-                placeholder="name@example.com"
+                placeholder="Enter your email address"
                 error={formErrors.email?.message}
                 registration={signup("email")}
               />
