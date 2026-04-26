@@ -215,13 +215,13 @@ export function RestaurantStep({
                       >
                         <input
                           type="checkbox"
-                          checked={values.foodCategories.includes(cat.title)}
+                          checked={values.foodCategories.includes(cat.id)}
                           onChange={(e) => {
                             if (!setValue) return;
                             const newCats = e.target.checked
-                              ? [...values.foodCategories, cat.title]
+                              ? [...values.foodCategories, cat.id]
                               : values.foodCategories.filter(
-                                  (c) => c !== cat.title,
+                                  (c) => c !== cat.id,
                                 );
                             setValue("foodCategories", newCats, {
                               shouldValidate: true,
