@@ -114,3 +114,9 @@ export interface ShowUpProduct {
 
   createdAt: string;
 }
+
+export interface CategoryFormModel {
+  title: string;
+  description?: string;
+  image?: File | null;
+}

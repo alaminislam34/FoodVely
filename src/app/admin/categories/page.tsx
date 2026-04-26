@@ -9,8 +9,6 @@ import {
   Trash2,
   TrendingUp,
   X,
-  Image as ImageIcon,
-  DollarSign,
   Package,
   Layers,
 } from "lucide-react";
@@ -18,263 +16,76 @@ import { adminApi } from "@/api/adminApi";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "@/utils/apiError";
 
+import { useCategory } from "@/hooks/hooks/useCategory";
+import { CategoryFormModal } from "@/components/admin/AddCategoryModal";
+import { CategoryFormModel } from "@/types/product";
+import Image from "next/image";
+
 // --- Types ---
 interface Category {
   id: number;
   name: string;
   slug: string;
   products: number;
-  image: string;
+  imageUrl: string;
   trending: boolean;
   revenue: string;
 }
 
-
-// --- Component: Add Category Form (Modal) ---
-const AddCategoryModal = ({
-  isOpen,
-  onClose,
-  onAdd,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (category: Category) => void;
-}) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    slug: "",
-    image: "🍽️", // Default emoji
-    trending: false,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newCategory: Category = {
-      id: Date.now(),
-      ...formData,
-      products: 0, // Default for new cat
-      revenue: "0", // Default for new cat
-    };
-    onAdd(newCategory);
-    setFormData({ name: "", slug: "", image: "🍽️", trending: false }); // Reset
-    onClose();
-  };
-
-  // Auto-generate slug from name
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.value;
-    setFormData({
-      ...formData,
-      name,
-      slug: name.toLowerCase().replace(/\s+/g, "-"),
-    });
-  };
-
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-          />
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
-          >
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden pointer-events-auto border border-gray-100">
-              <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                <h2 className="text-xl  font-bold text-gray-800">
-                  New Category
-                </h2>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                {/* Name Input */}
-                <div className="space-y-1">
-                  <label className="text-sm font-medium text-gray-700">
-                    Category Name
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    value={formData.name}
-                    onChange={handleNameChange}
-                    placeholder="e.g., Street Food"
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 outline-none transition-all"
-                  />
-                </div>
-
-                {/* Slug Input */}
-                <div className="space-y-1">
-                  <label className="text-sm font-medium text-gray-700">
-                    Slug (URL Friendly)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.slug}
-                    onChange={(e) =>
-                      setFormData({ ...formData, slug: e.target.value })
-                    }
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 outline-none"
-                  />
-                </div>
-
-                {/* Icon & Trending Row */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">
-                      Icon (Emoji)
-                    </label>
-                    <input
-                      type="text"
-                      maxLength={2}
-                      value={formData.image}
-                      onChange={(e) =>
-                        setFormData({ ...formData, image: e.target.value })
-                      }
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-center text-xl focus:border-rose-500 outline-none"
-                    />
-                  </div>
-                  <div className="flex items-end pb-3">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                      <div
-                        className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
-                          formData.trending
-                            ? "bg-rose-500 border-rose-500"
-                            : "border-gray-300 bg-white"
-                        }`}
-                      >
-                        {formData.trending && (
-                          <TrendingUp size={14} className="text-white" />
-                        )}
-                      </div>
-                      <input
-                        type="checkbox"
-                        checked={formData.trending}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            trending: e.target.checked,
-                          })
-                        }
-                        className="hidden"
-                      />
-                      <span className="text-sm font-medium text-gray-700 group-hover:text-rose-600 transition-colors">
-                        Mark Trending
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="pt-4 flex gap-3">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="flex-1 py-3 rounded-xl font-medium text-gray-600 hover:bg-gray-50 transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 py-3 rounded-xl font-medium text-white bg-gray-900 hover:bg-gray-800 shadow-lg shadow-gray-200 transition-all"
-                  >
-                    Create Category
-                  </button>
-                </div>
-              </form>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-};
-
 // --- Main Page Component ---
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const { categories } = useCategory();
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     adminApi
-      .listCategories({ limit: 200 })
+      .listCategories({ limit: 20 })
       .then((data) => {
         const mapped: Category[] = data.map((item, index) => ({
           id: Number(item.id ?? index + 1),
           name: String(item.title ?? item.name ?? "Category"),
           slug: String(item.slug ?? "category"),
           products: Number(item.products ?? item.productsCount ?? 0),
-          image: String(item.icon ?? "🍽️"),
+          imageUrl: String(item.imageUrl ?? "🍽️"),
           trending: Boolean(item.trending ?? false),
           revenue: String(item.revenue ?? "0"),
         }));
-        setCategories(mapped);
       })
       .catch((error) => console.error("Failed to load categories", error));
   }, []);
 
   const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    cat.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const handleAddCategory = async (newCat: Category) => {
-    const optimistic = [newCat, ...categories];
-    setCategories(optimistic);
-    try {
-      const created = await adminApi.createCategory({
-        title: newCat.name,
-        slug: newCat.slug,
-        icon: newCat.image,
-        trending: newCat.trending,
-      });
-      const createdRecord = created as { id?: string | number };
-      setCategories((prev) => [
-        {
-          ...newCat,
-          id: Number(createdRecord.id ?? newCat.id),
-        },
-        ...prev.filter((item) => item.id !== newCat.id),
-      ]);
-      toast.success("Category created");
-    } catch (error) {
-      setCategories(categories);
-      toast.error(getApiErrorMessage(error, "Failed to create category"));
-    }
-  };
+  const { createCategory } = useCategory();
 
-  const handleDelete = async (id: number) => {
-    if (confirm("Are you sure you want to delete this category?")) {
-      const prev = categories;
-      setCategories((current) => current.filter((c) => c.id !== id));
-      try {
-        await adminApi.deleteCategory(String(id));
-        toast.success("Category deleted");
-      } catch (error) {
-        setCategories(prev);
-        toast.error(getApiErrorMessage(error, "Failed to delete category"));
-      }
-    }
-  };
+  const handleAddCategory = (newCat: CategoryFormModel) => {
+    const file = newCat.image;
 
-  // Stats Logic
-  const totalProducts = categories.reduce((sum, cat) => sum + cat.products, 0);
-  const trendingCount = categories.filter((cat) => cat.trending).length;
+    let imageUrl = "🍽️";
+    if (file) {
+      imageUrl = URL.createObjectURL(file);
+    }
+
+    const formData = new FormData();
+    formData.append("title", newCat.title);
+
+    if (newCat.description) {
+      formData.append("description", newCat.description);
+    }
+
+    if (file) {
+      formData.append("images", file);
+    }
+
+    createCategory.mutate(formData as any, {
+      onSuccess: (created: any) => {
+        setIsModalOpen(false);
+      },
+    });
+  };
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen">
@@ -314,14 +125,14 @@ export default function CategoriesPage() {
           },
           {
             label: "Total Products",
-            value: totalProducts,
+            value: categories.length || 0,
             icon: Package,
             color: "text-orange-600",
             bg: "bg-orange-50/50",
           },
           {
             label: "Trending Categories",
-            value: trendingCount,
+            value: 0,
             icon: TrendingUp,
             color: "text-green-600",
             bg: "bg-green-50/50",
@@ -380,47 +191,28 @@ export default function CategoriesPage() {
               transition={{ duration: 0.3, delay: index * 0.05 }}
               className="group relative bg-white/60 backdrop-blur-xl rounded-3xl border border-white/60 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
-              {/* Trending Badge */}
-              {category.trending && (
-                <div className="absolute top-4 right-4 z-10 bg-linear-to-r from-rose-500 to-orange-500 text-white p-1.5 rounded-full shadow-lg shadow-orange-200">
-                  <TrendingUp size={14} />
-                </div>
-              )}
-
               <div className="p-6">
                 <div className="flex items-start gap-4">
                   {/* Icon Container */}
                   <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-gray-100 to-white border border-gray-200 shadow-inner flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {category.image}
+                    <Image
+                      priority
+                      src={category.imageUrl}
+                      width={100}
+                      height={100}
+                      alt={category.title}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
                   </div>
 
                   <div className="flex flex-col gap-2">
                     {/* Info */}
                     <h3 className=" font-bold text-gray-800 text-xl mb-1 group-hover:text-rose-600 transition-colors">
-                      {category.name}
+                      {category.title}
                     </h3>
-                    <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-6">
-                      /{category.slug}
-                    </p>
-                  </div>
-                </div>
 
-                {/* Metrics */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="bg-white/50 rounded-xl p-3 border border-gray-100">
-                    <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-                      <Package size={12} /> Items
-                    </p>
-                    <p className="font-bold text-gray-800">
-                      {category.products}
-                    </p>
-                  </div>
-                  <div className="bg-white/50 rounded-xl p-3 border border-gray-100">
-                    <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
-                      <DollarSign size={12} /> Sales
-                    </p>
-                    <p className="font-bold text-gray-800">
-                      ${category.revenue}
+                    <p className="text-gray-500 font-medium text-sm">
+                      {category.description}
                     </p>
                   </div>
                 </div>
@@ -431,10 +223,7 @@ export default function CategoriesPage() {
                     <Edit2 size={14} />
                     Edit
                   </button>
-                  <button
-                    onClick={() => handleDelete(category.id)}
-                    className="p-2.5 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-colors"
-                  >
+                  <button className="p-2.5 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-colors">
                     <Trash2 size={16} />
                   </button>
                 </div>
@@ -460,10 +249,11 @@ export default function CategoriesPage() {
       )}
 
       {/* Modal Component Injection */}
-      <AddCategoryModal
+      <CategoryFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAdd={handleAddCategory}
+        onSubmit={handleAddCategory}
+        isPending={createCategory.isPending}
       />
     </div>
   );

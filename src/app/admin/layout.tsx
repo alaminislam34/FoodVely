@@ -77,17 +77,6 @@ export default function AdminLayout({
     );
   }, [user]);
 
-  const hasMenuPermission = (requiredPermissions?: string[]) => {
-    if (!requiredPermissions || requiredPermissions.length === 0) return true;
-
-    const isAdminRole = String(user?.role ?? "").toUpperCase() === "";
-    if (isAdminRole && userPermissionSet.size === 0) return true;
-
-    return requiredPermissions.some((permission) =>
-      userPermissionSet.has(permission.toUpperCase()),
-    );
-  };
-
   useEffect(() => {
     const handleResize = () => {
       const isLargeScreen = window.innerWidth >= 768;
@@ -267,10 +256,8 @@ export default function AdminLayout({
   const visibleMenuItems = menuItems
     .map((item) => {
       if (item.submenu) {
-        const allowedSubmenu = item.submenu.filter(
-          (subitem) =>
-            existingAdminRoutes.has(subitem.href) &&
-            hasMenuPermission(subitem.permissions),
+        const allowedSubmenu = item.submenu.filter((subitem) =>
+          existingAdminRoutes.has(subitem.href),
         );
         return {
           ...item,
@@ -278,10 +265,7 @@ export default function AdminLayout({
         };
       }
 
-      const isVisible =
-        !!item.href &&
-        existingAdminRoutes.has(item.href) &&
-        hasMenuPermission(item.permissions);
+      const isVisible = !!item.href && existingAdminRoutes.has(item.href);
       return isVisible ? item : null;
     })
     .filter(
@@ -298,7 +282,7 @@ export default function AdminLayout({
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-4 left-4 z-50 md:hidden bg-white p-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-50 transition"
+        className="fixed top-4 left-2 z-50 lg:hidden bg-white p-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-50 transition"
       >
         {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -310,9 +294,9 @@ export default function AdminLayout({
           x: isDesktop ? 0 : sidebarOpen ? 0 : "-100%",
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={`fixed md:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 
-          ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} 
-          transition-none md:transition-all`}
+        className={`fixed lg:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} 
+          transition-none lg:transition-all`}
         suppressHydrationWarning
       >
         {/* Logo Section */}
@@ -426,7 +410,7 @@ export default function AdminLayout({
         {/* min-w-0 avoids layout breaking */}
         <div className="bg-white border-b border-gray-200 sticky top-0 z-20">
           <div className="px-4 md:px-8 py-4 flex items-center justify-between">
-            <h1 className="font-bold text-gray-800 text-xl hidden sm:block">
+            <h1 className="font-bold text-gray-800 text-xl hidden sm:block pl-6 lg:pl-0">
               Admin Dashboard
             </h1>
             <div className="flex items-center gap-4">

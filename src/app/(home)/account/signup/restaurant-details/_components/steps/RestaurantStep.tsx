@@ -53,9 +53,9 @@ export function RestaurantStep({
   const { categories, isLoading: isCategoriesLoading } = useCategory();
   const [categorySearch, setCategorySearch] = useState("");
   const [showPopover, setShowPopover] = useState(false);
-  // const filteredCategories = categories.filter((cat: any) =>
-  //   cat.title.toLowerCase().includes(categorySearch.toLowerCase()),
-  // );
+  const filteredCategories = categories.filter((cat: any) =>
+    cat.title.toLowerCase().includes(categorySearch.toLowerCase()),
+  );
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
 

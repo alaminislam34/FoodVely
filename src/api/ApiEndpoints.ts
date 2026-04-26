@@ -30,6 +30,12 @@ const API_ENDPOINTS = {
     UPDATE: (id: string) => `/food-categories/${id}`,
     DELETE: (id: string) => `/food-categories/${id}`,
   },
+
+  ADMIN: {
+    SIGN_IN: `/auth/admin/login`,
+    PLATFORM_STATS: `/admin/platform-stats`,
+    GET_ACTIVITY_LOGS: `/admin/activity-logs`,
+  },
 };
 
 export default API_ENDPOINTS;

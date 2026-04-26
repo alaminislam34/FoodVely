@@ -1,6 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { categoryService } from "../services/category.service";
 
+export type Category = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+};
+
 export function useCategory() {
   const queryClient = useQueryClient();
 
@@ -10,9 +17,18 @@ export function useCategory() {
     isLoading,
     isError,
     error,
-  } = useQuery({
+  } = useQuery<Category[]>({
     queryKey: ["categories"],
     queryFn: categoryService.getAllCategoriesForPublic,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const {
+    data: adminCategories = [],
+    isLoading: isAdminCategoriesLoading,
+  } = useQuery<Category[]>({
+    queryKey: ["adminCategories"],
+    queryFn: categoryService.getAllCategoriesForAdmin,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -36,7 +52,9 @@ export function useCategory() {
 
   return {
     categories,
+    adminCategories,
     isLoading,
+    isAdminCategoriesLoading,
     isError,
     error,
     createCategory,

@@ -75,105 +75,85 @@ const deleteAction = async (
 
 export const adminApi = {
   listUsers: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/users", params),
+    getList<Record<string, unknown>>("/admin/users", params),
   listUsersPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/users", params),
+    getListWithMeta<Record<string, unknown>>("/admin/users", params),
   listBannedUsers: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/banned-users", params),
+    getList<Record<string, unknown>>("/admin/banned-users", params),
   unbanUser: (id: string, reason: string) =>
-    postAction(`/api/v1/admin/users/${id}/unban`, { reason }),
+    postAction(`/admin/users/${id}/unban`, { reason }),
   listRoles: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/roles", params),
+    getList<Record<string, unknown>>("/admin/roles", params),
   listActivityLogs: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/activity-logs", params),
+    getList<Record<string, unknown>>("/admin/activity-logs", params),
   listProducts: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/products", params),
+    getList<Record<string, unknown>>("/admin/products", params),
   listProductsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/products", params),
+    getListWithMeta<Record<string, unknown>>("/admin/products", params),
   listCategories: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/categories", params),
+    getList<Record<string, unknown>>("/admin/categories", params),
   createCategory: (payload: Record<string, unknown>) =>
-    postAction("/api/v1/admin/categories", payload),
-  deleteCategory: (id: string) =>
-    deleteAction(`/api/v1/admin/categories/${id}`),
+    postAction("/admin/categories", payload),
+  deleteCategory: (id: string) => deleteAction(`/admin/categories/${id}`),
   listOutOfStockProducts: (params?: ListParams) =>
-    getList<Record<string, unknown>>(
-      "/api/v1/admin/stock/out-of-stock",
-      params,
-    ),
+    getList<Record<string, unknown>>("/admin/stock/out-of-stock", params),
   listRestaurants: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/restaurants", params),
+    getList<Record<string, unknown>>("/admin/restaurants", params),
   listRestaurantsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>(
-      "/api/v1/admin/restaurants",
-      params,
-    ),
+    getListWithMeta<Record<string, unknown>>("/admin/restaurants", params),
   listBestSellerRestaurants: (params?: ListParams) =>
-    getList<Record<string, unknown>>(
-      "/api/v1/admin/best-sellers/restaurants",
-      params,
-    ),
+    getList<Record<string, unknown>>("/admin/best-sellers/restaurants", params),
   listBestSellerRestaurantsPaged: (params?: ListParams) =>
     getListWithMeta<Record<string, unknown>>(
-      "/api/v1/admin/best-sellers/restaurants",
+      "/admin/best-sellers/restaurants",
       params,
     ),
   getAnalyticsOverview: () =>
-    getOne<Record<string, unknown>>("/api/v1/admin/analytics/overview"),
+    getOne<Record<string, unknown>>("/admin/analytics/overview"),
   getRevenueTrend: (params?: ListParams) =>
-    getList<Record<string, unknown>>(
-      "/api/v1/admin/analytics/revenue-trend",
-      params,
-    ),
+    getList<Record<string, unknown>>("/admin/analytics/revenue-trend", params),
   listReviews: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/reviews", params),
+    getList<Record<string, unknown>>("/admin/reviews", params),
   listReviewsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/reviews", params),
+    getListWithMeta<Record<string, unknown>>("/admin/reviews", params),
   deleteReview: (id: string, reason: string) =>
-    deleteAction(`/api/v1/admin/reviews/${id}`, { reason }),
+    deleteAction(`/admin/reviews/${id}`, { reason }),
   listReports: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/reports", params),
+    getList<Record<string, unknown>>("/admin/reports", params),
   listReportsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/reports", params),
+    getListWithMeta<Record<string, unknown>>("/admin/reports", params),
   resolveReport: (id: string, note: string) =>
-    postAction(`/api/v1/admin/reports/${id}/resolve`, { note }),
+    postAction(`/admin/reports/${id}/resolve`, { note }),
   rejectReport: (id: string, note: string) =>
-    postAction(`/api/v1/admin/reports/${id}/reject`, { note }),
+    postAction(`/admin/reports/${id}/reject`, { note }),
   listBlogPosts: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/blog-posts", params),
+    getList<Record<string, unknown>>("/admin/blog-posts", params),
   listBlogPostsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>(
-      "/api/v1/admin/blog-posts",
-      params,
-    ),
+    getListWithMeta<Record<string, unknown>>("/admin/blog-posts", params),
   createBlogPost: (payload: Record<string, unknown>) =>
-    postAction("/api/v1/admin/blog-posts", payload),
+    postAction("/admin/blog-posts", payload),
   updateBlogPost: (id: string, payload: Record<string, unknown>) =>
-    patchAction(`/api/v1/admin/blog-posts/${id}`, payload),
-  deleteBlogPost: (id: string) =>
-    deleteAction(`/api/v1/admin/blog-posts/${id}`),
+    patchAction(`/admin/blog-posts/${id}`, payload),
+  deleteBlogPost: (id: string) => deleteAction(`/admin/blog-posts/${id}`),
   listFaqs: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/faqs", params),
+    getList<Record<string, unknown>>("/admin/faqs", params),
   listBanners: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/banners", params),
+    getList<Record<string, unknown>>("/admin/banners", params),
   listBannersPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/banners", params),
-  activateBanner: (id: string) =>
-    postAction(`/api/v1/admin/banners/${id}/activate`),
+    getListWithMeta<Record<string, unknown>>("/admin/banners", params),
+  activateBanner: (id: string) => postAction(`/admin/banners/${id}/activate`),
   deactivateBanner: (id: string) =>
-    postAction(`/api/v1/admin/banners/${id}/deactivate`),
-  deleteBanner: (id: string) => deleteAction(`/api/v1/admin/banners/${id}`),
+    postAction(`/admin/banners/${id}/deactivate`),
+  deleteBanner: (id: string) => deleteAction(`/admin/banners/${id}`),
   listCoupons: (params?: ListParams) =>
-    getList<Record<string, unknown>>("/api/v1/admin/coupons", params),
+    getList<Record<string, unknown>>("/admin/coupons", params),
   listCouponsPaged: (params?: ListParams) =>
-    getListWithMeta<Record<string, unknown>>("/api/v1/admin/coupons", params),
-  activateCoupon: (id: string) =>
-    postAction(`/api/v1/admin/coupons/${id}/activate`),
+    getListWithMeta<Record<string, unknown>>("/admin/coupons", params),
+  activateCoupon: (id: string) => postAction(`/admin/coupons/${id}/activate`),
   deactivateCoupon: (id: string) =>
-    postAction(`/api/v1/admin/coupons/${id}/deactivate`),
-  deleteCoupon: (id: string) => deleteAction(`/api/v1/admin/coupons/${id}`),
-  getAdminProfile: () =>
-    getOne<Record<string, unknown>>("/api/v1/admin/profile"),
+    postAction(`/admin/coupons/${id}/deactivate`),
+  deleteCoupon: (id: string) => deleteAction(`/admin/coupons/${id}`),
+  getAdminProfile: () => getOne<Record<string, unknown>>("/admin/profile"),
   updateAdminProfile: (payload: Record<string, unknown>) =>
-    patchAction("/api/v1/admin/profile", payload),
+    patchAction("/admin/profile", payload),
 };

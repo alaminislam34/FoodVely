@@ -2,92 +2,50 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
-import { Search, Filter, MoreVertical, Ban, Shield, Trash2, Eye } from "lucide-react";
-import { adminApi } from "@/api/adminApi";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  Search,
+  Filter,
+  MoreVertical,
+  Ban,
+  Shield,
+  Trash2,
+  Eye,
+} from "lucide-react";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: "customer" | "restaurant" | "delivery" | "admin";
-  status: "active" | "suspended" | "banned";
-  joinDate: string;
-  orders: number;
-  verified: boolean;
-  image: string;
-}
+import { useAdminUsersList } from "@/hooks/hooks/userAdmin";
 
 export default function UsersManagement() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterRole, setFilterRole] = useState("all");
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState(1);
   const limit = 20;
-  const {
-    searchInput,
-    setSearchInput,
-    debouncedSearch,
-    page,
-    setPage,
-    reloadKey,
-    retry,
-  } = useAdminListControls({ debounceMs: 450 });
+
+  const { searchInput, setSearchInput, debouncedSearch, page, setPage } =
+    useAdminListControls({ debounceMs: 450 });
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, filterStatus, filterRole]);
+  }, [debouncedSearch, filterStatus, filterRole, setPage]);
 
-  useEffect(() => {
-    let mounted = true;
+  const { data, isLoading, error, refetch } = useAdminUsersList({
+    page,
+    limit,
+    search: debouncedSearch,
+    role: filterRole,
+    status: filterStatus,
+  });
 
-    const loadUsers = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const { items, meta } = await adminApi.listUsersPaged({
-          page,
-          limit,
-          search: debouncedSearch || undefined,
-          role: filterRole !== "all" ? filterRole.toUpperCase() : undefined,
-          status: filterStatus !== "all" ? filterStatus.toUpperCase() : undefined,
-        });
-
-        const mappedUsers: User[] = items.map((item) => ({
-          id: Number(item.id ?? 0),
-          name: String(item.name ?? "Unknown"),
-          email: String(item.email ?? ""),
-          role: String(item.role ?? "customer").toLowerCase() as User["role"],
-          status: String(item.status ?? "active").toLowerCase() as User["status"],
-          joinDate: String(item.createdAt ?? new Date().toISOString()),
-          orders: Number(item.orders ?? item.totalOrders ?? 0),
-          verified: Boolean(item.emailVerified ?? false),
-          image: String(item.image ?? ""),
-        }));
-
-        if (!mounted) return;
-        setUsers(mappedUsers);
-        setTotalPages(Number(meta?.totalPages ?? 1));
-      } catch (err) {
-        if (!mounted) return;
-        setError(getApiErrorMessage(err, "Failed to load users"));
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    loadUsers();
-
-    return () => {
-      mounted = false;
-    };
-  }, [debouncedSearch, filterRole, filterStatus, page, reloadKey]);
+  const users = data?.users ?? [];
+  const totalPages = data?.totalPages ?? 1;
+  const errorMessage = error
+    ? getApiErrorMessage(error, "Failed to load users")
+    : null;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -115,6 +73,8 @@ export default function UsersManagement() {
     }
   };
 
+  console.log(users, "total users");
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -140,10 +100,7 @@ export default function UsersManagement() {
       >
         {/* Search Bar */}
         <div className="relative">
-          <Search
-            size={18}
-            className="absolute left-4 top-3.5 text-gray-400"
-          />
+          <Search size={18} className="absolute left-4 top-3.5 text-gray-400" />
           <input
             type="text"
             placeholder="Search users by name or email..."
@@ -197,10 +154,13 @@ export default function UsersManagement() {
       </motion.div>
 
       {/* Users Table */}
-      {loading ? (
+      {isLoading ? (
         <AdminLoadingState label="Loading users..." />
-      ) : error ? (
-        <AdminErrorState description={error} onAction={retry} />
+      ) : errorMessage ? (
+        <AdminErrorState
+          description={errorMessage}
+          onAction={() => refetch()}
+        />
       ) : users.length === 0 ? (
         <AdminEmptyState description="No users found matching your filters." />
       ) : (
@@ -214,85 +174,81 @@ export default function UsersManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  User
-                </th>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  Role
-                </th>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  Status
-                </th>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  Joined
-                </th>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  Orders
-                </th>
-                <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, index) => (
-                <motion.tr
-                  key={user.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
-                >
-                  <td className="px-6 py-4">
-                    <div>
-                      <p className="font-semibold text-gray-800">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
-                      {user.verified && (
-                        <span className="text-xs text-green-600 font-semibold">
-                          ✓ Verified
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-lg">{getRoleIcon(user.role)}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                        user.status
-                      )}`}
-                    >
-                      {user.status.charAt(0).toUpperCase() +
-                        user.status.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {new Date(user.joinDate).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-800">
-                    {user.orders}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <Eye size={18} className="text-gray-600" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <Shield size={18} className="text-blue-600" />
-                      </button>
-                      <button className="p-2 hover:bg-red-100 rounded-lg transition-colors">
-                        <Ban size={18} className="text-red-600" />
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                        <MoreVertical size={18} className="text-gray-600" />
-                      </button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))}
-            </tbody>
-          </table>
+                  <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
+                    User
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
+                    Role
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
+                    Joined
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user, index) => (
+                  <motion.tr
+                    key={user.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-6 py-4">
+                      <div>
+                        <p className="font-semibold text-gray-800">
+                          {user.name}
+                        </p>
+                        <p className="text-sm text-gray-600">{user.email}</p>
+                        {user.emailVerified && (
+                          <span className="text-xs text-green-600 font-semibold">
+                            ✓ Verified
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-lg">{getRoleIcon(user.role)}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                          user.status,
+                        )}`}
+                      >
+                        {user.status.charAt(0).toUpperCase() +
+                          user.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {new Date(user.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <Eye size={18} className="text-gray-600" />
+                        </button>
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <Shield size={18} className="text-blue-600" />
+                        </button>
+                        <button className="p-2 hover:bg-red-100 rounded-lg transition-colors">
+                          <Ban size={18} className="text-red-600" />
+                        </button>
+                        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                          <MoreVertical size={18} className="text-gray-600" />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </motion.div>
       )}
@@ -307,7 +263,11 @@ export default function UsersManagement() {
         <span>
           Showing {users.length} users on page {page} of {totalPages}
         </span>
-        <AdminPaginator page={page} totalPages={totalPages} onPageChange={setPage} />
+        <AdminPaginator
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </motion.div>
     </div>
   );
