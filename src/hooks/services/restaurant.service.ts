@@ -1,6 +1,7 @@
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 import { httpClient } from "@/api/httpClient";
 import { APIResponse } from "./auth.service";
+import { object } from "zod";
 
 /* -----------------------------
    CLEAN PAYLOAD (JSON ONLY)
@@ -40,32 +41,41 @@ const createRestaurant = async (
 ): Promise<APIResponse<unknown, unknown>> => {
   const formData = new FormData();
 
-  // 1. append normal fields
+  // Append all text fields except file fields
   Object.entries(payload).forEach(([key, value]) => {
     if (
       value !== undefined &&
       value !== null &&
       key !== "logoFile" &&
-      key !== "coverImageFile"
+      key !== "coverImageFile" &&
+      key !== "logo" && // <-- Prevent sending logo as object
+      key !== "coverImage" // <-- Prevent sending coverImage as object
     ) {
-      formData.append(key, JSON.stringify(value));
+      if (key === "foodCategories") {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value as string);
+      }
     }
   });
 
-  // 2. append files
+  // Append files
   if (payload.logoFile instanceof File) {
     formData.append("logo", payload.logoFile);
   }
-
   if (payload.coverImageFile instanceof File) {
     formData.append("coverImage", payload.coverImageFile);
   }
 
-  const res = await httpClient.post(API_ENDPOINTS.CREATE_RESTAURANT, formData);
+  const formDataToObject = (formData: FormData) =>
+    Object.fromEntries(formData.entries());
 
+  console.log(formDataToObject(formData));
+
+  // Do NOT set Content-Type header manually!
+  const res = await httpClient.post(API_ENDPOINTS.CREATE_RESTAURANT, formData);
   return res;
 };
-
 /* -----------------------------
    EXPORT
 ------------------------------*/

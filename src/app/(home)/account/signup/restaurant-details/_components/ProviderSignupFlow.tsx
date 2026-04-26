@@ -15,33 +15,6 @@ import { CreateRestaurantSchema } from "./validation";
 
 export type RestaurantFormValues = z.infer<typeof CreateRestaurantSchema>;
 
-const buildFormData = (data: RestaurantFormValues) => {
-  const formData = new FormData();
-
-  const { logoFile, coverImageFile, foodCategories, ...fields } = data;
-
-  // text fields
-  Object.entries(fields).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      formData.append(key, String(value));
-    }
-  });
-
-  // files
-  if (logoFile instanceof File) {
-    formData.append("logo", logoFile);
-  }
-
-  if (coverImageFile instanceof File) {
-    formData.append("coverImage", coverImageFile);
-  }
-
-  // categories
-  formData.append("foodCategories", JSON.stringify(foodCategories ?? []));
-
-  return formData;
-};
-
 export function ProviderSignupFlow() {
   const router = useRouter();
   const { createRestaurant, isCreatingRestaurant } = useRestaurant();
@@ -59,7 +32,7 @@ export function ProviderSignupFlow() {
       city: "",
       address: "",
       contactNumber: "",
-      foodCategories: [], // 👈 MUST be always array
+      foodCategories: [],
       description: "",
       cuisine: "",
       openingHours: "",
