@@ -37,24 +37,24 @@ export default function AdminLayout({
   const existingAdminRoutes = useMemo(
     () =>
       new Set([
-        "/admin",
-        "/admin/users",
-        "/admin/user-roles",
-        "/admin/banned-users",
-        "/admin/activity-log",
-        "/admin/products",
-        "/admin/categories",
-        "/admin/stock",
-        "/admin/restaurants",
-        "/admin/best-sellers",
-        "/admin/reviews",
-        "/admin/reports",
-        "/admin/banners",
-        "/admin/blog",
-        "/admin/faqs",
-        "/admin/coupons",
-        "/admin/profile",
-        "/admin/analytics",
+        "/dashboard/admin",
+        "/dashboard/admin/users",
+        "/dashboard/admin/user-roles",
+        "/dashboard/admin/banned-users",
+        "/dashboard/admin/activity-log",
+        "/dashboard/admin/products",
+        "/dashboard/admin/categories",
+        "/dashboard/admin/stock",
+        "/dashboard/admin/restaurants",
+        "/dashboard/admin/best-sellers",
+        "/dashboard/admin/reviews",
+        "/dashboard/admin/reports",
+        "/dashboard/admin/banners",
+        "/dashboard/admin/blog",
+        "/dashboard/admin/faqs",
+        "/dashboard/admin/coupons",
+        "/dashboard/admin/profile",
+        "/dashboard/admin/analytics",
       ]),
     [],
   );
@@ -94,7 +94,7 @@ export default function AdminLayout({
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/admin",
+      href: "/dashboard/admin",
       submenu: null,
       permissions: ["ANALYTICS_VIEW", "DASHBOARD_VIEW"],
     },
@@ -104,22 +104,22 @@ export default function AdminLayout({
       submenu: [
         {
           label: "All Users",
-          href: "/admin/users",
+          href: "/dashboard/admin/users",
           permissions: ["USERS_VIEW"],
         },
         {
           label: "User Roles",
-          href: "/admin/user-roles",
+          href: "/dashboard/admin/user-roles",
           permissions: ["ROLES_VIEW"],
         },
         {
           label: "Banned Users",
-          href: "/admin/banned-users",
+          href: "/dashboard/admin/banned-users",
           permissions: ["USERS_VIEW"],
         },
         {
           label: "Activity Log",
-          href: "/admin/activity-log",
+          href: "/dashboard/admin/activity-log",
           permissions: ["ACTIVITY_LOG_VIEW"],
         },
       ],
@@ -130,17 +130,17 @@ export default function AdminLayout({
       submenu: [
         {
           label: "All Products",
-          href: "/admin/products",
+          href: "/dashboard/admin/products",
           permissions: ["PRODUCTS_VIEW"],
         },
         {
           label: "Categories",
-          href: "/admin/categories",
+          href: "/dashboard/admin/categories",
           permissions: ["CATEGORIES_VIEW"],
         },
         {
           label: "Out of Stock",
-          href: "/admin/stock",
+          href: "/dashboard/admin/stock",
           permissions: ["PRODUCTS_VIEW"],
         },
       ],
@@ -151,12 +151,12 @@ export default function AdminLayout({
       submenu: [
         {
           label: "All Restaurants",
-          href: "/admin/restaurants",
+          href: "/dashboard/admin/restaurants",
           permissions: ["RESTAURANTS_VIEW"],
         },
         {
           label: "Best Restaurants",
-          href: "/admin/best-sellers",
+          href: "/dashboard/admin/best-sellers",
           permissions: ["RESTAURANTS_VIEW"],
         },
       ],
@@ -167,12 +167,12 @@ export default function AdminLayout({
       submenu: [
         {
           label: "Customer Reviews",
-          href: "/admin/reviews",
+          href: "/dashboard/admin/reviews",
           permissions: ["REVIEWS_VIEW"],
         },
         {
           label: "Report Manage",
-          href: "/admin/reports",
+          href: "/dashboard/admin/reports",
           permissions: ["REPORTS_VIEW"],
         },
       ],
@@ -183,20 +183,24 @@ export default function AdminLayout({
       submenu: [
         {
           label: "Banners",
-          href: "/admin/banners",
+          href: "/dashboard/admin/banners",
           permissions: ["BANNERS_VIEW"],
         },
         {
           label: "Image Slider",
-          href: "/admin/slider",
+          href: "/dashboard/admin/slider",
           permissions: ["BANNERS_VIEW"],
         },
         {
           label: "Blog Management",
-          href: "/admin/blog",
+          href: "/dashboard/admin/blog",
           permissions: ["BLOG_VIEW"],
         },
-        { label: "FAQs", href: "/admin/faqs", permissions: ["FAQS_VIEW"] },
+        {
+          label: "FAQs",
+          href: "/dashboard/admin/faqs",
+          permissions: ["FAQS_VIEW"],
+        },
       ],
     },
     {
@@ -205,22 +209,22 @@ export default function AdminLayout({
       submenu: [
         {
           label: "Coupons",
-          href: "/admin/coupons",
+          href: "/dashboard/admin/coupons",
           permissions: ["COUPONS_VIEW"],
         },
         {
           label: "Events",
-          href: "/admin/events",
+          href: "/dashboard/admin/events",
           permissions: ["COUPONS_VIEW"],
         },
         {
           label: "Discounts",
-          href: "/admin/discounts",
+          href: "/dashboard/admin/discounts",
           permissions: ["COUPONS_VIEW"],
         },
         {
           label: "Active Campaigns",
-          href: "/admin/campaigns",
+          href: "/dashboard/admin/campaigns",
           permissions: ["COUPONS_VIEW"],
         },
       ],
@@ -231,22 +235,22 @@ export default function AdminLayout({
       submenu: [
         {
           label: "Profile",
-          href: "/admin/profile",
+          href: "/dashboard/admin/profile",
           permissions: ["ADMIN_PROFILE_VIEW"],
         },
         {
           label: "Website Settings",
-          href: "/admin/settings",
+          href: "/dashboard/admin/settings",
           permissions: ["SETTINGS_VIEW"],
         },
         {
           label: "Analytics",
-          href: "/admin/analytics",
+          href: "/dashboard/admin/analytics",
           permissions: ["ANALYTICS_VIEW"],
         },
         {
           label: "Security",
-          href: "/admin/security",
+          href: "/dashboard/admin/security",
           permissions: ["SETTINGS_VIEW"],
         },
       ],
@@ -294,14 +298,14 @@ export default function AdminLayout({
           x: isDesktop ? 0 : sidebarOpen ? 0 : "-100%",
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={`fixed lg:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 md:z-10 
+        className={`fixed lg:sticky left-0 top-0 w-72 h-screen bg-white border-r border-gray-200 overflow-y-auto z-40 lg:z-10 
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"} 
           transition-none lg:transition-all`}
         suppressHydrationWarning
       >
         {/* Logo Section */}
         <div className="p-6 border-b border-gray-200">
-          <Link href="/admin" className="flex items-center gap-2">
+          <Link href="/dashboard/admin" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold">F</span>
             </div>
@@ -399,7 +403,7 @@ export default function AdminLayout({
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}

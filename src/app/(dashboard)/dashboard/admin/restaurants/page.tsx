@@ -17,7 +17,11 @@ import {
 } from "lucide-react";
 import { Provider } from "@/types/provider";
 import { adminApi } from "@/api/adminApi";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
@@ -59,7 +63,9 @@ export default function BestSellersPage() {
           isActive:
             statusFilter === "all"
               ? undefined
-              : statusFilter === "true",
+              : statusFilter === "active"
+                ? "true"
+                : "false",
           minRating: ratingFilter === "all" ? undefined : Number(ratingFilter),
         });
 
@@ -97,12 +103,13 @@ export default function BestSellersPage() {
               deliveryFee: 0,
               minimumOrder: 0,
             },
-            openingHours:
-              (item.openingHours as Provider["openingHours"] | undefined) ?? {
-                open: "",
-                close: "",
-                isOpenNow: false,
-              },
+            openingHours: (item.openingHours as
+              | Provider["openingHours"]
+              | undefined) ?? {
+              open: "",
+              close: "",
+              isOpenNow: false,
+            },
             status: (item.status as Provider["status"] | undefined) ?? {
               isVerified: false,
               isActive: false,
@@ -128,7 +135,14 @@ export default function BestSellersPage() {
     };
 
     fetchRestaurants();
-  }, [currentPage, debouncedSearch, itemsPerPage, ratingFilter, reloadKey, statusFilter]);
+  }, [
+    currentPage,
+    debouncedSearch,
+    itemsPerPage,
+    ratingFilter,
+    reloadKey,
+    statusFilter,
+  ]);
 
   // Stats
   const totalOrders = restaurants.reduce(
@@ -261,12 +275,12 @@ export default function BestSellersPage() {
         {loading ? (
           <AdminLoadingState label="Loading restaurants..." />
         ) : error ? (
-          <AdminErrorState
-            description={error}
-            onAction={retry}
-          />
+          <AdminErrorState description={error} onAction={retry} />
         ) : restaurants.length === 0 ? (
-          <AdminEmptyState title="No restaurants found" description="Try changing filters or search query." />
+          <AdminEmptyState
+            title="No restaurants found"
+            description="Try changing filters or search query."
+          />
         ) : null}
 
         <div className="overflow-x-auto">
@@ -398,7 +412,9 @@ export default function BestSellersPage() {
         {/* Pagination Footer */}
         <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">
           <p className="text-sm text-gray-500 font-medium">
-            Showing page <span className="text-gray-800 font-bold">{currentPage}</span> of {totalPages}
+            Showing page{" "}
+            <span className="text-gray-800 font-bold">{currentPage}</span> of{" "}
+            {totalPages}
           </p>
           <AdminPaginator
             page={currentPage}

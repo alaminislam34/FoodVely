@@ -26,11 +26,26 @@ type ListParams = {
   search?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
-  [key: string]: string | number | boolean | undefined;
+  [key: string]: string | number | undefined;
 };
 
 const getList = async <T>(url: string, params?: ListParams): Promise<T[]> => {
-  const { data } = await httpClient.get<ApiResponse<T[]>>(url, { params });
+  // Filter out boolean values from params
+  const filteredParams:
+    | Record<string, string | number | undefined>
+    | undefined = params
+    ? Object.fromEntries(
+        Object.entries(params).filter(
+          ([, value]) =>
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "undefined",
+        ),
+      )
+    : undefined;
+  const { data } = await httpClient.get<ApiResponse<T[]>>(url, {
+    params: filteredParams,
+  });
   return data.data ?? [];
 };
 
@@ -38,7 +53,22 @@ const getListWithMeta = async <T>(
   url: string,
   params?: ListParams,
 ): Promise<PaginatedResult<T>> => {
-  const { data } = await httpClient.get<ApiResponse<T[]>>(url, { params });
+  // Filter out boolean values from params
+  const filteredParams:
+    | Record<string, string | number | undefined>
+    | undefined = params
+    ? Object.fromEntries(
+        Object.entries(params).filter(
+          ([, value]) =>
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "undefined",
+        ),
+      )
+    : undefined;
+  const { data } = await httpClient.get<ApiResponse<T[]>>(url, {
+    params: filteredParams,
+  });
   return {
     items: data.data ?? [],
     meta: data.meta,
@@ -46,7 +76,22 @@ const getListWithMeta = async <T>(
 };
 
 const getOne = async <T>(url: string, params?: ListParams): Promise<T> => {
-  const { data } = await httpClient.get<ApiResponse<T>>(url, { params });
+  // Filter out boolean values from params
+  const filteredParams:
+    | Record<string, string | number | undefined>
+    | undefined = params
+    ? Object.fromEntries(
+        Object.entries(params).filter(
+          ([, value]) =>
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "undefined",
+        ),
+      )
+    : undefined;
+  const { data } = await httpClient.get<ApiResponse<T>>(url, {
+    params: filteredParams,
+  });
   return data.data;
 };
 

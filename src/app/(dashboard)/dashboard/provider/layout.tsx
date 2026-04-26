@@ -46,7 +46,7 @@ export default function RestaurantLayout({
     {
       label: "Dashboard",
       icon: LayoutDashboard,
-      href: "/provider",
+      href: "/dashboard/provider",
       submenu: null,
     },
 
@@ -54,9 +54,9 @@ export default function RestaurantLayout({
       label: "My Profile",
       icon: User,
       submenu: [
-        { label: "Profile Info", href: "/provider/profile" },
-        // { label: "Business Details", href: "/provider/business" },
-        // { label: "Verification", href: "/provider/verification" },
+        { label: "Profile Info", href: "/dashboard/provider/profile" },
+        // { label: "Business Details", href: "/dashboard/provider/business" },
+        // { label: "Verification", href: "/dashboard/provider/verification" },
       ],
     },
 
@@ -64,36 +64,36 @@ export default function RestaurantLayout({
       label: "My Products",
       icon: Package2,
       submenu: [
-        { label: "All Products", href: "/provider/products" },
-        { label: "Add Product", href: "/provider/addFood" },
+        { label: "All Products", href: "/dashboard/provider/products" },
+        { label: "Add Product", href: "/dashboard/provider/addFood" },
       ],
     },
 
     {
       label: "Orders",
       icon: ShoppingBag,
-      href: "/provider/orders",
+      href: "/dashboard/provider/orders",
       submenu: null,
     },
 
     {
       label: "Reviews & Ratings",
       icon: MessageCircleCode,
-      href: "/provider/reviews",
+      href: "/dashboard/provider/reviews",
       submenu: null,
     },
 
     {
       label: "Promotions",
       icon: ZapIcon,
-      href: "/provider/coupons",
+      href: "/dashboard/provider/coupons",
       submenu: null,
     },
 
     {
       label: "Overview",
       icon: Wallet,
-      href: "/provider/overview",
+      href: "/dashboard/provider/overview",
       submenu: null,
     },
 
@@ -101,8 +101,8 @@ export default function RestaurantLayout({
       label: "Reports",
       icon: BarChart3,
       submenu: [
-        { label: "Sales Report", href: "/provider/sales_reports" },
-        { label: "Order Report", href: "/provider/order_reports" },
+        { label: "Sales Report", href: "/dashboard/provider/sales_reports" },
+        { label: "Order Report", href: "/dashboard/provider/order_reports" },
       ],
     },
   ];
@@ -135,7 +135,7 @@ export default function RestaurantLayout({
       >
         {/* Logo Section */}
         <div className="p-6 border-b border-gray-200">
-          <Link href="/provider" className="flex items-center gap-2">
+          <Link href="/dashboard/provider" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-lg flex items-center justify-center">
               <span className="text-xl lg:text-2xl text-white font-bold font-Sofia">
                 FV

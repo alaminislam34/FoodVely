@@ -18,37 +18,6 @@ export interface ApiErrorResponse {
   message: string;
 }
 
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    token: {
-      accesssToken: string;
-      refreshToken: string;
-      sessionToken: string;
-      expiresAt: string;
-    };
-    user: {
-      name: string;
-      email: string;
-      emailVerified: boolean;
-      image: string | null;
-      createdAt: string;
-      updatedAt: string;
-      needPasswordChange: boolean;
-      role: USER_ROLE;
-      accountType: USER_ACCOUNT_TYPE;
-      isDeleted: boolean;
-      status: string;
-      deletedAt: string | null;
-      rememberMe: boolean;
-      id: string;
-    };
-  };
-}
-
 export interface LoginErrorResponse {
   success: boolean;
   statusCode: number;
@@ -58,32 +27,6 @@ export interface LoginErrorResponse {
     path: string;
     message: string;
   }[];
-}
-
-type USER_ROLE = "USER" | "ADMIN" | "SUPER_ADMIN";
-type USER_ACCOUNT_TYPE = "SELLER" | "CLIENT" | "RECRUITER" | "JOB_SEEKER";
-
-export interface UserProfileResponse {
-  success: boolean;
-  message: string;
-  data: {
-    id: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    image: string | null;
-    needPasswordChange: boolean;
-    role: USER_ROLE;
-    accountType: USER_ACCOUNT_TYPE;
-    isDeleted: boolean;
-    status: string;
-    deletedAt: string | null;
-    rememberMe: boolean;
-    createdAt: string;
-    updatedAt: string;
-    jobSeeker: JobSeekerProfileResponse | null;
-    admin: AdminProfileResponse | null;
-  };
 }
 
 export interface JobSeekerProfileResponse {
@@ -104,4 +47,26 @@ export interface AdminProfileResponse {
   userId: string;
   createdAt: string;
   updatedAt: string;
+}
+type USER_ROLE = "CUSTOMER" | "PROVIDER" | "ADMIN";
+type USER_STATUS = "ACTIVE" | "BLOCKED" | "DELETED";
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string | null;
+  role: USER_ROLE;
+  status: USER_STATUS;
+  isDeleted: boolean;
+  deletedAt?: Date | string | null;
+  needPasswordReset: boolean;
+  rememberMe: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  restaurant?: any;
+  sessions?: any[];
+  accounts?: any[];
+  orders?: any[];
 }

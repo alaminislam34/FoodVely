@@ -56,7 +56,7 @@ export function useAdminProductsList(params: {
         limit: params.limit,
         search: params.search || undefined,
         category: params.category && params.category !== "All" ? params.category : undefined,
-        inStock: params.inStock,
+        inStock: typeof params.inStock === "boolean" ? String(params.inStock) : undefined,
         minRating: params.minRating,
         sortBy: params.sortBy,
         sortOrder: params.sortOrder,

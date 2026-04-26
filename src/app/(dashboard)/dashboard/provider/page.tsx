@@ -24,7 +24,7 @@ export default function ProviderDashboard() {
       change: "+12% vs yesterday",
       icon: ShoppingCart,
       color: "from-orange-500 to-orange-600",
-      href: "/provider/orders",
+      href: "/dashboard/provider/orders",
     },
     {
       title: "Daily Revenue",
@@ -32,7 +32,7 @@ export default function ProviderDashboard() {
       change: "+5.2% vs last week",
       icon: TrendingUp,
       color: "from-green-500 to-green-600",
-      href: "/provider/finance",
+      href: "/dashboard/provider/finance",
     },
     {
       title: "Avg. Prep Time",
@@ -40,7 +40,7 @@ export default function ProviderDashboard() {
       change: "-2 min faster",
       icon: Clock,
       color: "from-blue-500 to-blue-600",
-      href: "/provider/performance",
+      href: "/dashboard/provider/performance",
     },
     {
       title: "Avg. Rating",
@@ -48,7 +48,7 @@ export default function ProviderDashboard() {
       change: "24 new reviews",
       icon: Star,
       color: "from-yellow-500 to-yellow-600",
-      href: "/provider/reviews",
+      href: "/dashboard/provider/reviews",
     },
   ];
 
@@ -109,7 +109,7 @@ export default function ProviderDashboard() {
             <Bell size={18} /> Notifications
           </button>
           <Link
-            href="/provider/menu/add"
+            href="/dashboard/provider/menu/add"
             className="px-4 py-2 bg-rose-600 text-white rounded-xl font-semibold hover:bg-rose-700 transition-all shadow-md shadow-rose-200"
           >
             + Add Item
@@ -165,7 +165,7 @@ export default function ProviderDashboard() {
               <ChefHat className="text-rose-600" /> Active Orders
             </h2>
             <Link
-              href="/provider/orders"
+              href="/dashboard/provider/orders"
               className="text-sm text-rose-600 hover:underline font-bold"
             >
               Manage Queue →
@@ -233,7 +233,7 @@ export default function ProviderDashboard() {
             ))}
           </div>
           <Link
-            href="/provider/menu"
+            href="/dashboard/provider/menu"
             className="block text-center mt-8 py-3 rounded-xl border border-dashed border-gray-300 text-gray-500 hover:border-rose-300 hover:text-rose-600 transition-all font-semibold text-sm"
           >
             Edit Full Menu

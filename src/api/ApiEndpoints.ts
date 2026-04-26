@@ -35,6 +35,7 @@ const API_ENDPOINTS = {
     SIGN_IN: `/auth/admin/login`,
     PLATFORM_STATS: `/admin/platform-stats`,
     GET_ACTIVITY_LOGS: `/admin/activity-logs`,
+    GET_USERS: `/admin/users`,
   },
 };
 

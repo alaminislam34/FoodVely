@@ -1,4 +1,8 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders } from "axios";
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+} from "axios";
 import API_ENDPOINTS from "./ApiEndpoints";
 import { ApiResponse } from "@/types/api.types";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -33,7 +37,8 @@ axiosInstance.interceptors.request.use((config) => {
     if (!config.headers) {
       config.headers = {} as AxiosRequestHeaders;
     }
-    (config.headers as AxiosRequestHeaders)["Authorization"] = `Bearer ${token}`;
+    (config.headers as AxiosRequestHeaders)["Authorization"] =
+      `Bearer ${token}`;
   }
   return config;
 });
@@ -118,7 +123,7 @@ axiosInstance.interceptors.response.use(
 );
 
 interface ApiResponseOptions {
-  params?: Record<string, unknown>;
+  params?: Record<string, string | number | undefined>;
   headers?: Record<string, string>;
 }
 

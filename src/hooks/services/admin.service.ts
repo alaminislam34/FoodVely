@@ -1,5 +1,6 @@
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 import { httpClient } from "@/api/httpClient";
+import { IUser } from "@/types/api.types";
 
 export interface PlatformStats {
   // 👤 USERS
@@ -70,8 +71,33 @@ const getPlatformActivityLogs = async (): Promise<AuditLogEntry[]> => {
   return res.data as AuditLogEntry[];
 };
 
+const getAllUsers = async (params: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: string;
+  status?: string;
+}) => {
+  const res = await httpClient.get(API_ENDPOINTS.ADMIN.GET_USERS, {
+    params: {
+      page: params.page,
+      limit: params.limit,
+      search: params.search || undefined,
+      role: params.role === "ALL" ? "" : params.role || undefined,
+      status: params.status === "ALL" ? "" : params.status || undefined,
+    },
+  });
+
+  return {
+    users: res.data as IUser[],
+    totalPages: res.meta?.totalPages ?? 1,
+    totalItems: res.meta?.total ?? 0,
+  };
+};
+
 export const adminService = {
   adminSignIn,
   getPlatformStats,
   getPlatformActivityLogs,
+  getAllUsers,
 };

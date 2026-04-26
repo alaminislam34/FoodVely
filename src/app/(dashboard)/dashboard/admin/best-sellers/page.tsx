@@ -15,7 +15,11 @@ import {
 } from "lucide-react";
 import { Provider } from "@/types/provider";
 import { adminApi } from "@/api/adminApi";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
@@ -51,10 +55,7 @@ export default function BestSellersPage() {
           page: currentPage,
           limit: itemsPerPage,
           search: debouncedSearch || undefined,
-          isActive:
-            statusFilter === "all"
-              ? undefined
-              : statusFilter === "true",
+          isActive: statusFilter === "all" ? undefined : statusFilter,
         });
 
         const mapped = items.map((item) => ({
@@ -88,12 +89,13 @@ export default function BestSellersPage() {
             deliveryFee: 0,
             minimumOrder: 0,
           },
-          openingHours:
-            (item.openingHours as Provider["openingHours"] | undefined) ?? {
-              open: "",
-              close: "",
-              isOpenNow: false,
-            },
+          openingHours: (item.openingHours as
+            | Provider["openingHours"]
+            | undefined) ?? {
+            open: "",
+            close: "",
+            isOpenNow: false,
+          },
           status: (item.status as Provider["status"] | undefined) ?? {
             isVerified: false,
             isActive: false,
@@ -111,7 +113,9 @@ export default function BestSellersPage() {
         setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
         setTotalRestaurants(meta?.total ?? mapped.length);
       } catch (fetchError) {
-        setError(getApiErrorMessage(fetchError, "Failed to load top restaurants"));
+        setError(
+          getApiErrorMessage(fetchError, "Failed to load top restaurants"),
+        );
       } finally {
         setLoading(false);
       }
@@ -163,8 +167,8 @@ export default function BestSellersPage() {
             Top Restaurants
           </h1>
           <p className="text-gray-500 font-medium mt-1">
-            Analyzing the performance of your top {totalRestaurants}{" "}
-            restaurant partners.
+            Analyzing the performance of your top {totalRestaurants} restaurant
+            partners.
           </p>
         </div>
       </motion.div>
@@ -206,9 +210,7 @@ export default function BestSellersPage() {
             transition={{ delay: i * 0.1 }}
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-6 shadow-lg backdrop-blur-xl"
           >
-            <p className={`text-2xl font-bold ${stat.color}`}>
-              {stat.value}
-            </p>
+            <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
             <p className="text-sm font-medium text-gray-500">{stat.label}</p>
             <stat.icon
               size={40}
@@ -251,12 +253,12 @@ export default function BestSellersPage() {
         {loading ? (
           <AdminLoadingState label="Loading top restaurants..." />
         ) : error ? (
-          <AdminErrorState
-            description={error}
-            onAction={retry}
-          />
+          <AdminErrorState description={error} onAction={retry} />
         ) : restaurants.length === 0 ? (
-          <AdminEmptyState title="No top restaurants found" description="Try adjusting the filters." />
+          <AdminEmptyState
+            title="No top restaurants found"
+            description="Try adjusting the filters."
+          />
         ) : null}
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -405,7 +407,11 @@ export default function BestSellersPage() {
           <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">
             Page {currentPage} of {totalPages}
           </p>
-          <AdminPaginator page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+          <AdminPaginator
+            page={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
     </div>

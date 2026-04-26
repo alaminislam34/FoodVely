@@ -36,7 +36,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalUsersChange ?? 0) >= 0,
       icon: Users,
       color: "blue-500",
-      href: "/admin/users",
+      href: "/dashboard/admin/users",
     },
     {
       title: "Active Users",
@@ -45,7 +45,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.activeUsersChange ?? 0) >= 0,
       icon: UserCheck,
       color: "emerald-500",
-      href: "/admin/users?filter=active",
+      href: "/dashboard/admin/users?filter=active",
     },
     {
       title: "Customers",
@@ -54,7 +54,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalCustomersChange ?? 0) >= 0,
       icon: Users,
       color: "indigo-500",
-      href: "/admin/users?role=customer",
+      href: "/dashboard/admin/users?role=customer",
     },
     {
       title: "Providers",
@@ -63,7 +63,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalProvidersChange ?? 0) >= 0,
       icon: Store,
       color: "purple-500",
-      href: "/admin/providers",
+      href: "/dashboard/admin/providers",
     },
 
     // 🚫 USER STATUS
@@ -74,7 +74,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.blockedUsersChange ?? 0) >= 0,
       icon: UserX,
       color: "red-500",
-      href: "/admin/users?status=blocked",
+      href: "/dashboard/admin/users?status=blocked",
     },
     {
       title: "Deleted Users",
@@ -83,7 +83,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalDeletedUsersChange ?? 0) >= 0,
       icon: Trash2,
       color: "gray-500",
-      href: "/admin/users?deleted=true",
+      href: "/dashboard/admin/users?deleted=true",
     },
 
     // 🍔 PLATFORM DATA
@@ -94,7 +94,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalFoodsChange ?? 0) >= 0,
       icon: Package,
       color: "green-500",
-      href: "/admin/products",
+      href: "/dashboard/admin/products",
     },
     {
       title: "Restaurants",
@@ -103,7 +103,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalRestaurantsChange ?? 0) >= 0,
       icon: UtensilsCrossed,
       color: "orange-500",
-      href: "/admin/restaurants",
+      href: "/dashboard/admin/restaurants",
     },
 
     // 📦 ORDERS
@@ -114,7 +114,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalOrdersChange ?? 0) >= 0,
       icon: ShoppingCart,
       color: "cyan-500",
-      href: "/admin/orders",
+      href: "/dashboard/admin/orders",
     },
 
     // 💰 REVENUE
@@ -125,7 +125,7 @@ export default function DashboardOverview() {
       isPositive: (platformStats?.totalRevenueChange ?? 0) >= 0,
       icon: TrendingUp,
       color: "rose-500",
-      href: "/admin/analytics",
+      href: "/dashboard/admin/analytics",
     },
   ];
 
@@ -241,7 +241,7 @@ export default function DashboardOverview() {
               🏆 Best Sellers
             </h2>
             <Link
-              href="/admin/best-sellers"
+              href="/dashboard/admin/best-sellers"
               className="text-sm text-rose-600 hover:text-rose-700 font-semibold"
             >
               View All →
@@ -283,7 +283,7 @@ export default function DashboardOverview() {
               ⭐ Top Restaurants
             </h2>
             <Link
-              href="/admin/best-restaurants"
+              href="/dashboard/admin/best-restaurants"
               className="text-sm text-rose-600 hover:text-rose-700 font-semibold"
             >
               View All →

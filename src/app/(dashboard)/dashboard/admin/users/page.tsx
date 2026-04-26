@@ -24,7 +24,7 @@ import { useAdminUsersList } from "@/hooks/hooks/userAdmin";
 export default function UsersManagement() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterRole, setFilterRole] = useState("all");
-  const limit = 20;
+  const limit = 10;
 
   const { searchInput, setSearchInput, debouncedSearch, page, setPage } =
     useAdminListControls({ debounceMs: 450 });
@@ -40,8 +40,8 @@ export default function UsersManagement() {
     role: filterRole,
     status: filterStatus,
   });
-
-  const users = data?.users ?? [];
+  console.log(data);
+  const users = Array.isArray(data?.users) ? data.users : [];
   const totalPages = data?.totalPages ?? 1;
   const errorMessage = error
     ? getApiErrorMessage(error, "Failed to load users")
@@ -121,10 +121,10 @@ export default function UsersManagement() {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
-              <option value="banned">Banned</option>
+              <option value="all">ALL</option>
+              <option value="active">ACTIVE</option>
+              <option value="suspended">BLOCKED</option>
+              <option value="banned">DELETED</option>
             </select>
           </div>
 
@@ -137,10 +137,10 @@ export default function UsersManagement() {
               onChange={(e) => setFilterRole(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
             >
-              <option value="all">All Roles</option>
-              <option value="customer">Customer</option>
-              <option value="restaurant">Restaurant</option>
-              <option value="admin">Admin</option>
+              <option value="all">ALL</option>
+              <option value="customer">CUSTOMER</option>
+              <option value="restaurant">PROVIDER</option>
+              <option value="admin">ADMIN</option>
             </select>
           </div>
 

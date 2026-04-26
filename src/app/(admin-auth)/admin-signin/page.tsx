@@ -68,7 +68,7 @@ export default function AdminSignInPage() {
       if (res.token) {
         localStorage.setItem("admin_token", res.token);
         toast.success("Admin login successful!");
-        router.push("/admin");
+        router.push("/dashboard/admin");
       }
     } catch (err: any) {
       const errorData = err?.response?.data?.error;
@@ -180,6 +180,13 @@ export default function AdminSignInPage() {
                   Remember me
                 </span>
               </label>
+              <button
+                type="button"
+                onClick={() => router.push("/forgot-password")}
+                className="text-sm text-rose-500 hover:text-rose-700 transition-colors"
+              >
+                Forgot Password?
+              </button>
             </div>
 
             <Button
