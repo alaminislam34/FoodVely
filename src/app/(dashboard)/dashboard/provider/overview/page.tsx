@@ -119,7 +119,7 @@ export default function OverviewPage() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Dashboard
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -164,7 +164,7 @@ export default function OverviewPage() {
                   {stat.label}
                 </p>
                 <div className="flex items-end gap-2">
-                  <h3 className="text-2xl font-black text-gray-800 font-Sofia leading-none">
+                  <h3 className="text-2xl font-black text-gray-800  leading-none">
                     {stat.value}
                   </h3>
                   <span
@@ -195,7 +195,7 @@ export default function OverviewPage() {
         >
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="text-xl font-bold text-gray-800 font-Sofia">
+              <h3 className="text-xl font-bold text-gray-800 ">
                 Revenue Trends
               </h3>
               <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">
@@ -267,7 +267,7 @@ export default function OverviewPage() {
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500 mb-2">
                 Active Campaign
               </p>
-              <h4 className="text-2xl font-Sofia font-bold mb-4 tracking-tight">
+              <h4 className="text-2xl  font-bold mb-4 tracking-tight">
                 EATFREE100
               </h4>
               <p className="text-gray-400 text-sm mb-6 leading-relaxed">
@@ -275,7 +275,7 @@ export default function OverviewPage() {
                 month.
               </p>
               <button
-                onClick={() => router.push("/provider/coupons")}
+                onClick={() => router.push("/dashboard/provider/coupons")}
                 className="flex items-center gap-2 text-sm font-bold text-white group bg-white/10 px-5 py-3 rounded-2xl hover:bg-rose-600 transition-all"
               >
                 Manage Coupons{" "}
@@ -289,7 +289,7 @@ export default function OverviewPage() {
           </motion.div>
 
           <div className="bg-white/60 backdrop-blur-xl border border-white rounded-[2.5rem] p-6 shadow-xl">
-            <h3 className="text-lg font-bold text-gray-800 font-Sofia mb-4 px-2">
+            <h3 className="text-lg font-bold text-gray-800  mb-4 px-2">
               Recent Activity
             </h3>
             <div className="space-y-1">

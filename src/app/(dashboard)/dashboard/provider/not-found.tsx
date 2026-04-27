@@ -15,7 +15,7 @@ export default function ProviderNotFound() {
         </p>
         <div className="mt-6 flex flex-col sm:flex-row gap-3">
           <Link
-            href="/provider"
+            href="/dashboard/provider"
             className="flex-1 rounded-2xl bg-orange-500 text-white py-3 font-semibold"
           >
             Go to Provider Home

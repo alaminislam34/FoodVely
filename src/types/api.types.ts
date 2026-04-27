@@ -17,56 +17,91 @@ export interface ApiErrorResponse {
   success: boolean;
   message: string;
 }
+/* -----------------------------
+   ENUM TYPES
+------------------------------*/
+export type UserRole = "ADMIN" | "PROVIDER" | "CUSTOMER";
+export type UserStatus = "ACTIVE" | "DELETED" | "BLOCKED";
 
-export interface LoginErrorResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  requestId: string;
-  errorSource: {
-    path: string;
-    message: string;
-  }[];
-}
-
-export interface JobSeekerProfileResponse {
+/* -----------------------------
+   RESTAURANT (SHORT VERSION)
+------------------------------*/
+export interface IUserRestaurant {
   id: string;
   userId: string;
-  resumeUrl: string;
-  portfolioUrl: string;
-  bio: string;
-  skills: string[];
-  experience: string[];
-  education: string[];
+  restaurantName: string;
+  slug: string;
+  description: string | null;
+  city: string;
+
+  providerName: string | null;
+  providerEmail: string | null;
+  providerImage: string | null;
+
+  address: string;
+  contactNumber: string | null;
+  cuisine: string | null;
+  openingHours: string | null;
+
+  logo: string | null;
+  coverImage: string | null;
+
+  rating: number;
+  totalOrders: number;
+
+  isVerified: boolean;
+  isActive: boolean;
+  isDeleted: boolean;
+  deletedAt: string | null;
+
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AdminProfileResponse {
+/* -----------------------------
+   ORDER (MINIMAL - expand later)
+------------------------------*/
+export interface IUserOrder {
   id: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
+  status: string;
+  totalPrice?: number;
+  createdAt?: string;
 }
-type USER_ROLE = "CUSTOMER" | "PROVIDER" | "ADMIN";
-type USER_STATUS = "ACTIVE" | "BLOCKED" | "DELETED";
 
-export interface IUser {
+/* -----------------------------
+   USER PROFILE DATA
+------------------------------*/
+export interface IUserProfile {
   id: string;
   name: string;
   email: string;
-  emailVerified: boolean;
-  image?: string | null;
-  role: USER_ROLE;
-  status: USER_STATUS;
+
+  role: UserRole;
+  status: UserStatus;
+
+  image: string | null;
+
   isDeleted: boolean;
-  deletedAt?: Date | string | null;
+  deletedAt: string | null;
+
+  emailVerified: boolean;
   needPasswordReset: boolean;
-  rememberMe: boolean;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  restaurant?: any;
-  sessions?: any[];
-  accounts?: any[];
-  orders?: any[];
+
+  createdAt: string;
+  updatedAt: string;
+
+  restaurant: IUserRestaurant | null;
+  orders: IUserOrder[];
+}
+
+/* -----------------------------
+   MAIN RESPONSE
+------------------------------*/
+export interface IUserProfileResponse {
+  success: boolean;
+  message: string;
+  data: IUserProfile;
+  meta: {
+    requestId: string;
+  };
 }

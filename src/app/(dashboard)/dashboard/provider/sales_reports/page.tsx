@@ -312,7 +312,7 @@ export default function SalesReport() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Sales Report
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -360,9 +360,7 @@ export default function SalesReport() {
           className="lg:col-span-2 bg-white/60 backdrop-blur-xl border border-white rounded-[2.5rem] p-8 shadow-xl"
         >
           <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-bold text-gray-800 font-Sofia">
-              Revenue Growth
-            </h3>
+            <h3 className="text-xl font-bold text-gray-800 ">Revenue Growth</h3>
             <div className="flex items-center gap-2 text-xs font-black text-rose-500 bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100">
               <TrendingUp size={14} />
               {latestPoint
@@ -376,7 +374,7 @@ export default function SalesReport() {
               title="No revenue trend yet"
               description="Completed orders will appear here once transactions start coming in."
               actionLabel="Open Order Reports"
-              actionHref="/provider/order_reports"
+              actionHref="/dashboard/provider/order_reports"
             />
           ) : (
             <div className="h-75 w-full">
@@ -429,9 +427,7 @@ export default function SalesReport() {
           animate={{ opacity: 1, x: 0 }}
           className="bg-white/60 backdrop-blur-xl border border-white rounded-[2.5rem] p-8 shadow-xl"
         >
-          <h3 className="text-xl font-bold text-gray-800 font-Sofia mb-2">
-            Payment Mix
-          </h3>
+          <h3 className="text-xl font-bold text-gray-800  mb-2">Payment Mix</h3>
           <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-6">
             Distribution by channel
           </p>
@@ -486,7 +482,7 @@ export default function SalesReport() {
       <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-xl overflow-hidden">
         <div className="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-xl font-bold text-gray-800 font-Sofia">
+            <h3 className="text-xl font-bold text-gray-800 ">
               Recent Transactions
             </h3>
             <p className="text-sm text-gray-400 font-medium">
@@ -540,7 +536,7 @@ export default function SalesReport() {
               title="No transactions available"
               description="Completed orders will appear as transactions in this report."
               actionLabel="Open Order Reports"
-              actionHref="/provider/order_reports"
+              actionHref="/dashboard/provider/order_reports"
             />
           </div>
         ) : (
@@ -619,25 +615,21 @@ export default function SalesReport() {
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
                 Total Gross
               </p>
-              <p className="text-xl font-bold font-Sofia">
-                {gross.toLocaleString()} BDT
-              </p>
+              <p className="text-xl font-bold ">{gross.toLocaleString()} BDT</p>
             </div>
             <div className="w-px h-10 bg-white/10 hidden md:block" />
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
                 Estimated Tax
               </p>
-              <p className="text-xl font-bold font-Sofia">
-                {tax.toFixed(2)} BDT
-              </p>
+              <p className="text-xl font-bold ">{tax.toFixed(2)} BDT</p>
             </div>
           </div>
           <div className="text-center md:text-right">
             <p className="text-[10px] font-black text-rose-500 uppercase tracking-widest mb-1">
               Total Net Income
             </p>
-            <p className="text-3xl font-black font-Sofia text-white tracking-tight">
+            <p className="text-3xl font-black  text-white tracking-tight">
               {net.toFixed(2)} BDT
             </p>
           </div>

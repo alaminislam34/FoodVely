@@ -64,7 +64,7 @@ export default function ProviderPerformancePage() {
       </div>
 
       <div className="rounded-3xl border border-gray-100 bg-white p-6 md:p-8 shadow-sm">
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-2">
+        <h2 className="text-xl font-bold text-gray-800 mb-2">
           Operational Insight
         </h2>
         <p className="text-sm text-gray-500 leading-6">

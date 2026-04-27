@@ -1,6 +1,6 @@
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 import { httpClient } from "@/api/httpClient";
-import { IUser } from "@/types/api.types";
+import { IUserProfile } from "@/types/api.types";
 
 export interface PlatformStats {
   // 👤 USERS
@@ -89,7 +89,7 @@ const getAllUsers = async (params: {
   });
 
   return {
-    users: res.data as IUser[],
+    users: res.data as IUserProfile[],
     totalPages: res.meta?.totalPages ?? 1,
     totalItems: res.meta?.total ?? 0,
   };

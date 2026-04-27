@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function ProviderMenuAddPage() {
-  redirect("/provider/addFood");
+  redirect("/dashboard/provider/addFood");
 }

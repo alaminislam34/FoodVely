@@ -61,11 +61,11 @@ export default function RestaurantLayout({
     },
 
     {
-      label: "My Products",
+      label: "My Foods",
       icon: Package2,
       submenu: [
-        { label: "All Products", href: "/dashboard/provider/products" },
-        { label: "Add Product", href: "/dashboard/provider/addFood" },
+        { label: "All Foods", href: "/dashboard/provider/products" },
+        { label: "Add Food", href: "/dashboard/provider/addFood" },
       ],
     },
 
@@ -137,12 +137,12 @@ export default function RestaurantLayout({
         <div className="p-6 border-b border-gray-200">
           <Link href="/dashboard/provider" className="flex items-center gap-2">
             <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-lg flex items-center justify-center">
-              <span className="text-xl lg:text-2xl text-white font-bold font-Sofia">
+              <span className="text-xl lg:text-2xl text-white font-bold">
                 FV
               </span>
             </div>
             <div>
-              <h2 className="text-lg lg:text-xl font-bold font-Sofia text-orange-600">
+              <h2 className="text-lg lg:text-xl font-bold text-orange-600">
                 FoodVally
               </h2>
               <p className="text-xs text-gray-600">Restaurant Panel</p>

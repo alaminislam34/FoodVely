@@ -373,7 +373,7 @@ export default function ProductsManagement() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Inventory Management
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -431,9 +431,7 @@ export default function ProductsManagement() {
             className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-4 md:p-6 shadow-lg backdrop-blur-xl"
           >
             <div className="flex flex-col gap-1">
-              <p
-                className={`text-2xl md:text-3xl font-bold font-Sofia ${stat.color}`}
-              >
+              <p className={`text-2xl md:text-3xl font-bold  ${stat.color}`}>
                 {stat.value}
               </p>
               <p className="text-xs md:text-sm font-medium text-gray-500">
@@ -580,7 +578,7 @@ export default function ProductsManagement() {
                           </span>
                         </td>
                         <td className="px-6 py-3">
-                          <span className="text-sm font-bold text-gray-700 font-Sofia">
+                          <span className="text-sm font-bold text-gray-700 ">
                             ${product.price.toFixed(2)}
                           </span>
                         </td>
@@ -693,7 +691,7 @@ export default function ProductsManagement() {
                               {product.category?.name}
                             </span>
                           </div>
-                          <span className="font-Sofia font-bold text-gray-900">
+                          <span className=" font-bold text-gray-900">
                             ${product.price.toFixed(2)}
                           </span>
                         </div>
@@ -812,7 +810,7 @@ export default function ProductsManagement() {
               className="relative w-full max-w-lg bg-white rounded-3xl p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-Sofia font-bold text-gray-800">
+                <h2 className="text-xl  font-bold text-gray-800">
                   Edit Product
                 </h2>
                 <button

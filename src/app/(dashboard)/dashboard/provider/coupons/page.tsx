@@ -281,7 +281,7 @@ export default function CouponManage() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Coupons & Offers
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -572,7 +572,7 @@ export default function CouponManage() {
                   <div className="p-3 bg-rose-50 text-rose-500 rounded-2xl">
                     <Ticket size={24} />
                   </div>
-                  <h2 className="text-2xl font-Sofia font-bold text-gray-800">
+                  <h2 className="text-2xl  font-bold text-gray-800">
                     New Coupon
                   </h2>
                 </div>

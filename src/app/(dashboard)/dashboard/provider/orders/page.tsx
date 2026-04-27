@@ -265,7 +265,7 @@ export default function OrderManage() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
           Active Orders
         </h1>
         <p className="text-gray-500 font-medium mt-1">
@@ -292,9 +292,7 @@ export default function OrderManage() {
             className="relative overflow-hidden rounded-3xl border border-white/60 bg-white/40 p-4 md:p-6 shadow-lg backdrop-blur-xl"
           >
             <div className="flex flex-col gap-1">
-              <p
-                className={`text-xl md:text-2xl font-bold font-Sofia ${stat.color}`}
-              >
+              <p className={`text-xl md:text-2xl font-bold  ${stat.color}`}>
                 {stat.value}
               </p>
               <p className="text-xs md:text-sm font-medium text-gray-500">
@@ -418,7 +416,7 @@ export default function OrderManage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-Sofia font-black text-gray-900">
+                      <p className=" font-black text-gray-900">
                         {order.pricing.totalAmount} {order.pricing.currency}
                       </p>
                       <span className="text-[9px] font-bold text-green-500 uppercase px-1.5 py-0.5 bg-green-50 rounded-md border border-green-100">
@@ -488,7 +486,7 @@ export default function OrderManage() {
                   <span className="text-[10px] text-gray-400 font-bold uppercase">
                     Total Bill
                   </span>
-                  <span className="font-Sofia font-black text-gray-900 text-xl">
+                  <span className=" font-black text-gray-900 text-xl">
                     {order.pricing.totalAmount} ৳
                   </span>
                 </div>

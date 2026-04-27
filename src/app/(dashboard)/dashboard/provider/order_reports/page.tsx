@@ -356,7 +356,7 @@ export default function OrderReports() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
             Order Reports
           </h1>
           <p className="text-gray-500 font-medium mt-1">
@@ -478,7 +478,7 @@ export default function OrderReports() {
               {stat.label}
             </p>
             <div className="flex items-end justify-between mt-1">
-              <h3 className={`text-2xl font-black font-Sofia ${stat.color}`}>
+              <h3 className={`text-2xl font-black  ${stat.color}`}>
                 {stat.value}
               </h3>
               <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-gray-100 text-gray-500">
@@ -497,7 +497,7 @@ export default function OrderReports() {
         >
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h3 className="text-xl font-bold text-gray-800 font-Sofia">
+              <h3 className="text-xl font-bold text-gray-800 ">
                 Order Volume Heatmap
               </h3>
               <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">
@@ -556,7 +556,7 @@ export default function OrderReports() {
           animate={{ opacity: 1, x: 0 }}
           className="bg-gray-900 rounded-[2.5rem] p-8 shadow-xl text-white"
         >
-          <h3 className="text-xl font-bold font-Sofia mb-6">Order Sources</h3>
+          <h3 className="text-xl font-bold  mb-6">Order Sources</h3>
           <div className="space-y-8">
             {sourceBreakdown.map((source, i) => (
               <div key={source.label} className="space-y-3">
@@ -593,9 +593,7 @@ export default function OrderReports() {
 
       <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] border border-white shadow-xl overflow-hidden">
         <div className="p-8 border-b border-gray-100 flex justify-between items-center">
-          <h3 className="text-xl font-bold text-gray-800 font-Sofia">
-            Order Status Log
-          </h3>
+          <h3 className="text-xl font-bold text-gray-800 ">Order Status Log</h3>
           <div className="relative">
             <Filter
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"

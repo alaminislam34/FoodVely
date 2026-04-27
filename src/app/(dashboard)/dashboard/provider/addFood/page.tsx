@@ -1,50 +1,38 @@
 "use client";
 
 import { useState, useRef } from "react";
-import {
-  Upload,
-  Plus,
-  Clock,
-  ChevronLeft,
-  Save,
-  Leaf,
-  Flame,
-  Heart,
-} from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { providerApi } from "@/api/providerApi";
+import { Toaster } from "react-hot-toast";
+import { Upload, Plus, ChevronLeft, Save, Heart, Clock } from "lucide-react";
+import Image from "next/image";
+import { useFood } from "@/hooks/hooks/useFood";
+import { useAuth } from "@/hooks/hooks/useAuth";
+import { useCategory } from "@/hooks/hooks/useCategory";
 
 export default function AddNewFood() {
   const router = useRouter();
+  const { user } = useAuth();
+  const { createFood } = useFood();
+  const { categories } = useCategory();
   const [formData, setFormData] = useState({
-    name: "",
+    title: "",
+    slug: "",
     description: "",
     basePrice: "",
-    discountPrice: "",
-    category: "Biriyani",
-    prepTime: "20",
-    isVeg: false,
-    isSpicy: false,
-    isAvailable: true,
+    categoryId: "",
+    providerId: user?.id,
+    stock: "",
+    currency: "BDT",
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Constants for styling to match your card
-  const hasDiscount =
-    formData.discountPrice &&
-    Number(formData.discountPrice) < Number(formData.basePrice);
-  const displayPrice = hasDiscount
-    ? formData.discountPrice
-    : formData.basePrice || "0";
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => setImagePreview(reader.result as string);
       reader.readAsDataURL(file);
@@ -52,63 +40,36 @@ export default function AddNewFood() {
   };
 
   const validateForm = () => {
-    if (!formData.name.trim()) {
-      return "Food name is required";
-    }
-    if (!formData.description.trim()) {
-      return "Description is required";
-    }
-    const basePrice = Number(formData.basePrice);
-    if (!Number.isFinite(basePrice) || basePrice <= 0) {
+    if (!formData.title.trim()) return "Food name is required";
+    if (!formData.slug.trim()) return "Slug is required";
+    if (!formData.description.trim()) return "Description is required";
+    if (!formData.basePrice || Number(formData.basePrice) <= 0)
       return "Base price must be greater than 0";
-    }
-    if (formData.discountPrice) {
-      const discountPrice = Number(formData.discountPrice);
-      if (!Number.isFinite(discountPrice) || discountPrice <= 0) {
-        return "Discount price must be a valid amount";
-      }
-      if (discountPrice >= basePrice) {
-        return "Discount price must be lower than base price";
-      }
-    }
-    const prepTime = Number(formData.prepTime);
-    if (!Number.isFinite(prepTime) || prepTime <= 0) {
-      return "Prep time must be greater than 0";
-    }
+    if (!formData.categoryId) return "Category is required";
+    if (!formData.providerId) return "Provider is required";
     return null;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const validationError = validateForm();
     if (validationError) {
-      toast.error(validationError);
+      // You can use toast.error here if you want
       return;
     }
-
     setIsSubmitting(true);
 
     try {
-      await providerApi.createProduct({
-        name: formData.name.trim(),
-        description: formData.description.trim(),
-        price: Number(formData.basePrice),
-        discountPrice: formData.discountPrice
-          ? Number(formData.discountPrice)
-          : undefined,
-        category: formData.category,
-        prepTime: Number(formData.prepTime),
-        isVeg: formData.isVeg,
-        isSpicy: formData.isSpicy,
-        isAvailable: formData.isAvailable,
-        thumbnail: imagePreview || undefined,
-      });
-
-      toast.success("Product published successfully");
-      router.push("/provider/products");
+      const payload: any = {
+        ...formData,
+        basePrice: Number(formData.basePrice),
+        stock: formData.stock ? Number(formData.stock) : undefined,
+        images: imageFile ? [imageFile] : undefined,
+      };
+      await createFood(payload);
+      router.push("/dashboard/provider/products");
     } catch {
-      toast.error("Could not publish product. Please try again.");
+      // Error toast is handled in the hook
     } finally {
       setIsSubmitting(false);
     }
@@ -117,19 +78,18 @@ export default function AddNewFood() {
   return (
     <form onSubmit={handleSubmit}>
       <Toaster position="top-center" />
-
       {/* --- HEADER --- */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pt-6">
         <div className="flex items-center gap-4">
           <button
             type="button"
-            onClick={() => router.push("/provider/products")}
+            onClick={() => router.push("/dashboard/provider/products")}
             className="p-2 hover:bg-gray-100 rounded-full transition-all border border-gray-100 bg-white"
           >
             <ChevronLeft size={24} className="text-gray-600" />
           </button>
           <div>
-            <h1 className="text-3xl font-Sofia font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-gray-800">
               New Secret Recipe
             </h1>
             <p className="text-gray-500">
@@ -140,7 +100,7 @@ export default function AddNewFood() {
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={() => router.push("/provider/products")}
+            onClick={() => router.push("/dashboard/provider/products")}
             className="px-6 py-3 rounded-2xl bg-white border border-gray-200 font-bold text-gray-500 hover:bg-gray-50 transition-all"
           >
             Cancel
@@ -160,7 +120,7 @@ export default function AddNewFood() {
         <div className="lg:col-span-7 xl:col-span-8 space-y-8">
           {/* Image Upload Area */}
           <section className="bg-white p-6 rounded-4xl border border-gray-100 shadow-sm">
-            <h3 className="text-lg font-Sofia font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
               <Upload size={18} className="text-rose-500" /> Media Upload
             </h3>
             <div
@@ -203,11 +163,15 @@ export default function AddNewFood() {
                 </label>
                 <input
                   type="text"
-                  value={formData.name}
-                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-Sofia font-bold"
+                  value={formData.title}
+                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
                   placeholder="e.g. Traditional Beef Kala Bhuna"
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({
+                      ...formData,
+                      title: e.target.value,
+                      slug: e.target.value.toLowerCase().replace(/\s+/g, "-"),
+                    })
                   }
                 />
               </div>
@@ -229,73 +193,52 @@ export default function AddNewFood() {
 
               <div>
                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">
-                  Discount Price (Optional)
+                  Stock (Optional)
                 </label>
                 <input
                   type="number"
-                  value={formData.discountPrice}
-                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold text-green-600"
-                  placeholder="0.00"
+                  value={formData.stock}
+                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
+                  placeholder="Stock"
                   onChange={(e) =>
-                    setFormData({ ...formData, discountPrice: e.target.value })
+                    setFormData({ ...formData, stock: e.target.value })
                   }
                 />
-              </div>
-
-              <div>
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">
-                  Prep Time (Mins)
-                </label>
-                <input
-                  type="number"
-                  value={formData.prepTime}
-                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
-                  placeholder="20"
-                  onChange={(e) =>
-                    setFormData({ ...formData, prepTime: e.target.value })
-                  }
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">
-                  Category
-                </label>
-                <select
-                  value={formData.category}
-                  className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
-                  onChange={(e) =>
-                    setFormData({ ...formData, category: e.target.value })
-                  }
-                >
-                  <option>Biriyani</option>
-                  <option>Rice Bowl</option>
-                  <option>Curry</option>
-                  <option>Snacks</option>
-                </select>
               </div>
             </div>
 
-            {/* Toggles */}
-            <div className="flex flex-wrap gap-4 pt-4">
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, isVeg: !formData.isVeg })
+            <div>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-widest">
+                Category
+              </label>
+              <select
+                value={formData.categoryId}
+                className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
+                onChange={(e) =>
+                  setFormData({ ...formData, categoryId: e.target.value })
                 }
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all font-bold text-sm ${formData.isVeg ? "bg-green-50 border-green-200 text-green-600" : "bg-gray-50 border-gray-100 text-gray-400"}`}
               >
-                <Leaf size={16} /> Vegetarian
-              </button>
-              <button
-                type="button"
-                onClick={() =>
-                  setFormData({ ...formData, isSpicy: !formData.isSpicy })
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="text-xs font-black text-gray-400 uppercase tracking-widest">
+                Description
+              </label>
+              <textarea
+                value={formData.description}
+                className="w-full mt-2 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-rose-500 outline-none font-bold"
+                placeholder="Describe your dish"
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
                 }
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all font-bold text-sm ${formData.isSpicy ? "bg-red-50 border-red-200 text-red-600" : "bg-gray-50 border-gray-100 text-gray-400"}`}
-              >
-                <Flame size={16} /> Spicy
-              </button>
+              />
             </div>
           </section>
         </div>
@@ -306,10 +249,7 @@ export default function AddNewFood() {
             <h3 className="text-sm md:text-base font-black text-gray-600 mb-4 text-center">
               Live Preview
             </h3>
-
-            {/* --- YOUR ACTUAL CARD DESIGN START --- */}
             <div className="max-w-[320px] mx-auto group relative flex flex-col justify-between bg-white/60 backdrop-blur-md p-3 rounded-[2.5rem] border border-white/40 shadow-xl">
-              {/* Image Section */}
               <div className="relative aspect-square w-full rounded-4xl overflow-hidden mb-4 bg-slate-50">
                 <Image
                   src={imagePreview || "/images/food.png"}
@@ -317,46 +257,22 @@ export default function AddNewFood() {
                   alt="Preview"
                   className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
                 />
-
-                {/* Badges */}
-                <div className="absolute top-3 left-3 flex flex-col gap-2">
-                  {formData.isVeg && (
-                    <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-sm border border-green-100">
-                      <Leaf
-                        size={14}
-                        className="text-green-500 fill-green-500"
-                      />
-                    </div>
-                  )}
-                  {formData.isSpicy && (
-                    <div className="bg-white/90 backdrop-blur-md p-1.5 rounded-xl shadow-sm border border-red-100">
-                      <Flame
-                        size={14}
-                        className="text-orange-600 fill-orange-600"
-                      />
-                    </div>
-                  )}
-                </div>
+                <div className="absolute top-3 left-3 flex flex-col gap-2"></div>
               </div>
-
-              {/* Content Section */}
               <div className="px-2 pb-2">
                 <div className="flex justify-between items-center mb-1">
-                  <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest font-Sofia">
-                    {formData.category}
+                  <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest ">
+                    {formData.categoryId}
                   </span>
                   <div className="flex items-center gap-1 text-slate-400">
                     <Clock size={12} />
-                    <span className="text-[10px] font-bold">
-                      {formData.prepTime} min
-                    </span>
+                    <span className="text-[10px] font-bold">20 min</span>
                   </div>
                 </div>
-
                 <div className="flex justify-between items-start gap-2 mb-3">
                   <div className="flex-1">
-                    <h3 className="text-base font-Sofia font-bold text-gray-800 leading-tight">
-                      {formData.name || "Dish Title Here"}
+                    <h3 className="text-base font-bold text-gray-800 leading-tight">
+                      {formData.title || "Dish Title Here"}
                     </h3>
                     <p className="text-gray-400 text-xs mt-0.5 line-clamp-1 italic">
                       {formData.description || "Sample description..."}
@@ -366,20 +282,12 @@ export default function AddNewFood() {
                     <Heart size={18} />
                   </button>
                 </div>
-
-                {/* Pricing */}
                 <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                   <div className="flex flex-col">
-                    {hasDiscount && (
-                      <span className="text-[10px] text-slate-400 line-through font-bold">
-                        BDT {formData.basePrice}
-                      </span>
-                    )}
                     <span className="text-lg font-black text-slate-900">
-                      BDT {displayPrice}
+                      BDT {formData.basePrice || "0"}
                     </span>
                   </div>
-
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md text-rose-600 pl-4 pr-3 py-2 rounded-2xl shadow-[inset_0_2px_10px_0_rgba(0,0,0,0.1)]">
                     <span className="text-xs font-bold uppercase tracking-wider">
                       Add
@@ -391,7 +299,6 @@ export default function AddNewFood() {
                 </div>
               </div>
             </div>
-            {/* --- CARD DESIGN END --- */}
           </div>
         </div>
       </div>

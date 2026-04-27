@@ -165,7 +165,7 @@ export default function ReviewManage() {
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen pb-10 relative">
       <header>
-        <h1 className="text-3xl md:text-4xl font-Sofia font-bold text-gray-800">
+        <h1 className="text-3xl md:text-4xl  font-bold text-gray-800">
           Reviews
         </h1>
         <p className="text-gray-500 font-medium">
@@ -343,7 +343,7 @@ export default function ReviewManage() {
               <div className="p-8">
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h2 className="text-2xl font-Sofia font-bold text-gray-800">
+                    <h2 className="text-2xl  font-bold text-gray-800">
                       Reply to Review
                     </h2>
                     <p className="text-sm text-gray-500 font-medium mt-1">

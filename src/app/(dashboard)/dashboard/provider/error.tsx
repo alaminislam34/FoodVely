@@ -34,7 +34,7 @@ export default function ProviderError({
             Try again
           </button>
           <Link
-            href="/provider"
+            href="/dashboard/provider"
             className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-700"
           >
             Provider Home

@@ -50,7 +50,7 @@ export default function ProviderFinancePage() {
         actions={[
           {
             label: "Download Statement",
-            href: "/provider/sales_reports",
+            href: "/dashboard/provider/sales_reports",
             variant: "secondary",
             icon: Download,
           },
@@ -64,9 +64,7 @@ export default function ProviderFinancePage() {
       </div>
 
       <div className="rounded-3xl border border-gray-100 bg-white p-6 md:p-8 shadow-sm">
-        <h2 className="text-xl font-Sofia font-bold text-gray-800 mb-2">
-          Next Step
-        </h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Next Step</h2>
         <p className="text-sm text-gray-500 leading-6">
           Detailed settlement and transaction analytics are available in the
           sales report section. This page now exists so all dashboard links
