@@ -107,6 +107,11 @@ const getMe = async (): Promise<IUserProfileData> => {
   return res.data;
 };
 
+const getRestaurant = async () => {
+  const res = await httpClient.get(API_ENDPOINTS.PROVIDER.RESTAURANT);
+  return res.data;
+};
+
 export const AuthServices = {
   register: Register,
   verifyEmail: VerifyEmail,
@@ -116,4 +121,5 @@ export const AuthServices = {
   logoutUser: logoutUser,
   getMe: getMe,
   resendOtp: ResendOtp,
+  getRestaurant: getRestaurant,
 };

@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { AuthServices } from "../services/auth.service";
+import { IUserRestaurant } from "@/types/api.types";
 
 export interface LoginPayload {
   email: string;
@@ -73,7 +74,11 @@ export function useAuth() {
   });
 
   const loginMutation = useMutation({
-    mutationFn: async (payload: { email: string; password: string, rememberMe?: boolean }) => {
+    mutationFn: async (payload: {
+      email: string;
+      password: string;
+      rememberMe?: boolean;
+    }) => {
       const response = await AuthServices.loginUser(payload);
       return response;
     },
@@ -109,6 +114,15 @@ export function useAuth() {
     },
   });
 
+  const getRestaurant = useQuery({
+    queryKey: ["provider-restaurant"],
+    queryFn: async () => {
+      const res = await AuthServices.getRestaurant();
+      return res as IUserRestaurant;
+    },
+    enabled: user?.role === "PROVIDER",
+  });
+
   return {
     user: user ?? null,
     isAuthenticated: !!user,
@@ -128,5 +142,8 @@ export function useAuth() {
     resendOtp: resendOtpMutation.mutateAsync,
     error,
     clearError: () => setError(null),
+    providerRestaurant: getRestaurant.data,
+    providerRestaurantLoading: getRestaurant.isLoading,
+    providerRestaurantError: getRestaurant.isError,
   };
 }

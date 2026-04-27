@@ -13,7 +13,7 @@ export function ProviderOrdersEmptyState() {
       title="No orders found"
       description="Try changing filters or check again after a few minutes."
       actionLabel="View All Orders"
-      actionHref="/provider/orders"
+      actionHref="/dashboard/provider/orders"
     />
   );
 }
@@ -24,7 +24,7 @@ export function ProviderProductsEmptyState() {
       title="No products found"
       description="Try changing your filters or add a new product to your menu."
       actionLabel="Add Product"
-      actionHref="/provider/addFood"
+      actionHref="/dashboard/provider/addFood"
     />
   );
 }
@@ -33,7 +33,7 @@ export function ProviderReportsEmptyState({
   title = "No report rows available",
   description = "Try changing status filter or refresh the report data.",
   actionLabel = "Open Reports",
-  actionHref = "/provider/order_reports",
+  actionHref = "/dashboard/provider/order_reports",
 }: ProviderReportsEmptyStateProps) {
   return (
     <EmptyState

@@ -17,91 +17,91 @@ export interface ApiErrorResponse {
   success: boolean;
   message: string;
 }
+/* -----------------------------
+   ENUM TYPES
+------------------------------*/
+export type UserRole = "ADMIN" | "PROVIDER" | "CUSTOMER";
+export type UserStatus = "ACTIVE" | "DELETED" | "BLOCKED";
 
-export interface LoginResponse {
-  success: boolean;
-  message: string;
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    token: {
-      accesssToken: string;
-      refreshToken: string;
-      sessionToken: string;
-      expiresAt: string;
-    };
-    user: {
-      name: string;
-      email: string;
-      emailVerified: boolean;
-      image: string | null;
-      createdAt: string;
-      updatedAt: string;
-      needPasswordChange: boolean;
-      role: USER_ROLE;
-      accountType: USER_ACCOUNT_TYPE;
-      isDeleted: boolean;
-      status: string;
-      deletedAt: string | null;
-      rememberMe: boolean;
-      id: string;
-    };
-  };
-}
-
-export interface LoginErrorResponse {
-  success: boolean;
-  statusCode: number;
-  message: string;
-  requestId: string;
-  errorSource: {
-    path: string;
-    message: string;
-  }[];
-}
-
-type USER_ROLE = "USER" | "ADMIN" | "SUPER_ADMIN";
-type USER_ACCOUNT_TYPE = "SELLER" | "CLIENT" | "RECRUITER" | "JOB_SEEKER";
-
-export interface UserProfileResponse {
-  success: boolean;
-  message: string;
-  data: {
-    id: string;
-    name: string;
-    email: string;
-    emailVerified: boolean;
-    image: string | null;
-    needPasswordChange: boolean;
-    role: USER_ROLE;
-    accountType: USER_ACCOUNT_TYPE;
-    isDeleted: boolean;
-    status: string;
-    deletedAt: string | null;
-    rememberMe: boolean;
-    createdAt: string;
-    updatedAt: string;
-    jobSeeker: JobSeekerProfileResponse | null;
-    admin: AdminProfileResponse | null;
-  };
-}
-
-export interface JobSeekerProfileResponse {
+/* -----------------------------
+   RESTAURANT (SHORT VERSION)
+------------------------------*/
+export interface IUserRestaurant {
   id: string;
   userId: string;
-  resumeUrl: string;
-  portfolioUrl: string;
-  bio: string;
-  skills: string[];
-  experience: string[];
-  education: string[];
+  restaurantName: string;
+  slug: string;
+  description: string | null;
+  city: string;
+
+  providerName: string | null;
+  providerEmail: string | null;
+  providerImage: string | null;
+
+  address: string;
+  contactNumber: string | null;
+  cuisine: string | null;
+  openingHours: string | null;
+
+  logo: string | null;
+  coverImage: string | null;
+
+  rating: number;
+  totalOrders: number;
+
+  isVerified: boolean;
+  isActive: boolean;
+  isDeleted: boolean;
+  deletedAt: string | null;
+
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AdminProfileResponse {
+/* -----------------------------
+   ORDER (MINIMAL - expand later)
+------------------------------*/
+export interface IUserOrder {
   id: string;
-  userId: string;
+  status: string;
+  totalPrice?: number;
+  createdAt?: string;
+}
+
+/* -----------------------------
+   USER PROFILE DATA
+------------------------------*/
+export interface IUserProfile {
+  id: string;
+  name: string;
+  email: string;
+
+  role: UserRole;
+  status: UserStatus;
+
+  image: string | null;
+
+  isDeleted: boolean;
+  deletedAt: string | null;
+
+  emailVerified: boolean;
+  needPasswordReset: boolean;
+
   createdAt: string;
   updatedAt: string;
+
+  restaurant: IUserRestaurant | null;
+  orders: IUserOrder[];
+}
+
+/* -----------------------------
+   MAIN RESPONSE
+------------------------------*/
+export interface IUserProfileResponse {
+  success: boolean;
+  message: string;
+  data: IUserProfile;
+  meta: {
+    requestId: string;
+  };
 }

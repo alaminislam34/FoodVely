@@ -36,6 +36,10 @@ const API_ENDPOINTS = {
     PLATFORM_STATS: `/admin/platform-stats`,
     GET_ACTIVITY_LOGS: `/admin/activity-logs`,
   },
+  PROVIDER: {
+    DASHBOARD_STATS: `/provider/platform-stats`,
+    RESTAURANT: `/restaurants/profile`,
+  },
 };
 
 export default API_ENDPOINTS;
