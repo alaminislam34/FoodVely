@@ -141,7 +141,7 @@ export default async function ProductsDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
       <MenuDetailsPage
-        params={Promise.resolve(params)}
+        slug={params.slug}
         catalogPath="/products"
         catalogLabel="Products"
       />

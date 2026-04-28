@@ -18,17 +18,16 @@ import {
 import Link from "next/link";
 
 interface MenuDetailsPageProps {
-  params: Promise<{ slug: string }>;
+  slug: string;
   catalogPath?: string;
   catalogLabel?: string;
 }
 
 export default function MenuDetailsPage({
-  params,
+  slug,
   catalogPath = "/menu",
   catalogLabel = "Menu",
 }: MenuDetailsPageProps) {
-  const [slug, setSlug] = useState<string>("");
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -42,9 +41,7 @@ export default function MenuDetailsPage({
     notes: "",
   });
 
-  useEffect(() => {
-    params.then((p) => setSlug(p.slug));
-  }, [params]);
+  // No need to resolve params, slug is now a plain string
 
   // Fetch product data
   useEffect(() => {
