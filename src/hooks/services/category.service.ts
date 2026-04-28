@@ -18,14 +18,14 @@ const getAllCategoriesForPublic = async (): Promise<ICategory[]> => {
   const res = await httpClient.get<ICategory[]>(
     API_ENDPOINTS.CATEGORY.GET_ALL_FOR_PUBLIC,
   );
-  return res.data;
+  return res.data as ICategory[]; // Explicitly cast to ICategory[]
 };
 
 const getAllCategoriesForAdmin = async (): Promise<ICategory[]> => {
   const res = await httpClient.get<ICategory[]>(
     API_ENDPOINTS.CATEGORY.GET_ALL_FOR_ADMIN,
   );
-  return res.data;
+  return res.data as ICategory[]; // Explicitly cast to ICategory[]
 };
 
 // Use FormData so Multer on backend can grab the file

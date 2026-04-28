@@ -5,21 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "react-hot-toast";
-import {
-  Upload,
-  Plus,
-  ChevronLeft,
-  Save,
-  Heart,
-  Clock,
-  Star,
-  Flame,
-  Leaf,
-  Settings,
-  Info,
-} from "lucide-react";
-import Image from "next/image";
-import { motion } from "motion/react";
+import { ChevronLeft, Save } from "lucide-react";
 import CommonProductCard from "@/components/CommonProductCard";
 import { FoodImageUpload } from "@/components/food/FoodImageUpload";
 import { FoodGeneralDetailsForm } from "@/components/food/FoodGeneralDetailsForm";
@@ -31,7 +17,7 @@ import { FoodFormValues, foodSchema } from "@/types/zod.validation";
 export default function AddNewFood() {
   const router = useRouter();
   const { createFood, isLoading } = useFood();
-  const { categories } = useCategory();
+  const { adminCategories } = useCategory();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -94,7 +80,7 @@ export default function AddNewFood() {
   };
 
   // UI Helpers for Preview
-  const selectedCategory = categories.find(
+  const selectedCategory = adminCategories.find(
     (c) => c.id === watchedValues.categoryId,
   );
   const discountAmount =
@@ -156,7 +142,7 @@ export default function AddNewFood() {
               register={register}
               setValue={setValue}
               watchedValues={watchedValues}
-              categories={categories}
+              categories={adminCategories ?? []}
               errors={errors}
             />
 

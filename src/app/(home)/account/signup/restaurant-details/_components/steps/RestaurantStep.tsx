@@ -17,7 +17,6 @@ import type {
   FieldErrors,
   UseFormSetValue,
 } from "react-hook-form";
-// removed duplicate useState import
 import { useEffect, useState } from "react";
 import { RestaurantFormValues } from "../ProviderSignupFlow";
 import { useCategory } from "@/hooks/hooks/useCategory";
@@ -50,10 +49,10 @@ export function RestaurantStep({
   setValue,
 }: RestaurantStepProps) {
   // Food categories state for popover
-  const { categories, isLoading: isCategoriesLoading } = useCategory();
+  const { categoriesForPublic, isLoading: isCategoriesLoading } = useCategory();
   const [categorySearch, setCategorySearch] = useState("");
   const [showPopover, setShowPopover] = useState(false);
-  const filteredCategories = categories.filter((cat: any) =>
+  const filteredCategories = categoriesForPublic.filter((cat: any) =>
     cat.title.toLowerCase().includes(categorySearch.toLowerCase()),
   );
   const [logoPreview, setLogoPreview] = useState<string | null>(null);

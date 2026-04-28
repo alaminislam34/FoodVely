@@ -7,18 +7,18 @@ export function useCategory() {
 
   // ---------------- GET ----------------
   const {
-    data: categories = [],
+    data: categoriesForPublic = [] as ICategory[],
     isLoading,
     isError,
     refetch: refetchPublicCategories,
   } = useQuery<ICategory[]>({
     queryKey: ["categories", "public"],
     queryFn: categoryService.getAllCategoriesForPublic,
-    staleTime: 10 * 60 * 1000, // Categories don't change often
+    staleTime: 10 * 60 * 1000,
   });
 
   const {
-    data: adminCategories = [],
+    data: adminCategories = [] as ICategory[],
     isLoading: isAdminCategoriesLoading,
     refetch: refetchAdminCategories,
   } = useQuery<ICategory[]>({
@@ -89,7 +89,7 @@ export function useCategory() {
   });
 
   return {
-    categories,
+    categoriesForPublic,
     adminCategories,
     isLoading,
     isAdminCategoriesLoading,
