@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form"; // Controller add kora hoyeche
+import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useAuth } from "@/hooks/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -56,8 +56,6 @@ const EmailVerify = () => {
       router.replace("/account/signup");
     }
   }, [router, setValue]);
-
-  if (!email) return null;
 
   const maskEmail = (email: string | null) => {
     if (!email) return "";
@@ -211,14 +209,6 @@ const EmailVerify = () => {
                 "Verify OTP"
               )}
             </Button>
-
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="text-sm font-bold text-rose-500 hover:underline block w-full"
-            >
-              Change Email Address
-            </button>
           </form>
         </div>
       </motion.div>

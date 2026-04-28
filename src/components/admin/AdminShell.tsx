@@ -16,12 +16,11 @@ import {
   Settings,
   LogOut,
   ChevronDown,
-  Loader2,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/hooks/useAuth";
 
-export default function AdminLayout({
+export default function AdminShell({
   children,
 }: {
   children: React.ReactNode;

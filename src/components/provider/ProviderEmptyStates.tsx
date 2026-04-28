@@ -1,3 +1,5 @@
+"use client"; // <--- এই লাইনটি যোগ করা বাধ্যতামূলক
+
 import { EmptyState } from "@/components/shared/EmptyState";
 
 type ProviderReportsEmptyStateProps = {

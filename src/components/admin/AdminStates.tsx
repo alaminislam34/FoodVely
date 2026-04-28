@@ -1,3 +1,5 @@
+"use client";
+
 import { AlertCircle, Inbox, Loader2 } from "lucide-react";
 import Link from "next/link";
 

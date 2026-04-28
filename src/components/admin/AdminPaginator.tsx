@@ -1,3 +1,5 @@
+"use client";
+
 type AdminPaginatorProps = {
   page: number;
   totalPages: number;
