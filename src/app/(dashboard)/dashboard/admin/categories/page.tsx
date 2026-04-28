@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Search,
@@ -8,253 +8,378 @@ import {
   Edit2,
   Trash2,
   TrendingUp,
-  X,
   Package,
   Layers,
+  Loader2,
 } from "lucide-react";
-import { adminApi } from "@/api/adminApi";
-import toast from "react-hot-toast";
-import { getApiErrorMessage } from "@/utils/apiError";
-
 import { useCategory } from "@/hooks/hooks/useCategory";
 import { CategoryFormModal } from "@/components/admin/AddCategoryModal";
 import { CategoryFormModel } from "@/types/product";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { ICategory } from "@/hooks/services/category.service";
+import Swal from "sweetalert2";
 
-// --- Types ---
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  products: number;
-  imageUrl: string;
-  trending: boolean;
-  revenue: string;
-}
-
-// --- Main Page Component ---
 export default function CategoriesPage() {
-  const { categories } = useCategory();
+  const router = useRouter();
+  const {
+    adminCategories: categories,
+    isLoading,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    isCreating,
+    isUpdating,
+    refetchAdminCategories,
+    activateCategory,
+    deactivateCategory,
+  } = useCategory();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null,
+  );
 
-  useEffect(() => {
-    adminApi
-      .listCategories({ limit: 20 })
-      .then((data) => {
-        const mapped: Category[] = data.map((item, index) => ({
-          id: Number(item.id ?? index + 1),
-          name: String(item.title ?? item.name ?? "Category"),
-          slug: String(item.slug ?? "category"),
-          products: Number(item.products ?? item.productsCount ?? 0),
-          imageUrl: String(item.imageUrl ?? "🍽️"),
-          trending: Boolean(item.trending ?? false),
-          revenue: String(item.revenue ?? "0"),
-        }));
-      })
-      .catch((error) => console.error("Failed to load categories", error));
-  }, []);
+  // --- Handlers ---
+  const handleOpenCreate = () => {
+    setSelectedCategory(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEdit = (category: ICategory) => {
+    setSelectedCategory(category);
+    setIsModalOpen(true);
+  };
+
+  const handleFormSubmit = async (data: CategoryFormModel) => {
+    const formData = new FormData();
+    formData.append("title", data.title);
+    if (data.description) formData.append("description", data.description);
+
+    // Use 'image' to match Multer backend requirement
+    if (data.image instanceof File) {
+      formData.append("image", data.image);
+    }
+
+    try {
+      if (selectedCategory) {
+        await updateCategory({ id: selectedCategory.id, data: formData });
+      } else {
+        await createCategory(formData);
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Form Action Failed", error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Delete!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteCategory(id);
+        } catch (error) {
+          console.error("Delete failed", error);
+        } finally {
+          refetchAdminCategories();
+        }
+      }
+    });
+  };
 
   const filteredCategories = categories.filter((cat) =>
     cat.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const { createCategory } = useCategory();
-
-  const handleAddCategory = (newCat: CategoryFormModel) => {
-    const file = newCat.image;
-
-    let imageUrl = "🍽️";
-    if (file) {
-      imageUrl = URL.createObjectURL(file);
-    }
-
-    const formData = new FormData();
-    formData.append("title", newCat.title);
-
-    if (newCat.description) {
-      formData.append("description", newCat.description);
-    }
-
-    if (file) {
-      formData.append("images", file);
-    }
-
-    createCategory.mutate(formData as any, {
-      onSuccess: (created: any) => {
-        setIsModalOpen(false);
-      },
-    });
-  };
+  if (isLoading) {
+    return (
+      <div className="h-[60vh] flex flex-col items-center justify-center gap-4 text-gray-400">
+        <Loader2 className="animate-spin text-rose-500" size={40} />
+        <p className="font-bold animate-pulse">Loading Kitchen Categories...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 lg:space-y-8 min-h-screen">
-      {/* Header */}
+    <div className="space-y-8 min-h-screen pb-20">
+      {/* --- HEADER --- */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col md:flex-row md:items-end justify-between gap-4"
+        className="flex flex-col md:flex-row md:items-center justify-between gap-6"
       >
         <div>
-          <h1 className="text-3xl md:text-4xl  font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-black text-gray-900 tracking-tight">
             Categories
           </h1>
-          <p className="text-gray-500 font-medium">
-            Organize your menu items into structured groups.
+          <p className="text-gray-500 font-medium mt-1">
+            Manage your menu architecture and groups.
           </p>
         </div>
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 hover:shadow-lg hover:shadow-gray-200 transition-all transform active:scale-95"
+          onClick={handleOpenCreate}
+          className="flex items-center justify-center gap-2 px-8 py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-rose-600 hover:shadow-xl hover:shadow-rose-100 transition-all transform active:scale-95"
         >
           <Plus size={20} />
           New Category
         </button>
       </motion.div>
 
-      {/* Analytics Cards - Glassy Style */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[
-          {
-            label: "Total Categories",
-            value: categories.length,
-            icon: Layers,
-            color: "text-rose-600",
-            bg: "bg-rose-50/50",
-          },
-          {
-            label: "Total Products",
-            value: categories.length || 0,
-            icon: Package,
-            color: "text-orange-600",
-            bg: "bg-orange-50/50",
-          },
-          {
-            label: "Trending Categories",
-            value: 0,
-            icon: TrendingUp,
-            color: "text-green-600",
-            bg: "bg-green-50/50",
-          },
-        ].map((stat, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="relative overflow-hidden rounded-2xl border border-white/60 bg-white/40 p-6 shadow-xl backdrop-blur-xl"
-          >
-            <div
-              className={`absolute top-0 right-0 p-4 opacity-10 ${stat.color}`}
-            >
-              <stat.icon size={64} />
-            </div>
-            <p className={`text-4xl font-bold  ${stat.color} mb-1`}>
-              {stat.value}
-            </p>
-            <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-          </motion.div>
-        ))}
+      {/* --- ANALYTICS --- */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <StatCard
+          label="Total Categories"
+          value={categories.length}
+          icon={Layers}
+          color="text-rose-600"
+        />
+        <StatCard
+          label="Active Categories"
+          value={categories.filter((c) => c.isActive).length}
+          icon={Package}
+          color="text-blue-600"
+        />
+        <StatCard
+          label="Inactive Categories"
+          value={categories.filter((c) => !c.isActive).length}
+          icon={Package}
+          color="text-gray-600"
+        />
+        <StatCard
+          label="Deleted Categories"
+          value={categories.filter((c) => c.isDeleted).length}
+          icon={TrendingUp}
+          color="text-green-600"
+        />
       </div>
 
-      {/* Search Bar */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="relative max-w-md"
-      >
+      {/* --- SEARCH --- */}
+      <div className="relative max-w-md">
         <Search
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
           size={20}
         />
         <input
           type="text"
-          placeholder="Search categories..."
+          placeholder="Search by name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 bg-white/60 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-rose-100 focus:bg-white transition-all"
+          className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-100 bg-white shadow-sm focus:ring-4 focus:ring-rose-50 transition-all outline-none font-bold text-gray-700"
         />
-      </motion.div>
+      </div>
 
-      {/* Categories Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <AnimatePresence>
-          {filteredCategories.map((category, index) => (
-            <motion.div
+      {/* --- GRID --- */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <AnimatePresence mode="popLayout">
+          {filteredCategories.map((category) => (
+            <CategoryCard
               key={category.id}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className="group relative bg-white/60 backdrop-blur-xl rounded-3xl border border-white/60 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="p-6">
-                <div className="flex items-start gap-4">
-                  {/* Icon Container */}
-                  <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-gray-100 to-white border border-gray-200 shadow-inner flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Image
-                      priority
-                      src={category.imageUrl}
-                      width={100}
-                      height={100}
-                      alt={category.title}
-                      className="w-full h-full object-cover rounded-2xl"
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    {/* Info */}
-                    <h3 className=" font-bold text-gray-800 text-xl mb-1 group-hover:text-rose-600 transition-colors">
-                      {category.title}
-                    </h3>
-
-                    <p className="text-gray-500 font-medium text-sm">
-                      {category.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Actions (Hidden until hover) */}
-                <div className="flex gap-2">
-                  <button className="flex-1 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200 flex items-center justify-center gap-2">
-                    <Edit2 size={14} />
-                    Edit
-                  </button>
-                  <button className="p-2.5 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-100 transition-colors">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
+              category={category}
+              onEdit={() => handleOpenEdit(category)}
+              onClick={() =>
+                router.push(
+                  `/dashboard/provider/products?category=${category.slug}`,
+                )
+              }
+              onDelete={() => handleDelete(category.id)}
+              onActive={() => activateCategory(category.id)}
+              onDeactivate={() => deactivateCategory(category.id)}
+            />
           ))}
         </AnimatePresence>
       </div>
 
-      {/* Empty State */}
-      {filteredCategories.length === 0 && (
-        <div className="text-center py-20 bg-white/40 rounded-3xl border border-white/60">
-          <div className="inline-block p-4 rounded-full bg-gray-50 mb-4">
-            <Search className="text-gray-400" size={32} />
-          </div>
-          <p className="text-lg font-semibold text-gray-600">
-            No categories found
-          </p>
-          <p className="text-gray-400">
-            Try searching for something else or create a new category.
-          </p>
-        </div>
-      )}
+      {filteredCategories.length === 0 && <EmptyState />}
 
-      {/* Modal Component Injection */}
+      {/* --- SHARED MODAL --- */}
       <CategoryFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddCategory}
-        isPending={createCategory.isPending}
+        onSubmit={handleFormSubmit}
+        initialData={selectedCategory} // Pass the category to edit
+        isPending={isCreating || isUpdating}
       />
     </div>
   );
 }
+
+// --- Reusable Sub-Components ---
+
+const StatCard = ({ label, value, icon: Icon, color }: any) => (
+  <motion.div
+    whileHover={{ y: -5 }}
+    className="relative overflow-hidden rounded-[2.5rem] border border-white bg-white/50 p-8 shadow-xl backdrop-blur-md"
+  >
+    <div className={`absolute -right-4 -top-4 p-8 opacity-5 ${color}`}>
+      <Icon size={120} />
+    </div>
+    <p className={`text-5xl font-black ${color} mb-2`}>{value}</p>
+    <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
+      {label}
+    </p>
+  </motion.div>
+);
+
+interface CategoryCardProps {
+  category: ICategory;
+  onEdit: () => void;
+  onClick: () => void;
+  onDelete: () => void;
+  onActive: () => void;
+  onDeactivate: () => void;
+}
+
+const CategoryCard = ({
+  category,
+  onEdit,
+  onClick,
+  onDelete,
+  onActive,
+  onDeactivate,
+}: CategoryCardProps) => {
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      className="group relative flex flex-col bg-white/40 backdrop-blur-md p-4 rounded-[2.5rem] border border-white/20 shadow-xl hover:shadow-rose-200/40 transition-all duration-500 hover:-translate-y-2"
+    >
+      {/* Top Status Badge (Visual Ease) */}
+      <div className="absolute top-6 right-6 z-10">
+        <div
+          className={`flex items-center gap-1.5 px-3 py-1 rounded-full backdrop-blur-md border ${
+            category.isActive
+              ? "bg-green-500/10 border-green-500/20 text-green-600"
+              : category.isDeleted
+                ? "bg-red-500/10 border-red-500/20 text-red-600"
+                : "bg-gray-500/10 border-gray-500/20 text-gray-500"
+          }`}
+        >
+          <div
+            className={`h-1.5 w-1.5 rounded-full ${category.isActive ? "bg-green-500 animate-pulse" : category.isDeleted ? "bg-red-500" : "bg-gray-400"}`}
+          />
+          <span
+            className={`text-[10px] ${category.isDeleted ? "text-red-500" : "text-gray-500"} font-black `}
+          >
+            {category.isActive
+              ? "Live"
+              : category.isDeleted
+                ? "Deleted"
+                : "Paused"}
+          </span>
+        </div>
+      </div>
+
+      {/* Image Section */}
+      <div
+        onClick={onClick}
+        className="relative aspect-video w-full overflow-hidden rounded-[2rem] cursor-pointer bg-gray-100/50"
+      >
+        <Image
+          src={category.image}
+          alt={category.title}
+          fill
+          priority
+          className="object-contain p-4 transition-transform duration-700 group-hover:scale-110"
+        />
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+
+      {/* Content */}
+      <div className="mt-5 w-full px-1 flex flex-col gap-2 grow">
+        <div className="text-center">
+          <h3 className="text-xl font-Sofia font-black text-gray-800 group-hover:text-rose-600 transition-colors line-clamp-1">
+            {category.title}
+          </h3>
+          <p className="text-gray-500 text-xs mt-1.5 line-clamp-2 min-h-8 leading-relaxed">
+            {category.description ||
+              "No description provided for this category."}
+          </p>
+        </div>
+
+        {/* Action Row */}
+        <div className="mt-auto border-t border-white/30 space-y-2">
+          {/* Status Toggle */}
+          <div className="flex items-center justify-between bg-white/30 p-2 rounded-2xl">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tight ml-1">
+              Visibility
+            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                category.isActive ? onDeactivate() : onActive();
+              }}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 ${
+                category.isActive
+                  ? "bg-green-500 shadow-md shadow-green-100"
+                  : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-sm transition-transform duration-300 ${
+                  category.isActive ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-gray-900 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all shadow-lg shadow-gray-200/50 group/btn"
+            >
+              <Edit2
+                size={16}
+                className="group-hover/btn:rotate-12 transition-transform"
+              />
+              <span className="text-xs">Edit Details</span>
+            </button>
+
+            {!category.isDeleted && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+                className="px-4 py-3 bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white rounded-2xl transition-all duration-300 group/del"
+                title="Delete Category"
+              >
+                <Trash2
+                  size={18}
+                  className="group-hover/del:scale-110 group-hover/del:rotate-6 transition-transform"
+                />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const EmptyState = () => (
+  <div className="text-center py-32 bg-white/40 rounded-[3rem] border border-dashed border-gray-200">
+    <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+      <Search className="text-gray-300" size={32} />
+    </div>
+    <p className="text-2xl font-black text-gray-700">No categories matching</p>
+    <p className="text-gray-400 font-medium">
+      Try a different keyword or create a new one.
+    </p>
+  </div>
+);

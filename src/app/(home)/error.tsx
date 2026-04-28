@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect } from "react";
 
 export default function HomeError({
@@ -33,12 +32,12 @@ export default function HomeError({
           >
             Try again
           </button>
-          <Link
-            href="/"
+          <button
+            onClick={() => window.history.back()}
             className="flex-1 rounded-2xl border border-slate-200 py-3 font-semibold text-slate-700"
           >
-            Go home
-          </Link>
+            Go Back
+          </button>
         </div>
       </div>
     </div>

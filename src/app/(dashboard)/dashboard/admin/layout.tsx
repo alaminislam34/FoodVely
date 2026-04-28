@@ -29,10 +29,9 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [authReady, setAuthReady] = useState(false);
   const pathName = usePathname();
   const router = useRouter();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const existingAdminRoutes = useMemo(
     () =>
@@ -40,11 +39,9 @@ export default function AdminLayout({
         "/dashboard/admin",
         "/dashboard/admin/users",
         "/dashboard/admin/user-roles",
-        "/dashboard/admin/banned-users",
         "/dashboard/admin/activity-log",
         "/dashboard/admin/products",
         "/dashboard/admin/categories",
-        "/dashboard/admin/stock",
         "/dashboard/admin/restaurants",
         "/dashboard/admin/best-sellers",
         "/dashboard/admin/reviews",

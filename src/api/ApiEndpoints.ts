@@ -29,6 +29,8 @@ const API_ENDPOINTS = {
     GET_BY_ID: (id: string) => `/food-categories/${id}`,
     UPDATE: (id: string) => `/food-categories/${id}`,
     DELETE: (id: string) => `/food-categories/${id}`,
+    ACTIVATE: (id: string) => `/food-categories/${id}/activate`,
+    DEACTIVATE: (id: string) => `/food-categories/${id}/deactivate`,
   },
 
   ADMIN: {

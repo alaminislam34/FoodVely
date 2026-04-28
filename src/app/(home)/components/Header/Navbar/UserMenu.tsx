@@ -11,6 +11,7 @@ import {
   ShoppingBag,
   Package2,
   Wallet,
+  Folder,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -80,7 +81,11 @@ export default function UserMenu({
                 <p className="text-xs text-gray-500">{user?.email}</p>
               </div>
               <span className="rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-600">
-                {isProvider ? "PROVIDER" : "USER"}
+                {isProvider
+                  ? "PROVIDER"
+                  : user.role === "ADMIN"
+                    ? "ADMIN"
+                    : "USER"}
               </span>
             </div>
 
@@ -96,20 +101,43 @@ export default function UserMenu({
                 Go to Dashboard
               </button>
             )}
-
-            {/* Menu Items */}
-            <div className="mt-4 space-y-1">
-              {/* Common Profile */}
+            {user?.role === "ADMIN" && (
               <button
                 onClick={() => {
                   setUserMenuOpen(false);
-                  router.push("/account/profile");
+                  router.push("/dashboard/admin");
                 }}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-rose-50"
+                className="mt-4 w-full rounded-2xl bg-linear-to-r from-rose-500 to-orange-500 py-2 text-sm font-semibold text-white hover:opacity-90"
               >
-                <User size={16} />
-                Profile
+                Go to Admin Panel
               </button>
+            )}
+
+            {/* Menu Items */}
+            <div className="mt-4 space-y-1">
+              {user?.role === "ADMIN" ? (
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/dashboard/admin/profile");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-rose-50"
+                >
+                  <User size={16} />
+                  Profile
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/account/profile");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-rose-50"
+                >
+                  <User size={16} />
+                  Profile
+                </button>
+              )}
 
               {/* Provider Menu */}
               {isProvider ? (
@@ -147,9 +175,41 @@ export default function UserMenu({
                     Earnings
                   </button>
                 </>
+              ) : user?.role === "ADMIN" ? (
+                <>
+                  <button
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      router.push("/dashboard/admin/users");
+                    }}
+                    className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                  >
+                    <User size={16} />
+                    Manage Users
+                  </button>
+                  <button
+                    className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      router.push("/dashboard/admin/products");
+                    }}
+                  >
+                    <Package2 size={16} />
+                    Manage Products
+                  </button>
+                  <button
+                    className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                    onClick={() => {
+                      setUserMenuOpen(false);
+                      router.push("/dashboard/admin/categories");
+                    }}
+                  >
+                    <Folder size={16} />
+                    Manage Categories
+                  </button>
+                </>
               ) : (
                 <>
-                  {/* Customer Menu */}
                   <button
                     onClick={() => {
                       setUserMenuOpen(false);
@@ -162,34 +222,47 @@ export default function UserMenu({
                   </button>
                 </>
               )}
-
-              {/* Common */}
-              <button
-                onClick={() => {
-                  setUserMenuOpen(false);
-                  router.push("/settings");
-                }}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
-              >
-                <Settings size={16} />
-                Settings
-              </button>
+              {user?.role === "ADMIN" ? (
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/dashboard/admin/settings");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                >
+                  <Settings size={16} />
+                  Admin Settings
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/settings");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                >
+                  <Settings size={16} />
+                  Settings
+                </button>
+              )}
             </div>
 
             {/* Bottom */}
             <div className="my-3 h-px bg-gray-100" />
 
             <div className="space-y-1">
-              <button
-                onClick={() => {
-                  setUserMenuOpen(false);
-                  router.push("/contact");
-                }}
-                className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
-              >
-                <HelpCircle size={16} />
-                Help center
-              </button>
+              {user?.role !== "ADMIN" && (
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/contact");
+                  }}
+                  className="flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-sm text-gray-700 hover:bg-rose-50"
+                >
+                  <HelpCircle size={16} />
+                  Help center
+                </button>
+              )}
 
               <button
                 onClick={() => {

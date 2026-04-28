@@ -43,7 +43,7 @@ export function useAdminUsersList(params: AdminUserParams) {
           role: params.role,
         },
       });
-
+      console.log(response.data);
       return {
         users: response.data,
         totalPages: response.meta?.totalPages ?? 1,

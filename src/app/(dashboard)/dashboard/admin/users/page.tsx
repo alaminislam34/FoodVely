@@ -20,6 +20,8 @@ import { getApiErrorMessage } from "@/utils/apiError";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { useAdminListControls } from "@/hooks/useAdminListControls";
 import { useAdminUsersList } from "@/hooks/hooks/userAdmin";
+import Image from "next/image";
+import { Avatar } from "radix-ui";
 
 export default function UsersManagement() {
   const [filterStatus, setFilterStatus] = useState("all");
@@ -62,11 +64,11 @@ export default function UsersManagement() {
 
   const getRoleIcon = (role: string) => {
     switch (role) {
-      case "admin":
+      case "ADMIN":
         return "👑";
-      case "restaurant":
+      case "PROVIDER":
         return "🏪";
-      case "customer":
+      case "CUSTOMER":
         return "👤";
       default:
         return "❓";
@@ -121,10 +123,10 @@ export default function UsersManagement() {
               onChange={(e) => setFilterStatus(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
             >
-              <option value="all">ALL</option>
-              <option value="active">ACTIVE</option>
-              <option value="suspended">BLOCKED</option>
-              <option value="banned">DELETED</option>
+              <option value="ALL">ALL</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="BLOCKED">BLOCKED</option>
+              <option value="DELETED">DELETED</option>
             </select>
           </div>
 
@@ -137,10 +139,10 @@ export default function UsersManagement() {
               onChange={(e) => setFilterRole(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
             >
-              <option value="all">ALL</option>
-              <option value="customer">CUSTOMER</option>
-              <option value="restaurant">PROVIDER</option>
-              <option value="admin">ADMIN</option>
+              <option value="ALL">ALL</option>
+              <option value="CUSTOMER">CUSTOMER</option>
+              <option value="PROVIDER">PROVIDER</option>
+              <option value="ADMIN">ADMIN</option>
             </select>
           </div>
 
@@ -174,8 +176,11 @@ export default function UsersManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
+                  <th>
+                    <span className="">Avatar</span>
+                  </th>
                   <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
-                    User
+                    User Details
                   </th>
                   <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                     Role
@@ -186,6 +191,7 @@ export default function UsersManagement() {
                   <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                     Joined
                   </th>
+                  <th></th>
                   <th className="px-6 py-4 text-left text-sm  font-bold text-gray-700">
                     Actions
                   </th>
@@ -200,6 +206,25 @@ export default function UsersManagement() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="border-b border-gray-200 hover:bg-gray-50 transition-colors"
                   >
+                    <td className="">
+                      <div className="flex items-center justify-center px-2">
+                        {user?.image ? (
+                          <Image
+                            src={user.image}
+                            alt={"user"}
+                            width={40}
+                            height={40}
+                            className="rounded-full border"
+                          />
+                        ) : (
+                          <Avatar.Root className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center border">
+                            <Avatar.Fallback className="text-gray-500 text-sm">
+                              {getRoleIcon(user.role)}
+                            </Avatar.Fallback>
+                          </Avatar.Root>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-6 py-4">
                       <div>
                         <p className="font-semibold text-gray-800">
@@ -214,7 +239,7 @@ export default function UsersManagement() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-lg">{getRoleIcon(user.role)}</span>
+                      <span className="">{user.role}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span
@@ -229,6 +254,7 @@ export default function UsersManagement() {
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {new Date(user.createdAt).toLocaleDateString()}
                     </td>
+                    <td></td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
