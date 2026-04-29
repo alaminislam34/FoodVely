@@ -89,7 +89,7 @@ export const CommonProductCard = ({
       className="h-full group relative flex flex-col justify-between bg-white/60 backdrop-blur-md p-3 rounded-[2.5rem] border border-white/40 shadow-xl hover:shadow-rose-200/40 transition-all duration-500"
     >
       {/* --- IMAGE SECTION --- */}
-      <div className="relative aspect-square w-full rounded-4xl overflow-hidden mb-4 bg-slate-50">
+      <div className="relative aspect-6/4 w-full rounded-4xl overflow-hidden mb-4 bg-slate-50">
         {isPreview ? (
           <Image
             src={imageSrc}

@@ -7,7 +7,7 @@ interface ProductsTableProps {
   products: AdminProductMapped[];
 }
 
-export function ProductsTable({ products }: ProductsTableProps) {
+export default function ProductsTable({ products }: ProductsTableProps) {
   return (
     <>
       {/* Desktop Table View */}

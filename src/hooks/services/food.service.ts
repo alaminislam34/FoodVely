@@ -31,17 +31,29 @@ const createFood = async (data: IFoodPayload) => {
   const formData = new FormData();
 
   Object.entries(data).forEach(([key, value]) => {
+    // 1. Skip null/undefined
     if (value === undefined || value === null) return;
 
+    // 2. Handle Images Array
     if (key === "images" && Array.isArray(value)) {
-      value.forEach((file) => formData.append("images", file));
-    } else if (key === "foodInfo") {
-      // CRITICAL: Stringify the nested object for FormData
+      value.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file);
+        }
+      });
+    }
+    // 3. Handle Nested Objects (foodInfo)
+    else if (typeof value === "object" && !(value instanceof File)) {
       formData.append(key, JSON.stringify(value));
-    } else {
+    }
+    // 4. Handle Everything Else (Strings, Numbers, Booleans)
+    else {
       formData.append(key, String(value));
     }
   });
+
+  // Note: Ensure your backend controller extracts providerId from the
+  // auth token or that you've included it in the 'data' object.
 
   const res = await httpClient.post(API_ENDPOINTS.FOOD.CREATE, formData, {
     headers: { "Content-Type": "multipart/form-data" },
