@@ -123,23 +123,19 @@ axiosInstance.interceptors.response.use(
 );
 
 interface ApiResponseOptions {
-  params?: Record<string, unknown>;
+  params?: Record<string, string | number | undefined>;
   headers?: Record<string, string>;
 }
-
 const get = async <TData>(
   endpoint: string,
   options?: ApiResponseOptions,
 ): Promise<ApiResponse<TData>> => {
-  try {
-    const response = await axiosInstance.get(endpoint, {
-      params: options?.params,
-      headers: options?.headers,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
+  // Pass <ApiResponse<TData>> to axiosInstance so .data is typed correctly
+  const response = await axiosInstance.get<ApiResponse<TData>>(endpoint, {
+    params: options?.params,
+    headers: options?.headers,
+  });
+  return response.data;
 };
 
 const post = async <TData>(
@@ -147,15 +143,15 @@ const post = async <TData>(
   data?: Record<string, unknown> | FormData,
   options?: ApiResponseOptions,
 ): Promise<ApiResponse<TData>> => {
-  try {
-    const response = await axiosInstance.post(endpoint, data ?? {}, {
+  const response = await axiosInstance.post<ApiResponse<TData>>(
+    endpoint,
+    data ?? {},
+    {
       params: options?.params,
       headers: options?.headers,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
+    },
+  );
+  return response.data;
 };
 
 const put = async <TData>(
@@ -163,15 +159,11 @@ const put = async <TData>(
   data: Record<string, unknown>,
   options?: ApiResponseOptions,
 ): Promise<ApiResponse<TData>> => {
-  try {
-    const response = await axiosInstance.put(endpoint, data, {
-      params: options?.params,
-      headers: options?.headers,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
+  const response = await axiosInstance.put<ApiResponse<TData>>(endpoint, data, {
+    params: options?.params,
+    headers: options?.headers,
+  });
+  return response.data;
 };
 
 const patch = async <TData>(
@@ -179,30 +171,26 @@ const patch = async <TData>(
   data?: Record<string, unknown> | FormData,
   options?: ApiResponseOptions,
 ): Promise<ApiResponse<TData>> => {
-  try {
-    const response = await axiosInstance.patch(endpoint, data ?? {}, {
+  const response = await axiosInstance.patch<ApiResponse<TData>>(
+    endpoint,
+    data ?? {},
+    {
       params: options?.params,
       headers: options?.headers,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
+    },
+  );
+  return response.data;
 };
 
 const del = async <TData>(
   endpoint: string,
   options?: ApiResponseOptions,
 ): Promise<ApiResponse<TData>> => {
-  try {
-    const response = await axiosInstance.delete(endpoint, {
-      params: options?.params,
-      headers: options?.headers,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    throw error;
-  }
+  const response = await axiosInstance.delete<ApiResponse<TData>>(endpoint, {
+    params: options?.params,
+    headers: options?.headers,
+  });
+  return response.data;
 };
 
 export const httpClient = {

@@ -78,9 +78,7 @@ export default function UserRolesPage() {
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h3 className=" font-bold text-gray-800">
-                  {role.name}
-                </h3>
+                <h3 className=" font-bold text-gray-800">{role.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">{role.description}</p>
               </div>
               <Shield className="text-rose-500" size={24} />

@@ -162,7 +162,7 @@ export default function ActivityLogPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 bg-gradient-to-r from-rose-500 to-orange-500 rounded-full flex items-center justify-center text-white">
+                    <div className="w-10 h-10 bg-linear-to-r from-rose-500 to-orange-500 rounded-full flex items-center justify-center text-white">
                       <FileText size={18} />
                     </div>
                     <div>

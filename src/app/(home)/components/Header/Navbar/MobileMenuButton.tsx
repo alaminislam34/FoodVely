@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu } from "lucide-react";
 import { motion } from "motion/react";
 

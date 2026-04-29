@@ -1,58 +1,10 @@
 "use client";
 
+import { useCategory } from "@/hooks/hooks/useCategory";
+import { ICategory } from "@/hooks/services/category.service";
 import { motion } from "motion/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-const foodCategories = [
-  {
-    id: 1,
-    name: "Burgers",
-    slug: "burgers",
-    icon: "🍔",
-  },
-  {
-    id: 2,
-    name: "Pizza",
-    slug: "pizza",
-    icon: "🍕",
-  },
-  {
-    id: 3,
-    name: "Chicken",
-    slug: "chicken",
-    icon: "🍗",
-  },
-  {
-    id: 4,
-    name: "Rice Bowls",
-    slug: "rice-bowls",
-    icon: "🍚",
-  },
-  {
-    id: 5,
-    name: "Biriyani",
-    slug: "biriyani",
-    icon: "🍛",
-  },
-  {
-    id: 6,
-    name: "Chinese",
-    slug: "chinese",
-    icon: "🥡",
-  },
-  {
-    id: 7,
-    name: "Desserts",
-    slug: "desserts",
-    icon: "🍰",
-  },
-  {
-    id: 8,
-    name: "Drinks",
-    slug: "drinks",
-    icon: "🥤",
-  },
-];
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -69,14 +21,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  icon: string;
-}
-
-const CategoryCard = ({ category }: { category: Category }) => {
+const CategoryCard = ({ category }: { category: ICategory }) => {
   const route = useRouter();
   return (
     <motion.div
@@ -85,10 +30,16 @@ const CategoryCard = ({ category }: { category: Category }) => {
       className="group relative flex flex-col items-center justify-center bg-white/40 backdrop-blur-md p-6 rounded-[2.5rem] border border-white/20 shadow-xl hover:shadow-rose-200/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer"
     >
       <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">
-        {category.icon}
+        <Image
+          src={category.image}
+          alt={category.title}
+          width={100}
+          height={100}
+          className="p-4"
+        />
       </div>
       <h3 className="text-lg font-Sofia font-bold text-gray-800 text-center">
-        {category.name}
+        {category.title}
       </h3>
 
       {/* Hover overlay */}
@@ -98,6 +49,8 @@ const CategoryCard = ({ category }: { category: Category }) => {
 };
 
 export default function FoodCategory() {
+  const { categoriesForPublic } = useCategory();
+
   return (
     <section className="py-12 lg:py-16 mb-12">
       <div className="mb-8">
@@ -112,7 +65,7 @@ export default function FoodCategory() {
         viewport={{ once: true, amount: 0.2 }}
         className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4"
       >
-        {foodCategories.map((category) => (
+        {categoriesForPublic.map((category: ICategory) => (
           <CategoryCard key={category.id} category={category} />
         ))}
       </motion.div>

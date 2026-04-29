@@ -29,12 +29,15 @@ const API_ENDPOINTS = {
     GET_BY_ID: (id: string) => `/food-categories/${id}`,
     UPDATE: (id: string) => `/food-categories/${id}`,
     DELETE: (id: string) => `/food-categories/${id}`,
+    ACTIVATE: (id: string) => `/food-categories/${id}/activate`,
+    DEACTIVATE: (id: string) => `/food-categories/${id}/deactivate`,
   },
 
   ADMIN: {
     SIGN_IN: `/auth/admin/login`,
     PLATFORM_STATS: `/admin/platform-stats`,
     GET_ACTIVITY_LOGS: `/admin/activity-logs`,
+    GET_USERS: `/admin/users`,
   },
   PROVIDER: {
     DASHBOARD_STATS: `/provider/platform-stats`,

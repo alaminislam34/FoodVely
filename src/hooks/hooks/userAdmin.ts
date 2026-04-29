@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { adminService } from "../services/admin.service";
-import { adminApi } from "@/api/adminApi";
+import { httpClient } from "@/api/httpClient";
+import API_ENDPOINTS from "@/api/ApiEndpoints";
 
 export interface AdminUserMapped {
   id: string;
@@ -14,54 +15,37 @@ export interface AdminUserMapped {
   image: string;
 }
 
-export function useAdminUsersList(params: {
-  page?: number;
+export interface AdminUserParams {
+  page?: number; // Keep these as numbers here
   limit?: number;
   search?: string;
-  role?: string;
   status?: string;
-}) {
+  role?: string;
+}
+
+export function useAdminUsersList(params: AdminUserParams) {
   return useQuery({
     queryKey: [
       "adminUsers",
       params.page,
       params.limit,
       params.search,
-      params.role,
       params.status,
+      params.role,
     ],
     queryFn: async () => {
-      const response = await adminApi.listUsersPaged({
-        page: params.page,
-        limit: params.limit,
-        search: params.search || undefined,
-        role:
-          params.role && params.role !== "all"
-            ? params.role.toUpperCase()
-            : undefined,
-        status:
-          params.status && params.status !== "all"
-            ? params.status.toUpperCase()
-            : undefined,
+      const response = await httpClient.get(API_ENDPOINTS.ADMIN.GET_USERS, {
+        params: {
+          page: params.page ? Number(params.page) : undefined,
+          limit: params.limit ? Number(params.limit) : undefined,
+          search: params.search || undefined,
+          status: params.status,
+          role: params.role,
+        },
       });
-      const mappedUsers: AdminUserMapped[] = (response.items ?? []).map(
-        (item) => ({
-          id: String(item.id ?? ""),
-          name: String(item.name ?? ""),
-          email: String(item.email ?? ""),
-
-          role: (item.role ?? "CUSTOMER") as AdminUserMapped["role"],
-          status: (item.status ?? "ACTIVE") as AdminUserMapped["status"],
-
-          createdAt: String(item.createdAt ?? new Date().toISOString()),
-          totalOrders: Number(item.totalOrders ?? 0),
-          emailVerified: Boolean(item.emailVerified ?? false),
-
-          image: String(item.image ?? ""),
-        }),
-      );
+      console.log(response.data);
       return {
-        users: mappedUsers,
+        users: response.data,
         totalPages: response.meta?.totalPages ?? 1,
         totalItems: response.meta?.total ?? 0,
       };

@@ -67,7 +67,9 @@ export default function CouponsManagement() {
           isActive:
             filterStatus === "all"
               ? undefined
-              : filterStatus === "active",
+              : filterStatus === "active"
+                ? "true"
+                : "false",
         });
 
         const mapped: Coupon[] = items.map((item) => ({
