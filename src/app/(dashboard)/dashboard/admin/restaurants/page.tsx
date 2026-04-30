@@ -24,7 +24,7 @@ import {
 } from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
+import { useAdminListControls } from "@/module/useAdminListControls";
 
 export default function BestSellersPage() {
   const [restaurants, setRestaurants] = useState<Provider[]>([]);

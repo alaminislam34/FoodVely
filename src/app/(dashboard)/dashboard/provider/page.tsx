@@ -14,7 +14,7 @@ import {
   Wallet,
   AlertCircle,
 } from "lucide-react";
-import { useProvider } from "@/hooks/hooks/useProvider";
+import { useProvider } from "@/module/hooks/useProvider";
 
 // StatsCard Component
 function StatsCard({ title, value, change, icon: Icon, color, href }: any) {

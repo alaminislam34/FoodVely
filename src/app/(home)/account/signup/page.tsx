@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 
 // --- VALIDATION SCHEMA ---
 export const SignUpSchemaValidation = z.object({

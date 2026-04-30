@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { useDebouncedValue } from "@/module/useDebouncedValue";
 
 type UseAdminListControlsOptions = {
   initialPage?: number;

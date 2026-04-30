@@ -7,7 +7,7 @@ import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
 import toast from "react-hot-toast";
 import { accountApi } from "@/api/accountApi";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 
 type AddressItem = {
   id: string;

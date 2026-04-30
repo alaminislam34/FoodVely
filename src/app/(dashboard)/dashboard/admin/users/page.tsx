@@ -18,8 +18,8 @@ import {
 } from "@/components/admin/AdminStates";
 import { getApiErrorMessage } from "@/utils/apiError";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
-import { useAdminUsersList } from "@/hooks/hooks/userAdmin";
+import { useAdminListControls } from "@/module/useAdminListControls";
+import { useAdminUsersList } from "@/module/hooks/userAdmin";
 import Image from "next/image";
 import { Avatar } from "radix-ui";
 

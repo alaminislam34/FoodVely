@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 const variants = {

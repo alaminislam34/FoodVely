@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 import { Product } from "@/types/product";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 
 type CartLine = {
   product: Product;

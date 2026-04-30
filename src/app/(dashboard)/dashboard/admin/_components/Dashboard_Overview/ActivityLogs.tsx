@@ -1,4 +1,4 @@
-import { useAdmin } from "@/hooks/hooks/userAdmin";
+import { useAdmin } from "@/module/hooks/userAdmin";
 import { useMemo } from "react";
 import { motion } from "motion/react";
 import Link from "next/link";

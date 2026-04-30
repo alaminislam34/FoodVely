@@ -20,9 +20,13 @@ import {
 import { adminApi } from "@/api/adminApi";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
+import { useAdminListControls } from "@/module/useAdminListControls";
 
 interface Blog {
   id: string;
@@ -80,24 +84,38 @@ export default function BlogManage() {
         thumbnail: String(item.thumbnail ?? item.imageUrl ?? ""),
         blog_video: String(item.blog_video ?? item.videoUrl ?? ""),
         category: {
-          id: String((item.category as { id?: string } | undefined)?.id ?? "general"),
-          name: String((item.category as { name?: string } | undefined)?.name ?? "General"),
-          slug: String((item.category as { slug?: string } | undefined)?.slug ?? "general"),
+          id: String(
+            (item.category as { id?: string } | undefined)?.id ?? "general",
+          ),
+          name: String(
+            (item.category as { name?: string } | undefined)?.name ?? "General",
+          ),
+          slug: String(
+            (item.category as { slug?: string } | undefined)?.slug ?? "general",
+          ),
         },
         author: {
-          id: String((item.author as { id?: string } | undefined)?.id ?? "admin"),
-          name: String((item.author as { name?: string } | undefined)?.name ?? "Admin"),
-          role: String((item.author as { role?: string } | undefined)?.role ?? "admin"),
+          id: String(
+            (item.author as { id?: string } | undefined)?.id ?? "admin",
+          ),
+          name: String(
+            (item.author as { name?: string } | undefined)?.name ?? "Admin",
+          ),
+          role: String(
+            (item.author as { role?: string } | undefined)?.role ?? "admin",
+          ),
         },
         publishedAt: String(item.publishedAt ?? new Date().toISOString()),
         readingTime: String(item.readingTime ?? "5 min read"),
         tags: ((item.tags as string[] | undefined) ?? []) as string[],
-        status: (String(item.status ?? "draft") as "published" | "draft"),
+        status: String(item.status ?? "draft") as "published" | "draft",
       }));
       setBlogs(mapped);
       setTotalPages(Math.max(meta?.totalPages ?? 1, 1));
       setSelectedId((prev) =>
-        mapped.some((blog) => blog.id === prev) ? prev : (mapped[0]?.id ?? null),
+        mapped.some((blog) => blog.id === prev)
+          ? prev
+          : (mapped[0]?.id ?? null),
       );
     } catch (loadError) {
       setError(getApiErrorMessage(loadError, "Failed to load blog posts"));
@@ -237,15 +255,17 @@ export default function BlogManage() {
           </div>
 
           <div className="bg-white/60 border border-gray-200 rounded-3xl h-[calc(100vh-320px)] overflow-y-auto custom-scrollbar">
-            {loading ? <AdminLoadingState label="Loading blog posts..." /> : null}
+            {loading ? (
+              <AdminLoadingState label="Loading blog posts..." />
+            ) : null}
             {error ? (
-              <AdminErrorState
-                description={error}
-                onAction={retry}
-              />
+              <AdminErrorState description={error} onAction={retry} />
             ) : null}
             {!loading && !error && blogs.length === 0 ? (
-              <AdminEmptyState title="No blog posts found" description="Create a new article or adjust search query." />
+              <AdminEmptyState
+                title="No blog posts found"
+                description="Create a new article or adjust search query."
+              />
             ) : null}
 
             {blogs.map((blog) => (

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 
 export default function OrderTrackRedirectPage() {
   const router = useRouter();

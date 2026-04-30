@@ -10,7 +10,7 @@ import {
   Search,
   Download,
 } from "lucide-react";
-import { useAdmin } from "@/hooks/hooks/userAdmin";
+import { useAdmin } from "@/module/hooks/userAdmin";
 
 export default function ActivityLogPage() {
   const [searchQuery, setSearchQuery] = useState("");

@@ -16,7 +16,7 @@ import {
   Trash2,
   UserCheck,
 } from "lucide-react";
-import { useAdmin } from "@/hooks/hooks/userAdmin";
+import { useAdmin } from "@/module/hooks/userAdmin";
 import ActivityLogs from "./ActivityLogs";
 
 export default function DashboardOverview() {

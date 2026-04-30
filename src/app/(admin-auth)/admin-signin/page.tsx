@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { adminService } from "@/hooks/services/admin.service";
+import { adminService } from "@/module/services/admin.service";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),

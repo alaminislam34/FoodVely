@@ -9,8 +9,8 @@ import { ChevronLeft, Save, X, Plus, ImageIcon } from "lucide-react";
 import CommonProductCard from "@/components/CommonProductCard";
 import { FoodGeneralDetailsForm } from "@/components/food/FoodGeneralDetailsForm";
 import { FoodSEOForm } from "@/components/food/FoodSEOForm";
-import { useFood } from "@/hooks/hooks/useFood";
-import { useCategory } from "@/hooks/hooks/useCategory";
+import { useFood } from "@/module/hooks/useFood";
+import { useCategory } from "@/module/hooks/useCategory";
 import { FoodFormValues, foodSchema } from "@/types/zod.validation";
 
 // If you have a real auth hook, use that instead of this mock
