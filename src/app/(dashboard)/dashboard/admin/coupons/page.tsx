@@ -15,9 +15,13 @@ import {
 import { adminApi } from "@/api/adminApi";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
+import { useAdminListControls } from "@/module/useAdminListControls";
 
 interface Coupon {
   id: string;
@@ -75,7 +79,7 @@ export default function CouponsManagement() {
         const mapped: Coupon[] = items.map((item) => ({
           id: String(item.id ?? ""),
           code: String(item.code ?? ""),
-          type: (String(item.type ?? "percentage") as Coupon["type"]),
+          type: String(item.type ?? "percentage") as Coupon["type"],
           value: Number(item.value ?? 0),
           maxUses: Number(item.maxUses ?? 0),
           usedCount: Number(item.usedCount ?? 0),
@@ -282,13 +286,13 @@ export default function CouponsManagement() {
 
         {loading ? <AdminLoadingState label="Loading coupons..." /> : null}
         {error ? (
-          <AdminErrorState
-            description={error}
-            onAction={retry}
-          />
+          <AdminErrorState description={error} onAction={retry} />
         ) : null}
         {!loading && !error && coupons.length === 0 ? (
-          <AdminEmptyState title="No coupons found" description="Try changing status or search query." />
+          <AdminEmptyState
+            title="No coupons found"
+            description="Try changing status or search query."
+          />
         ) : null}
 
         <div className="p-6 border-t border-gray-200 flex justify-end">
@@ -349,9 +353,7 @@ export default function CouponsManagement() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 mb-1">Estimated Saved</p>
-              <p className="text-3xl font-bold  text-gray-800">
-                $1,245
-              </p>
+              <p className="text-3xl font-bold  text-gray-800">$1,245</p>
             </div>
             <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center">
               <Calendar size={24} className="text-rose-600" />

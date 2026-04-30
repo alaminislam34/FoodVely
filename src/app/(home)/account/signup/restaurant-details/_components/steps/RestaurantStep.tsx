@@ -1,393 +1,248 @@
-"use client";
-
-import {
-  ArrowLeft,
-  Clock3,
-  MapPin,
-  Phone,
-  Store,
-  Utensils,
-  Image as ImageIcon,
-  Loader2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { FormField } from "../FormField";
-import type {
-  UseFormRegister,
-  FieldErrors,
-  UseFormSetValue,
-} from "react-hook-form";
-import { useEffect, useState } from "react";
+import React from "react";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { RestaurantFormValues } from "../ProviderSignupFlow";
-import { useCategory } from "@/hooks/hooks/useCategory";
+import { Upload, X, MapPin, Phone, Utensils, Clock } from "lucide-react";
 
-type RestaurantStepProps = {
+interface Props {
   register: UseFormRegister<RestaurantFormValues>;
   errors: FieldErrors<RestaurantFormValues>;
   values: RestaurantFormValues;
   isLoading: boolean;
   onBack: () => void;
-  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  onSubmit: (e: React.FormEvent) => void;
   onFileChange: (
     field: "logoFile" | "coverImageFile",
     file: File | null,
   ) => void;
-  setValue?: UseFormSetValue<RestaurantFormValues>;
-};
-
-const inputClassName =
-  "h-12 w-full rounded-xl border border-slate-100 bg-white px-4 text-sm font-medium text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-50";
+  setValue: UseFormSetValue<RestaurantFormValues>;
+}
 
 export function RestaurantStep({
   register,
   errors,
   values,
   isLoading,
-  onBack,
   onSubmit,
   onFileChange,
-  setValue,
-}: RestaurantStepProps) {
-  // Food categories state for popover
-  const { categoriesForPublic, isLoading: isCategoriesLoading } = useCategory();
-  const [categorySearch, setCategorySearch] = useState("");
-  const [showPopover, setShowPopover] = useState(false);
-  const filteredCategories = categoriesForPublic.filter((cat: any) =>
-    cat.title.toLowerCase().includes(categorySearch.toLowerCase()),
-  );
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [coverPreview, setCoverPreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!values.logoFile) {
-      setLogoPreview(null);
-      return;
-    }
-
-    const url = URL.createObjectURL(values.logoFile);
-    setLogoPreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [values.logoFile]);
-
-  useEffect(() => {
-    if (!values.coverImageFile) {
-      setCoverPreview(null);
-      return;
-    }
-
-    const url = URL.createObjectURL(values.coverImageFile);
-    setCoverPreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [values.coverImageFile]);
-
+}: Props) {
   return (
-    <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <form onSubmit={onSubmit} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-6">
+      {/* Photo Upload Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Logo Upload */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-700">
+            Restaurant Logo
+          </label>
+          <div
+            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.logoFile ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
+          >
+            {values.logoFile ? (
+              <div className="relative h-full w-full p-2">
+                <img
+                  src={URL.createObjectURL(values.logoFile)}
+                  alt="Preview"
+                  className="h-full w-full object-cover rounded-xl"
+                />
+                <button
+                  type="button"
+                  onClick={() => onFileChange("logoFile", null)}
+                  className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-lg"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center cursor-pointer">
+                <Upload className="text-slate-400 mb-2" size={24} />
+                <span className="text-xs text-slate-500">Upload Logo</span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) =>
+                    onFileChange("logoFile", e.target.files?.[0] || null)
+                  }
+                />
+              </label>
+            )}
+          </div>
+          {errors.logoFile && (
+            <p className="text-xs text-rose-500">
+              {errors.logoFile.message as string}
+            </p>
+          )}
+        </div>
+
+        {/* Cover Image Upload */}
+        <div className="space-y-2">
+          <label className="text-sm font-semibold text-slate-700">
+            Cover Image
+          </label>
+          <div
+            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.coverImageFile ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
+          >
+            {values.coverImageFile ? (
+              <div className="relative h-full w-full p-2">
+                <img
+                  src={URL.createObjectURL(values.coverImageFile)}
+                  alt="Preview"
+                  className="h-full w-full object-cover rounded-xl"
+                />
+                <button
+                  type="button"
+                  onClick={() => onFileChange("coverImageFile", null)}
+                  className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-lg"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <label className="flex flex-col items-center cursor-pointer">
+                <Upload className="text-slate-400 mb-2" size={24} />
+                <span className="text-xs text-slate-500">Upload Cover</span>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={(e) =>
+                    onFileChange("coverImageFile", e.target.files?.[0] || null)
+                  }
+                />
+              </label>
+            )}
+          </div>
+          {errors.coverImageFile && (
+            <p className="text-xs text-rose-500">
+              {errors.coverImageFile.message as string}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Input Fields Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Restaurant Name */}
-        <FormField
-          label="Restaurant Name"
-          htmlFor="restaurantName"
-          required
-          error={errors.restaurantName?.message}
-        >
+        <div className="col-span-2 space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">
+            Restaurant Name
+          </label>
+          <input
+            {...register("restaurantName")}
+            placeholder="e.g. Food Vally Premium"
+            className="w-full rounded-xl border-slate-200 focus:border-rose-500 focus:ring-rose-500 bg-slate-50/50 p-3 text-sm transition-all outline-none border"
+          />
+          {errors.restaurantName && (
+            <p className="text-xs text-rose-500 font-medium">
+              {errors.restaurantName.message}
+            </p>
+          )}
+        </div>
+
+        {/* City */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">City</label>
           <div className="relative">
-            <Store
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+            <MapPin
+              className="absolute left-3 top-3 text-slate-400"
               size={18}
             />
             <input
-              id="restaurantName"
-              {...register("restaurantName")}
-              type="text"
-              className={`${inputClassName} pl-11`}
-              placeholder="e.g. Chillox"
+              {...register("city")}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 pl-10 text-sm outline-none focus:border-rose-500"
+              placeholder="Dhaka"
             />
           </div>
-        </FormField>
+          {errors.city && (
+            <p className="text-xs text-rose-500 font-medium">
+              {errors.city.message}
+            </p>
+          )}
+        </div>
 
-        {/* City + Contact */}
-        <div className="grid gap-5 md:grid-cols-2">
-          <FormField
-            label="City"
-            htmlFor="city"
-            required
-            error={errors.city?.message}
-          >
-            <div className="relative">
-              <MapPin
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                id="city"
-                {...register("city")}
-                type="text"
-                className={`${inputClassName} pl-11`}
-                placeholder="e.g. Dhaka"
-              />
-            </div>
-          </FormField>
-
-          <FormField
-            label="Contact Number"
-            htmlFor="contactNumber"
-            required
-            error={errors.contactNumber?.message}
-          >
-            <div className="relative">
-              <Phone
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                id="contactNumber"
-                {...register("contactNumber")}
-                type="tel"
-                inputMode="numeric"
-                className={`${inputClassName} pl-11`}
-                placeholder="017XXXXXXXX"
-              />
-            </div>
-          </FormField>
+        {/* Contact Number */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">
+            Contact Number
+          </label>
+          <div className="relative">
+            <Phone className="absolute left-3 top-3 text-slate-400" size={18} />
+            <input
+              {...register("contactNumber")}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 pl-10 text-sm outline-none focus:border-rose-500"
+              placeholder="+8801xxxxxxxxx"
+            />
+          </div>
+          {errors.contactNumber && (
+            <p className="text-xs text-rose-500 font-medium">
+              {errors.contactNumber.message}
+            </p>
+          )}
         </div>
 
         {/* Address */}
-        <FormField
-          label="Full Address"
-          htmlFor="address"
-          required
-          error={errors.address?.message}
-        >
+        <div className="col-span-2 space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">
+            Full Address
+          </label>
           <textarea
-            id="address"
             {...register("address")}
             rows={2}
-            className={`${inputClassName} h-auto py-3 resize-none`}
-            placeholder="Street, Area, City"
+            className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 text-sm outline-none focus:border-rose-500"
+            placeholder="Street address, House no, Area..."
           />
-        </FormField>
+          {errors.address && (
+            <p className="text-xs text-rose-500 font-medium">
+              {errors.address.message}
+            </p>
+          )}
+        </div>
 
-        {/* Food Categories (Multi-select popover) */}
-        <FormField
-          label="Food Categories"
-          htmlFor="foodCategories"
-          required
-          error={errors.foodCategories?.message as string}
-        >
+        {/* Cuisine & Opening Hours */}
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">
+            Cuisine Type
+          </label>
           <div className="relative">
-            <button
-              type="button"
-              className="w-full h-12 rounded-xl border border-slate-100 bg-white px-4 text-sm font-medium text-slate-900 outline-none transition-all flex items-center justify-between"
-              onClick={() => setShowPopover((v) => !v)}
-            >
-              {values.foodCategories.length > 0
-                ? `${values.foodCategories.length} selected`
-                : "Select food categories"}
-              <span className="ml-2 text-xs text-slate-400">▼</span>
-            </button>
-            {showPopover && (
-              <div className="absolute z-20 mt-2 w-full max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-lg p-3">
-                <input
-                  type="text"
-                  placeholder="Search categories..."
-                  className="mb-2 w-full rounded border px-2 py-1 text-sm"
-                  value={categorySearch}
-                  onChange={(e) => setCategorySearch(e.target.value)}
-                />
-                {isCategoriesLoading ? (
-                  <div className="text-center py-4 text-slate-400 text-sm">
-                    Loading...
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-                    {filteredCategories.length === 0 && (
-                      <div className="col-span-2 text-center text-slate-400 text-xs">
-                        No categories found
-                      </div>
-                    )}
-                    {filteredCategories.map((cat: any) => (
-                      <label
-                        key={cat.id}
-                        className="flex items-center gap-2 cursor-pointer rounded px-2 py-1 hover:bg-rose-50"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={values.foodCategories.includes(cat.id)}
-                          onChange={(e) => {
-                            if (!setValue) return;
-                            const newCats = e.target.checked
-                              ? [...values.foodCategories, cat.id]
-                              : values.foodCategories.filter(
-                                  (c) => c !== cat.id,
-                                );
-                            setValue("foodCategories", newCats, {
-                              shouldValidate: true,
-                              shouldDirty: true,
-                            });
-                          }}
-                        />
-                        <span>{cat.title}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-                <button
-                  type="button"
-                  className="mt-2 w-full rounded bg-rose-500 text-white py-1 text-sm font-semibold hover:bg-rose-600"
-                  onClick={() => setShowPopover(false)}
-                >
-                  Done
-                </button>
-              </div>
-            )}
-          </div>
-        </FormField>
-
-        {/* Cuisine + Hours */}
-        <div className="grid gap-5 md:grid-cols-2">
-          <FormField
-            label="Cuisine Type"
-            htmlFor="cuisine"
-            error={errors.cuisine?.message}
-          >
-            <div className="relative">
-              <Utensils
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                id="cuisine"
-                {...register("cuisine")}
-                type="text"
-                className={`${inputClassName} pl-11`}
-                placeholder="e.g. Burger, Fast Food"
-              />
-            </div>
-          </FormField>
-
-          <FormField
-            label="Business Hours"
-            htmlFor="openingHours"
-            error={errors.openingHours?.message}
-          >
-            <div className="relative">
-              <Clock3
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
-                size={18}
-              />
-              <input
-                id="openingHours"
-                {...register("openingHours")}
-                type="text"
-                className={`${inputClassName} pl-11`}
-                placeholder="9 AM - 10 PM"
-              />
-            </div>
-          </FormField>
-        </div>
-
-        {/* Upload Section */}
-        <div className="grid gap-5 md:grid-cols-2">
-          {/* Logo */}
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">Logo</label>
-
-            <input
-              id="logoFile"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) =>
-                onFileChange("logoFile", e.target.files?.[0] || null)
-              }
+            <Utensils
+              className="absolute left-3 top-3 text-slate-400"
+              size={18}
             />
-
-            <label
-              htmlFor="logoFile"
-              className={`flex h-12 w-full cursor-pointer items-center gap-2 rounded-xl border border-dashed px-4 text-xs font-medium transition-all ${
-                values.logoFile
-                  ? "border-rose-300 bg-rose-50 text-rose-600"
-                  : "border-slate-300 bg-slate-50 text-slate-500"
-              }`}
-            >
-              <ImageIcon size={16} />
-              {values.logoFile?.name || "Upload Logo"}
-            </label>
-
-            {logoPreview && (
-              <img
-                src={logoPreview}
-                alt="logo preview"
-                className="h-12 w-12 rounded object-cover"
-              />
-            )}
-          </div>
-
-          {/* Cover */}
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">
-              Cover Image
-            </label>
-
             <input
-              id="coverImageFile"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) =>
-                onFileChange("coverImageFile", e.target.files?.[0] || null)
-              }
+              {...register("cuisine")}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 pl-10 text-sm outline-none focus:border-rose-500"
+              placeholder="Bengali, Italian..."
             />
-
-            <label
-              htmlFor="coverImageFile"
-              className={`flex h-12 w-full cursor-pointer items-center gap-2 rounded-xl border border-dashed px-4 text-xs font-medium transition-all ${
-                values.coverImageFile
-                  ? "border-rose-300 bg-rose-50 text-rose-600"
-                  : "border-slate-300 bg-slate-50 text-slate-500"
-              }`}
-            >
-              <ImageIcon size={16} />
-              {values.coverImageFile?.name || "Upload Cover"}
-            </label>
-
-            {coverPreview && (
-              <img
-                src={coverPreview}
-                alt="cover preview"
-                className="h-20 w-full rounded object-cover"
-              />
-            )}
           </div>
         </div>
 
-        {/* Buttons */}
-        <div className="flex flex-col gap-4 pt-4 sm:flex-row">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={onBack}
-            className="h-12 flex-1 rounded-2xl font-bold text-slate-500"
-          >
-            <ArrowLeft size={18} className="mr-2" />
-            Back
-          </Button>
-
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="h-12 flex-1 rounded-2xl bg-rose-500 font-bold text-white hover:bg-rose-600"
-          >
-            {isLoading ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              "Complete Registration"
-            )}
-          </Button>
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium text-slate-700">
+            Opening Hours
+          </label>
+          <div className="relative">
+            <Clock className="absolute left-3 top-3 text-slate-400" size={18} />
+            <input
+              {...register("openingHours")}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/50 p-3 pl-10 text-sm outline-none focus:border-rose-500"
+              placeholder="10:00 AM - 11:00 PM"
+            />
+          </div>
         </div>
-      </form>
-    </section>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="w-full mt-6 py-4 bg-rose-500 text-white rounded-2xl font-bold shadow-lg shadow-rose-200 hover:bg-rose-600 active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+      >
+        {isLoading ? (
+          <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          "Create Profile & Finish"
+        )}
+      </button>
+    </form>
   );
 }

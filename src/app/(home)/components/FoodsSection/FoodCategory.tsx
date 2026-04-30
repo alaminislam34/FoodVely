@@ -1,7 +1,7 @@
 "use client";
 
-import { useCategory } from "@/hooks/hooks/useCategory";
-import { ICategory } from "@/hooks/services/category.service";
+import { useCategory } from "@/module/hooks/useCategory";
+import { ICategory } from "@/module/services/category.service";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

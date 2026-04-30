@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form"; // Controller add kora hoyeche
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 import { useRouter } from "next/navigation";
 
 const variants = {
@@ -160,12 +160,12 @@ const EmailVerify = () => {
                     onChange={field.onChange}
                     containerClassName="flex justify-center"
                   >
-                    <InputOTPGroup className="flex gap-2">
+                    <InputOTPGroup className="flex gap-4">
                       {[0, 1, 2, 3, 4, 5].map((i) => (
                         <InputOTPSlot
                           key={i}
                           index={i}
-                          className={`h-14 w-12 rounded-xl border-slate-200 text-xl font-bold focus:border-rose-500 transition-all ${
+                          className={`h-14 w-12 rounded-2xl border border-slate-200 text-xl font-bold focus:border-rose-500 transition-all ${
                             errors.otp
                               ? "border-red-500 ring-1 ring-red-100"
                               : ""

@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 // Hooks & Utils
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 import { getRedirectPathByRole } from "@/utils/authRedirect";
 import { Button } from "@/components/ui/button";
 
@@ -166,9 +166,7 @@ export default function SignIn() {
           {/* Form Section */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {serverError && (
-              <div className="text-red-500 text-sm">
-                {serverError}
-              </div>
+              <div className="text-red-500 text-sm">{serverError}</div>
             )}
             <div className="space-y-4">
               {/* Email */}

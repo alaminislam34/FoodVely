@@ -12,8 +12,12 @@ const API_ENDPOINTS = {
   VERIFY_PASSWORD_RESET_OTP: `/auth/verify-otp`,
   RESET_PASSWORD: `/auth/reset-password`,
   GET_ME: `/auth/me`,
-  CREATE_RESTAURANT: `/restaurants`,
-  GET_RESTAURANT: (slug: string) => `/restaurants/${slug}`,
+  RESTAURANT: {
+    CREATE_RESTAURANT: `/restaurants`,
+    UPDATE_API: `/restaurants/update`,
+    GET_RESTAURANT_PROFILE: `/restaurants/profile`,
+    GET_RESTAURANT_BY_SLUG: (slug: string) => `/restaurants/${slug}`,
+  },
 
   FOOD: {
     CREATE: `/foods`,

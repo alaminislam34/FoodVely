@@ -10,9 +10,9 @@ import {
 } from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
-import { useAdminProductsList } from "@/hooks/hooks/useAdminProducts";
-import { useCategory } from "@/hooks/hooks/useCategory";
+import { useAdminListControls } from "@/module/useAdminListControls";
+import { useAdminProductsList } from "@/module/hooks/useAdminProducts";
+import { useCategory } from "@/module/hooks/useCategory";
 import { ProductsTable } from "@/components/admin/products/ProductsTable";
 import { ProductsFilters } from "@/components/admin/products/ProductsFilters";
 
@@ -76,7 +76,14 @@ export default function ProductsManagement() {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [debouncedSearch, selectedCategory, stockFilter, ratingFilter, sortBy, setCurrentPage]);
+  }, [
+    debouncedSearch,
+    selectedCategory,
+    stockFilter,
+    ratingFilter,
+    sortBy,
+    setCurrentPage,
+  ]);
 
   const { data, isLoading, error, refetch } = useAdminProductsList({
     page: currentPage,
@@ -98,7 +105,9 @@ export default function ProductsManagement() {
   const products = data?.products ?? [];
   const totalPages = data?.totalPages ?? 1;
   const totalItems = data?.totalItems ?? 0;
-  const errorMessage = error ? getApiErrorMessage(error, "Failed to load products") : null;
+  const errorMessage = error
+    ? getApiErrorMessage(error, "Failed to load products")
+    : null;
 
   useEffect(() => {
     setCurrentPage(1);
@@ -192,7 +201,10 @@ export default function ProductsManagement() {
       <div className="bg-white/60 backdrop-blur-xl rounded-3xl border border-white shadow-xl overflow-hidden">
         {isLoading ? <AdminLoadingState label="Loading products..." /> : null}
         {errorMessage ? (
-          <AdminErrorState description={errorMessage} onAction={() => refetch()} />
+          <AdminErrorState
+            description={errorMessage}
+            onAction={() => refetch()}
+          />
         ) : null}
         {!isLoading && !errorMessage && products.length === 0 ? (
           <AdminProductsEmptyState />
@@ -214,8 +226,6 @@ export default function ProductsManagement() {
         />
 
         <ProductsTable products={products} />
-
-
 
         {/* Pagination Footer */}
         <div className="p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/30">

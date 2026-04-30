@@ -1,5 +1,11 @@
-import { redirect } from "next/navigation";
+import ProductsManagement from "./_components/MenuPage";
 
-export default function ProviderMenuPage() {
-  redirect("/dashboard/provider/products");
-}
+const Foods = () => {
+  return (
+    <div>
+      <ProductsManagement />
+    </div>
+  );
+};
+
+export default Foods;

@@ -5,22 +5,26 @@ import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "react-hot-toast";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft, Save, X, Plus, ImageIcon } from "lucide-react";
 import CommonProductCard from "@/components/CommonProductCard";
-import { FoodImageUpload } from "@/components/food/FoodImageUpload";
 import { FoodGeneralDetailsForm } from "@/components/food/FoodGeneralDetailsForm";
 import { FoodSEOForm } from "@/components/food/FoodSEOForm";
-import { useFood } from "@/hooks/hooks/useFood";
-import { useCategory } from "@/hooks/hooks/useCategory";
+import { useFood } from "@/module/hooks/useFood";
+import { useCategory } from "@/module/hooks/useCategory";
 import { FoodFormValues, foodSchema } from "@/types/zod.validation";
+
+// If you have a real auth hook, use that instead of this mock
+const MOCK_PROVIDER_ID = "550e8400-e29b-41d4-a716-446655440000";
+const MAX_IMAGES = 3;
 
 export default function AddNewFood() {
   const router = useRouter();
   const { createFood, isLoading } = useFood();
-  const { adminCategories } = useCategory();
+  const { categoriesForPublic } = useCategory();
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // Multi-image states
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -50,69 +54,80 @@ export default function AddNewFood() {
   const watchedValues = useWatch({ control });
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result as string);
-      reader.readAsDataURL(file);
+    const files = Array.from(e.target.files || []);
+
+    if (imageFiles.length + files.length > MAX_IMAGES) {
+      return toast.error(`Maximum ${MAX_IMAGES} images allowed`);
     }
+
+    files.forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        return toast.error(`${file.name} is not an image file`);
+      }
+
+      setImageFiles((prev) => [...prev, file]);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviews((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset input value so same file can be uploaded if deleted
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = (index: number) => {
+    setImageFiles((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const onFormSubmit = async (data: FoodFormValues) => {
-    if (!imageFile) {
-      return toast.error("Please upload a food image first!");
+    if (imageFiles.length === 0) {
+      return toast.error("Please upload at least one image of your dish!");
     }
 
     try {
-      // NOTE: We pass the plain object + images array.
-      // Your foodService handles the FormData conversion.
       const payload = {
         ...data,
-        images: [imageFile],
+        providerId: MOCK_PROVIDER_ID, // CRITICAL: Added this to fix your Zod error
+        images: imageFiles,
       };
 
       await createFood(payload as any);
+      toast.success("Dish published successfully!");
       router.push("/dashboard/provider/products");
     } catch (error) {
       console.error("Submission Error:", error);
+      toast.error("Failed to publish dish. Check console for details.");
     }
   };
 
-  // UI Helpers for Preview
-  const selectedCategory = adminCategories.find(
+  const selectedCategory = categoriesForPublic?.find(
     (c) => c.id === watchedValues.categoryId,
   );
-  const discountAmount =
-    watchedValues.basePrice && watchedValues.discountPrice
-      ? Math.round(
-          ((watchedValues.basePrice - watchedValues.discountPrice) /
-            watchedValues.basePrice) *
-            100,
-        )
-      : 0;
 
   return (
-    <div className="relative">
-      <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-10 ">
+    <div className="relative max-w-[1400px] mx-auto">
+      <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-10 pb-20">
         <Toaster position="top-right" />
 
-        {/* --- FIXED HEADER --- */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 sticky top-0 z-10 bg-gray-50/80 backdrop-blur-md py-4">
-          <div className="flex items-center gap-4">
+        {/* --- STICKY HEADER --- */}
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 sticky top-0 z-20 bg-gray-50/90 backdrop-blur-xl py-6 border-b border-gray-200/50">
+          <div className="flex items-center gap-5">
             <button
               type="button"
               onClick={() => router.back()}
-              className="p-3 hover:bg-white rounded-2xl transition-all border border-gray-200 bg-white shadow-sm text-gray-600"
+              className="p-3 hover:bg-white rounded-2xl transition-all border border-gray-200 bg-white shadow-sm text-gray-600 hover:text-rose-600 hover:border-rose-100"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={22} />
             </button>
             <div>
-              <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
+              <h1 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
                 New Secret Recipe
               </h1>
               <p className="text-gray-500 text-sm font-medium">
-                List your masterpiece on FoodVely
+                Fill in the details to showcase your dish to the world
               </p>
             </div>
           </div>
@@ -120,72 +135,161 @@ export default function AddNewFood() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full md:w-auto px-10 py-4 rounded-2xl bg-rose-600 text-white font-bold hover:bg-rose-700 shadow-xl shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full md:w-auto px-12 py-4 rounded-2xl bg-rose-600 text-white font-bold hover:bg-rose-700 shadow-xl shadow-rose-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save size={20} /> {isLoading ? "Publishing..." : "Publish Dish"}
+              {isLoading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Publishing...
+                </span>
+              ) : (
+                <>
+                  <Save size={20} /> Publish Dish
+                </>
+              )}
             </button>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* --- LEFT: FORM --- */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-8">
-            {/* Image Upload Area */}
-            <FoodImageUpload
-              imagePreview={imagePreview}
-              fileInputRef={fileInputRef}
-              handleImageChange={handleImageChange}
-            />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          {/* --- LEFT COLUMN: INPUTS --- */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-10">
+            {/* MULTI-IMAGE SECTION */}
+            <section className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-rose-50 rounded-xl text-rose-500">
+                    <ImageIcon size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      Food Gallery
+                    </h3>
+                    <p className="text-xs text-gray-500 font-medium">
+                      The first image is your main cover
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span
+                    className={`text-xs font-black px-3 py-1 rounded-full ${imageFiles.length === MAX_IMAGES ? "bg-amber-100 text-amber-600" : "bg-gray-100 text-gray-500"}`}
+                  >
+                    {imageFiles.length} / {MAX_IMAGES}
+                  </span>
+                </div>
+              </div>
 
-            {/* General Information */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {imagePreviews.map((src, index) => (
+                  <div
+                    key={index}
+                    className="relative aspect-square rounded-2xl overflow-hidden group border border-gray-100 shadow-sm"
+                  >
+                    <img
+                      src={src}
+                      alt="preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 p-2 bg-white/90 backdrop-blur-md text-rose-600 rounded-xl opacity-0 group-hover:opacity-100 transition-all transform translate-y-[-4px] group-hover:translate-y-0 shadow-lg hover:bg-rose-600 hover:text-white"
+                    >
+                      <X size={16} />
+                    </button>
+                    {index === 0 && (
+                      <div className="absolute bottom-2 left-2 px-2.5 py-1 bg-rose-600 text-[9px] text-white font-black rounded-lg uppercase tracking-widest shadow-lg">
+                        Cover Photo
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {imageFiles.length < MAX_IMAGES && (
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="aspect-square rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-3 hover:border-rose-400 hover:bg-rose-50/20 transition-all text-gray-400 hover:text-rose-500 group bg-gray-50/50"
+                  >
+                    <div className="p-3 bg-white rounded-2xl shadow-sm group-hover:shadow-rose-100 transition-all">
+                      <Plus size={24} />
+                    </div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider">
+                      Add Photo
+                    </span>
+                  </button>
+                )}
+              </div>
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                multiple
+                className="hidden"
+              />
+            </section>
+
             <FoodGeneralDetailsForm
               register={register}
               setValue={setValue}
               watchedValues={watchedValues}
-              categories={adminCategories ?? []}
+              categories={categoriesForPublic ?? []}
               errors={errors}
             />
 
-            {/* SEO Settings */}
             <FoodSEOForm register={register} />
           </div>
 
-          {/* --- RIGHT: LIVE PREVIEW --- */}
+          {/* --- RIGHT COLUMN: PREVIEW --- */}
           <aside className="lg:col-span-5 xl:col-span-4">
-            <div className="sticky top-28 space-y-6">
-              <div className="flex items-center justify-center gap-3 text-gray-400 font-black uppercase text-[10px] tracking-[0.3em]">
-                <div className="h-px w-6 bg-gray-200"></div>
+            <div className="sticky top-32 space-y-8">
+              <div className="flex items-center justify-center gap-4 text-gray-300 font-bold uppercase text-[10px] tracking-[0.4em]">
+                <div className="h-px flex-1 bg-linear-to-r from-transparent to-gray-200"></div>
                 Live Preview
-                <div className="h-px w-6 bg-gray-200"></div>
+                <div className="h-px flex-1 bg-linear-to-l from-transparent to-gray-200"></div>
               </div>
 
-              {/* Card Component (now using CommonProductCard) */}
-              <CommonProductCard
-                product={{
-                  title: watchedValues.title,
-                  name: watchedValues.title,
-                  description: watchedValues.description,
-                  shortDescription: watchedValues.shortDescription,
-                  basePrice: watchedValues.basePrice,
-                  price: watchedValues.basePrice,
-                  discountPrice: watchedValues.discountPrice,
-                  images: imagePreview ? [imagePreview] : [],
-                  imagePreview: imagePreview || undefined,
-                  category: selectedCategory
-                    ? { title: selectedCategory.title }
-                    : undefined,
-                  categoryName: selectedCategory?.title,
-                  foodInfo: watchedValues.foodInfo,
-                  stock: watchedValues.stock,
-                  currency: "BDT",
-                }}
-                isPreview={true}
-              />
+              <div className="transform hover:scale-[1.02] transition-transform duration-500">
+                <CommonProductCard
+                  product={{
+                    title: watchedValues.title || "Dish Name Appears Here",
+                    name: watchedValues.title,
+                    description: watchedValues.description,
+                    shortDescription:
+                      watchedValues.shortDescription ||
+                      "Short description will be shown here...",
+                    basePrice: watchedValues.basePrice,
+                    price: watchedValues.basePrice,
+                    discountPrice: watchedValues.discountPrice,
+                    images: imagePreviews.length > 0 ? imagePreviews : [],
+                    imagePreview: imagePreviews[0] || undefined,
+                    category: selectedCategory
+                      ? { title: selectedCategory.title }
+                      : undefined,
+                    categoryName: selectedCategory?.title || "Category",
+                    foodInfo: watchedValues.foodInfo,
+                    stock: watchedValues.stock,
+                    currency: "BDT",
+                  }}
+                  isPreview={true}
+                />
+              </div>
 
-              <div className="p-6 bg-rose-50/50 rounded-3xl border border-rose-100/50">
-                <p className="text-[11px] text-rose-400 font-bold leading-relaxed text-center">
-                  Quality Tip: Use high-resolution photos under good lighting to
-                  increase your dish visibility by up to 40%.
+              <div className="p-8 bg-linear-to-br from-rose-50 to-orange-50 rounded-[2rem] border border-rose-100/50 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 text-rose-500">
+                  <ImageIcon size={80} />
+                </div>
+                <h4 className="text-rose-900 font-bold text-sm mb-2 relative z-10">
+                  Pro Visibility Tip
+                </h4>
+                <p className="text-[12px] text-rose-700/80 font-medium leading-relaxed relative z-10">
+                  Dishes with at least{" "}
+                  <span className="font-bold">3 bright photos</span> and a
+                  detailed <span className="font-bold">Short Description</span>{" "}
+                  receive 40% more orders.
                 </p>
               </div>
             </div>

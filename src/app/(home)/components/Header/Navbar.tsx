@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 import Logo from "./Navbar/Logo";
 import DesktopNavLinks from "./Navbar/DesktopNavLinks";
 import AuthButtons from "./Navbar/AuthButtons";

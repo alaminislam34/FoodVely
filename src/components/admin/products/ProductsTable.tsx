@@ -1,13 +1,13 @@
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { Edit2, Trash2, Star } from "lucide-react";
-import { AdminProductMapped } from "@/hooks/hooks/useAdminProducts";
+import { AdminProductMapped } from "@/module/hooks/useAdminProducts";
 
 interface ProductsTableProps {
   products: AdminProductMapped[];
 }
 
-export function ProductsTable({ products }: ProductsTableProps) {
+export default function ProductsTable({ products }: ProductsTableProps) {
   return (
     <>
       {/* Desktop Table View */}

@@ -26,7 +26,7 @@ import {
   AdminReportsEmptyState,
 } from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
+import { useAdminListControls } from "@/module/useAdminListControls";
 
 interface Report {
   id: string;

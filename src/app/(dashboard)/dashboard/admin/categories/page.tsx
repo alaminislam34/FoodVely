@@ -12,12 +12,12 @@ import {
   Layers,
   Loader2,
 } from "lucide-react";
-import { useCategory } from "@/hooks/hooks/useCategory";
+import { useCategory } from "@/module/hooks/useCategory";
 import { CategoryFormModal } from "@/components/admin/AddCategoryModal";
 import { CategoryFormModel } from "@/types/product";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ICategory } from "@/hooks/services/category.service";
+import { ICategory } from "@/module/services/category.service";
 import Swal from "sweetalert2";
 
 export default function CategoriesPage() {

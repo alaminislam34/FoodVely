@@ -1,11 +1,8 @@
 import API_ENDPOINTS from "@/api/ApiEndpoints";
 import { httpClient } from "@/api/httpClient";
 import { APIResponse } from "./auth.service";
-import { object } from "zod";
+import { IUserRestaurantResponse } from "@/types/api.types";
 
-/* -----------------------------
-   CLEAN PAYLOAD (JSON ONLY)
-------------------------------*/
 export type RestaurantPayload = {
   restaurantName: string;
   description?: string;
@@ -17,25 +14,18 @@ export type RestaurantPayload = {
   foodCategories: string[];
 };
 
-/* -----------------------------
-   FORM DATA TYPE (UPLOAD ONLY)
-------------------------------*/
 export type RestaurantFormData = {
   logoFile?: File | null;
   coverImageFile?: File | null;
 };
 
-/* -----------------------------
-   GET RESTAURANT
-------------------------------*/
-const getRestaurant = async (slug: string) => {
-  const res = await httpClient.get(API_ENDPOINTS.GET_RESTAURANT(slug));
-  return res;
+const getRestaurant = async () => {
+  const res = await httpClient.get(
+    API_ENDPOINTS.RESTAURANT.GET_RESTAURANT_PROFILE,
+  );
+  return res.data as IUserRestaurantResponse;
 };
 
-/* -----------------------------
-   CREATE RESTAURANT
-------------------------------*/
 const createRestaurant = async (
   payload: RestaurantPayload & RestaurantFormData,
 ): Promise<APIResponse<unknown, unknown>> => {
@@ -73,13 +63,50 @@ const createRestaurant = async (
   console.log(formDataToObject(formData));
 
   // Do NOT set Content-Type header manually!
-  const res = await httpClient.post(API_ENDPOINTS.CREATE_RESTAURANT, formData);
+  const res = await httpClient.post(
+    API_ENDPOINTS.RESTAURANT.CREATE_RESTAURANT,
+    formData,
+  );
   return res;
 };
-/* -----------------------------
-   EXPORT
-------------------------------*/
+
+const updateRestaurant = async (
+  payload: Partial<RestaurantPayload & RestaurantFormData>,
+): Promise<APIResponse<unknown, unknown>> => {
+  const formData = new FormData() as FormData & Record<string, any>;
+
+  Object.entries(payload).forEach(([key, value]) => {
+    const skipFields = ["logoFile", "coverImageFile", "logo", "coverImage"];
+
+    if (value !== undefined && value !== null && !skipFields.includes(key)) {
+      if (key === "foodCategories" && Array.isArray(value)) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, String(value));
+      }
+    }
+  });
+  if (payload.logoFile instanceof File) {
+    formData.append("logo", payload.logoFile);
+  }
+
+  if (payload.coverImageFile instanceof File) {
+    formData.append("coverImage", payload.coverImageFile);
+  }
+
+  const updateUrl = `${API_ENDPOINTS.RESTAURANT.UPDATE_API}`;
+
+  try {
+    const res = await httpClient.put(updateUrl, formData);
+    return res;
+  } catch (error) {
+    console.error("Frontend Update Error:", error);
+    throw error;
+  }
+};
+
 export const restaurantService = {
   createRestaurant,
   getRestaurant,
+  updateRestaurant,
 };

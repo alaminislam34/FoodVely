@@ -7,7 +7,7 @@ import { ChevronRight, Search } from "lucide-react";
 import AccountNav from "../components/AccountNav";
 import AccountFallbackNotice from "../components/AccountFallbackNotice";
 import { orderApi } from "@/api/orderApi";
-import { useAuth } from "@/hooks/hooks/useAuth";
+import { useAuth } from "@/module/hooks/useAuth";
 
 type OrderRow = {
   orderId: string;

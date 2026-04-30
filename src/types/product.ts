@@ -20,16 +20,16 @@ export interface Rating {
 }
 
 export interface FoodInfo {
-  isVeg: boolean;
-  isSpicy: boolean;
-  calories: number;
-  preparationTime: number; // in minutes
+  isVeg?: boolean;
+  isSpicy?: boolean;
+  calories?: number;
+  preparationTime?: number; // in minutes
 }
 
 export interface Availability {
+  stock: number;
   status: ProductStatus;
   isAvailable: boolean;
-  stock: number;
 }
 
 export interface SEO {
@@ -65,8 +65,8 @@ export interface Product {
 
   seo?: SEO;
 
-  createdAt: string; // ISO string
-  updatedAt: string; // ISO string
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ProductImage = {

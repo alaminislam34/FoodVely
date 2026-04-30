@@ -105,3 +105,61 @@ export interface IUserProfileResponse {
     requestId: string;
   };
 }
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  role: "PROVIDER" | "USER" | "ADMIN"; // আপনার প্রজেক্ট অনুযায়ী রোল যোগ করুন
+  status: "ACTIVE" | "INACTIVE" | "BLOCKED";
+  image: string | null;
+  emailVerified: boolean;
+  isDeleted?: boolean;
+  deletedAt?: string | null;
+  needPasswordReset?: boolean;
+  rememberMe?: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IFoodCategory {
+  id: string;
+  name: string;
+  // অন্য প্রোপার্টি থাকলে এখানে যোগ করুন
+}
+
+export interface IRestaurant {
+  id: string;
+  userId: string;
+  restaurantName: string;
+  slug: string;
+  description: string;
+  city: string;
+  providerName: string;
+  providerEmail: string;
+  providerImage: string | null;
+  address: string;
+  contactNumber: string;
+  cuisine: string;
+  openingHours: string;
+  logo: string | null;
+  coverImage: string | null;
+  rating: number;
+  totalOrders: number;
+  isVerified: boolean;
+  isBestSeller: boolean;
+  isActive: boolean;
+  isDeleted: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  foods: any[]; // আপনার Food এর নির্দিষ্ট ইন্টারফেস থাকলে সেটি ব্যবহার করুন
+  user: IUser; // Nested user object inside restaurant
+  foodCategories: IFoodCategory[];
+}
+
+// এটিই আপনার মেইন ইন্টারফেস যা এপিআই থেকে সরাসরি আসে
+export interface IUserRestaurantResponse {
+  user: IUser;
+  restaurant: IRestaurant;
+}

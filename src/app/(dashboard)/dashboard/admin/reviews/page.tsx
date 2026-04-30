@@ -16,9 +16,13 @@ import {
 import { adminApi } from "@/api/adminApi";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "@/utils/apiError";
-import { AdminEmptyState, AdminErrorState, AdminLoadingState } from "@/components/admin/AdminStates";
+import {
+  AdminEmptyState,
+  AdminErrorState,
+  AdminLoadingState,
+} from "@/components/admin/AdminStates";
 import { AdminPaginator } from "@/components/admin/AdminPaginator";
-import { useAdminListControls } from "@/hooks/useAdminListControls";
+import { useAdminListControls } from "@/module/useAdminListControls";
 
 interface ReviewData {
   id: string;
@@ -92,27 +96,38 @@ export default function ReviewsManagement() {
             },
             comment: String(item.comment ?? "No comment provided"),
             customer: {
-              id: String((item.customer as { id?: string } | undefined)?.id ?? ""),
+              id: String(
+                (item.customer as { id?: string } | undefined)?.id ?? "",
+              ),
               name: String(
-                (item.customer as { name?: string } | undefined)?.name ?? "Unknown Customer",
+                (item.customer as { name?: string } | undefined)?.name ??
+                  "Unknown Customer",
               ),
               avatar: String(
-                (item.customer as { avatar?: string } | undefined)?.avatar ?? "",
+                (item.customer as { avatar?: string } | undefined)?.avatar ??
+                  "",
               ),
             },
             restaurant: {
-              id: String((item.restaurant as { id?: string } | undefined)?.id ?? ""),
+              id: String(
+                (item.restaurant as { id?: string } | undefined)?.id ?? "",
+              ),
               name: String(
-                (item.restaurant as { name?: string } | undefined)?.name ?? "Unknown Restaurant",
+                (item.restaurant as { name?: string } | undefined)?.name ??
+                  "Unknown Restaurant",
               ),
             },
             product: {
-              id: String((item.product as { id?: string } | undefined)?.id ?? ""),
+              id: String(
+                (item.product as { id?: string } | undefined)?.id ?? "",
+              ),
               name: String(
-                (item.product as { name?: string } | undefined)?.name ?? "Unknown Product",
+                (item.product as { name?: string } | undefined)?.name ??
+                  "Unknown Product",
               ),
               category: String(
-                (item.product as { category?: string } | undefined)?.category ?? "general",
+                (item.product as { category?: string } | undefined)?.category ??
+                  "general",
               ),
             },
             createdAt: String(item.createdAt ?? new Date().toISOString()),
@@ -239,10 +254,7 @@ export default function ReviewsManagement() {
           </div>
         ) : error ? (
           <div className="p-6">
-            <AdminErrorState
-              description={error}
-              onAction={retry}
-            />
+            <AdminErrorState description={error} onAction={retry} />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -368,7 +380,12 @@ export default function ReviewsManagement() {
             <span className="text-gray-800 font-bold">
               {startIndex + paginatedData.length}
             </span>{" "}
-            of {Math.max(filteredReviews.length, startIndex + paginatedData.length)} items
+            of{" "}
+            {Math.max(
+              filteredReviews.length,
+              startIndex + paginatedData.length,
+            )}{" "}
+            items
           </p>
 
           <AdminPaginator
