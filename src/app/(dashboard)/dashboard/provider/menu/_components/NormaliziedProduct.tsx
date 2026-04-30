@@ -1,18 +1,19 @@
 import { Product } from "@/types/product";
 
-const normalizeProducts = (items: Record<string, unknown>[]): Product[] => {
+const NormalizeProducts = (items: Record<string, unknown>[]): Product[] => {
   return items.map((item) => {
-    const category =
-      (item.category as Record<string, unknown> | undefined) ?? {};
-    const provider =
-      (item.provider as Record<string, unknown> | undefined) ?? {};
+    const category = (item.category as Record<string, any> | undefined) ?? {};
+    const provider = (item.provider as Record<string, any> | undefined) ?? {};
     const providerRating =
-      (provider.rating as Record<string, unknown> | undefined) ?? {};
-    const rating = (item.rating as Record<string, unknown> | undefined) ?? {};
-    const availability =
-      (item.availability as Record<string, unknown> | undefined) ?? {};
-    const foodInfo =
-      (item.foodInfo as Record<string, unknown> | undefined) ?? {};
+      (provider.rating as Record<string, any> | undefined) ?? {};
+    const rating = (item.rating as Record<string, any> | undefined) ?? {};
+    const availabilityData =
+      (item.availability as Record<string, any> | undefined) ?? {};
+    const foodInfo = (item.foodInfo as Record<string, any> | undefined) ?? {};
+    //export type ProductStatus = "active" | "inactive";
+
+    const status =
+      (availabilityData.status as string) === "active" ? "active" : "inactive";
 
     return {
       id: String(item.id ?? ""),
@@ -41,9 +42,9 @@ const normalizeProducts = (items: Record<string, unknown>[]): Product[] => {
         totalReviews: Number(rating.totalReviews ?? 0),
       },
       availability: {
-        stock: Number(availability.stock ?? 0),
-        status: String(availability.status ?? "active"),
-        isAvailable: Boolean(availability.isAvailable ?? true),
+        stock: Number(availabilityData.stock ?? 0),
+        status: status,
+        isAvailable: Boolean(availabilityData.isAvailable ?? true),
       },
       foodInfo: {
         calories: Number(foodInfo.calories ?? 0),
@@ -57,4 +58,4 @@ const normalizeProducts = (items: Record<string, unknown>[]): Product[] => {
   });
 };
 
-export default normalizeProducts;
+export default NormalizeProducts;

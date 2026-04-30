@@ -27,6 +27,7 @@ export function ProviderSignupFlow() {
     setError,
     formState: { errors },
   } = useForm<RestaurantFormValues>({
+    // <-- This part is important!
     resolver: zodResolver(CreateRestaurantSchema),
     defaultValues: {
       restaurantName: "",
@@ -37,16 +38,15 @@ export function ProviderSignupFlow() {
       description: "",
       cuisine: "",
       openingHours: "",
-      logoFile: null,
-      coverImageFile: null,
+      logo: null,
+      coverImage: null,
     },
   });
 
-  // optimized watch for real-time preview in RestaurantStep
   const watchedValues = useWatch({ control });
 
   const handleFileChange = (
-    field: "logoFile" | "coverImageFile",
+    field: "logo" | "coverImage",
     file: File | null,
   ) => {
     setValue(field, file, {
@@ -56,26 +56,30 @@ export function ProviderSignupFlow() {
   };
 
   const onSubmit: SubmitHandler<RestaurantFormValues> = async (data) => {
+    console.log(data);
     createRestaurant(data, {
       onSuccess: (res: any) => {
         if (res?.success) {
           toast.success("Restaurant created successfully!");
           router.push("/dashboard/provider/profile");
-        } else {
-          toast.error(res?.message);
         }
       },
       onError: (error: any) => {
-        if (error?.response?.data?.errorSources) {
-          error.response.data.errorSources.forEach((err: any) => {
-            setError(err.path as keyof RestaurantFormValues, {
+        const serverErrors = error?.response?.data?.error?.details;
+
+        if (serverErrors && Array.isArray(serverErrors)) {
+          serverErrors.forEach((err: any) => {
+            const fieldPath = Array.isArray(err.path) ? err.path[0] : err.path;
+
+            setError(fieldPath as keyof RestaurantFormValues, {
+              type: "server",
               message: err.message,
             });
           });
+        } else {
+          const message = error?.message;
+          toast.error(message);
         }
-        const message =
-          error?.response?.data?.message || "Something went wrong!";
-        toast.error(message);
       },
     });
   };
@@ -139,6 +143,7 @@ export function ProviderSignupFlow() {
                 onSubmit={handleSubmit(onSubmit)}
                 onFileChange={handleFileChange}
                 setValue={setValue}
+                control={control}
               />
             </motion.div>
           </AnimatePresence>

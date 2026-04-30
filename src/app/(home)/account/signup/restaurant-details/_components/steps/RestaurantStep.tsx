@@ -1,7 +1,13 @@
 import React from "react";
-import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
+import {
+  UseFormRegister,
+  FieldErrors,
+  UseFormSetValue,
+  Controller,
+} from "react-hook-form";
 import { RestaurantFormValues } from "../ProviderSignupFlow";
 import { Upload, X, MapPin, Phone, Utensils, Clock } from "lucide-react";
+import { useCategory } from "@/module/hooks/useCategory";
 
 interface Props {
   register: UseFormRegister<RestaurantFormValues>;
@@ -10,10 +16,7 @@ interface Props {
   isLoading: boolean;
   onBack: () => void;
   onSubmit: (e: React.FormEvent) => void;
-  onFileChange: (
-    field: "logoFile" | "coverImageFile",
-    file: File | null,
-  ) => void;
+  onFileChange: (field: "logo" | "coverImage", file: File | null) => void;
   setValue: UseFormSetValue<RestaurantFormValues>;
 }
 
@@ -24,7 +27,27 @@ export function RestaurantStep({
   isLoading,
   onSubmit,
   onFileChange,
-}: Props) {
+  setValue,
+  control,
+}: Props & { control?: any }) {
+  const { categoriesForPublic, isLoading: isCategoriesLoading } = useCategory();
+
+  // Handle checkbox change for foodCategories
+  const handleCategoryChange = (category: string) => {
+    let updated = Array.isArray(values.foodCategories)
+      ? [...values.foodCategories]
+      : [];
+    if (updated.includes(category)) {
+      updated = updated.filter((c) => c !== category);
+    } else {
+      updated.push(category);
+    }
+    setValue("foodCategories", updated, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-6">
       {/* Photo Upload Section */}
@@ -35,18 +58,18 @@ export function RestaurantStep({
             Restaurant Logo
           </label>
           <div
-            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.logoFile ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
+            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.logo ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
           >
-            {values.logoFile ? (
+            {values.logo ? (
               <div className="relative h-full w-full p-2">
                 <img
-                  src={URL.createObjectURL(values.logoFile)}
+                  src={URL.createObjectURL(values.logo)}
                   alt="Preview"
                   className="h-full w-full object-cover rounded-xl"
                 />
                 <button
                   type="button"
-                  onClick={() => onFileChange("logoFile", null)}
+                  onClick={() => onFileChange("logo", null)}
                   className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-lg"
                 >
                   <X size={14} />
@@ -61,15 +84,15 @@ export function RestaurantStep({
                   className="hidden"
                   accept="image/*"
                   onChange={(e) =>
-                    onFileChange("logoFile", e.target.files?.[0] || null)
+                    onFileChange("logo", e.target.files?.[0] || null)
                   }
                 />
               </label>
             )}
           </div>
-          {errors.logoFile && (
+          {errors.logo && (
             <p className="text-xs text-rose-500">
-              {errors.logoFile.message as string}
+              {errors.logo.message as string}
             </p>
           )}
         </div>
@@ -80,18 +103,18 @@ export function RestaurantStep({
             Cover Image
           </label>
           <div
-            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.coverImageFile ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
+            className={`relative h-32 flex flex-col items-center justify-center border-2 border-dashed rounded-2xl transition-all ${errors.coverImage ? "border-rose-300 bg-rose-50" : "border-slate-200 hover:border-rose-400"}`}
           >
-            {values.coverImageFile ? (
+            {values.coverImage ? (
               <div className="relative h-full w-full p-2">
                 <img
-                  src={URL.createObjectURL(values.coverImageFile)}
+                  src={URL.createObjectURL(values.coverImage)}
                   alt="Preview"
                   className="h-full w-full object-cover rounded-xl"
                 />
                 <button
                   type="button"
-                  onClick={() => onFileChange("coverImageFile", null)}
+                  onClick={() => onFileChange("coverImage", null)}
                   className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full p-1 shadow-lg"
                 >
                   <X size={14} />
@@ -106,18 +129,53 @@ export function RestaurantStep({
                   className="hidden"
                   accept="image/*"
                   onChange={(e) =>
-                    onFileChange("coverImageFile", e.target.files?.[0] || null)
+                    onFileChange("coverImage", e.target.files?.[0] || null)
                   }
                 />
               </label>
             )}
           </div>
-          {errors.coverImageFile && (
+          {errors.coverImage && (
             <p className="text-xs text-rose-500">
-              {errors.coverImageFile.message as string}
+              {errors.coverImage.message as string}
             </p>
           )}
         </div>
+      </div>
+
+      {/* Food Categories Multi-select */}
+      <div className="mb-6">
+        <label className="text-sm font-medium text-slate-700 block mb-2">
+          Food Categories
+        </label>
+        {isCategoriesLoading ? (
+          <div className="text-xs text-slate-400">Loading categories...</div>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {categoriesForPublic.map((cat) => (
+              <label
+                key={cat.id}
+                className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={
+                    Array.isArray(values.foodCategories) &&
+                    values.foodCategories.includes(cat.title)
+                  }
+                  onChange={() => handleCategoryChange(cat.title)}
+                  className="accent-rose-500"
+                />
+                <span className="text-xs">{cat.title}</span>
+              </label>
+            ))}
+          </div>
+        )}
+        {errors.foodCategories && (
+          <p className="text-xs text-rose-500 mt-1">
+            {errors.foodCategories.message as string}
+          </p>
+        )}
       </div>
 
       {/* Input Fields Grid */}

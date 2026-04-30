@@ -11,12 +11,12 @@ export type RestaurantPayload = {
   contactNumber: string;
   cuisine?: string;
   openingHours?: string;
-  foodCategories: string[];
+  foodCategories?: string[];
 };
 
 export type RestaurantFormData = {
-  logoFile?: File | null;
-  coverImageFile?: File | null;
+  logo?: File | null;
+  coverImage?: File | null;
 };
 
 const getRestaurant = async () => {
@@ -36,10 +36,8 @@ const createRestaurant = async (
     if (
       value !== undefined &&
       value !== null &&
-      key !== "logoFile" &&
-      key !== "coverImageFile" &&
-      key !== "logo" && // <-- Prevent sending logo as object
-      key !== "coverImage" // <-- Prevent sending coverImage as object
+      key !== "logo" &&
+      key !== "coverImage"
     ) {
       if (key === "foodCategories") {
         formData.append(key, JSON.stringify(value));
@@ -50,11 +48,11 @@ const createRestaurant = async (
   });
 
   // Append files
-  if (payload.logoFile instanceof File) {
-    formData.append("logo", payload.logoFile);
+  if (payload.logo instanceof File) {
+    formData.append("logo", payload.logo);
   }
-  if (payload.coverImageFile instanceof File) {
-    formData.append("coverImage", payload.coverImageFile);
+  if (payload.coverImage instanceof File) {
+    formData.append("coverImage", payload.coverImage);
   }
 
   const formDataToObject = (formData: FormData) =>
@@ -62,7 +60,6 @@ const createRestaurant = async (
 
   console.log(formDataToObject(formData));
 
-  // Do NOT set Content-Type header manually!
   const res = await httpClient.post(
     API_ENDPOINTS.RESTAURANT.CREATE_RESTAURANT,
     formData,
@@ -76,7 +73,7 @@ const updateRestaurant = async (
   const formData = new FormData() as FormData & Record<string, any>;
 
   Object.entries(payload).forEach(([key, value]) => {
-    const skipFields = ["logoFile", "coverImageFile", "logo", "coverImage"];
+    const skipFields = ["logo", "coverImage", "logo", "coverImage"];
 
     if (value !== undefined && value !== null && !skipFields.includes(key)) {
       if (key === "foodCategories" && Array.isArray(value)) {
@@ -86,12 +83,12 @@ const updateRestaurant = async (
       }
     }
   });
-  if (payload.logoFile instanceof File) {
-    formData.append("logo", payload.logoFile);
+  if (payload.logo instanceof File) {
+    formData.append("logo", payload.logo);
   }
 
-  if (payload.coverImageFile instanceof File) {
-    formData.append("coverImage", payload.coverImageFile);
+  if (payload.coverImage instanceof File) {
+    formData.append("coverImage", payload.coverImage);
   }
 
   const updateUrl = `${API_ENDPOINTS.RESTAURANT.UPDATE_API}`;

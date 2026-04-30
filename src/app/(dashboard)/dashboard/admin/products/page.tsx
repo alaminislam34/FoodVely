@@ -13,8 +13,8 @@ import { getApiErrorMessage } from "@/utils/apiError";
 import { useAdminListControls } from "@/module/useAdminListControls";
 import { useAdminProductsList } from "@/module/hooks/useAdminProducts";
 import { useCategory } from "@/module/hooks/useCategory";
-import { ProductsTable } from "@/components/admin/products/ProductsTable";
 import { ProductsFilters } from "@/components/admin/products/ProductsFilters";
+import ProductsTable from "@/components/admin/products/ProductsTable";
 
 // --- Interface ---
 interface Product {

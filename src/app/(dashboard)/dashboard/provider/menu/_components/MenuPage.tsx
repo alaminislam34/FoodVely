@@ -1,3 +1,5 @@
+"use client";
+
 import { providerApi } from "@/api/providerApi";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
