@@ -341,13 +341,13 @@ export default function OrderReports() {
 
   const tableRows = filteredOrders.slice(0, 8);
 
-  if (loading) {
-    return <TableSkeleton rows={8} columns={5} />;
-  }
+  // if (loading) {
+  //   return <TableSkeleton rows={8} columns={5} />;
+  // }
 
-  if (error) {
-    return <ErrorState message={error} onRetry={() => loadOrders("initial")} />;
-  }
+  // if (error) {
+  //   return <ErrorState message={error} onRetry={() => loadOrders("initial")} />;
+  // }
 
   return (
     <div className="space-y-8 min-h-screen pb-10">

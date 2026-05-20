@@ -250,13 +250,13 @@ export default function OrderManage() {
     },
   ];
 
-  if (loading) {
-    return <TableSkeleton rows={6} columns={6} />;
-  }
+  // if (loading) {
+  //   return <TableSkeleton rows={6} columns={6} />;
+  // }
 
-  if (error) {
-    return <ErrorState message={error} onRetry={() => loadOrders("initial")} />;
-  }
+  // if (error) {
+  //   return <ErrorState message={error} onRetry={() => loadOrders("initial")} />;
+  // }
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen pb-10">

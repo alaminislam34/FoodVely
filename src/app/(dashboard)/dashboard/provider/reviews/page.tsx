@@ -158,9 +158,9 @@ export default function ReviewManage() {
     currentPage * itemsPerPage,
   );
 
-  if (loading) return <TableSkeleton rows={6} columns={6} />;
+  // if (loading) return <TableSkeleton rows={6} columns={6} />;
 
-  if (error) return <ErrorState message={error} onRetry={loadReviews} />;
+  // if (error) return <ErrorState message={error} onRetry={loadReviews} />;
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen pb-10 relative">

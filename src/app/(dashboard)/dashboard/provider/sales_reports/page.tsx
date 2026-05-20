@@ -297,13 +297,13 @@ export default function SalesReport() {
     URL.revokeObjectURL(url);
   };
 
-  if (loading) {
-    return <TableSkeleton rows={8} columns={6} />;
-  }
+  // if (loading) {
+  //   return <TableSkeleton rows={8} columns={6} />;
+  // }
 
-  if (error) {
-    return <ErrorState message={error} onRetry={() => loadData("initial")} />;
-  }
+  // if (error) {
+  //   return <ErrorState message={error} onRetry={() => loadData("initial")} />;
+  // }
 
   return (
     <div className="space-y-8 min-h-screen pb-10">

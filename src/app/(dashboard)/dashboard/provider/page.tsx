@@ -136,15 +136,6 @@ export default function ProviderDashboard() {
   const { platformStats, PlatformStatsLoading, platformStatsError } =
     useProvider();
 
-  // Fallback UI for loading/error
-  if (PlatformStatsLoading) {
-    return <div className="p-8 text-center">Loading dashboard...</div>;
-  }
-  if (platformStatsError) {
-    return (
-      <div className="p-8 text-center text-red-500">Failed to load stats.</div>
-    );
-  }
 
   // Stats config with API data
   const providerStats = [

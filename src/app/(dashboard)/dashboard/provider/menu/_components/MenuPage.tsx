@@ -279,19 +279,19 @@ export default function ProductsManagement() {
     products.reduce((acc, p) => acc + (p.rating?.average ?? 0), 0) /
     (products.length || 1);
 
-  if (loading) {
-    return (
-      <div className="space-y-6 lg:space-y-8 min-h-screen">
-        <TableSkeleton rows={6} columns={6} />
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="space-y-6 lg:space-y-8 min-h-screen">
+  //       <TableSkeleton rows={6} columns={6} />
+  //     </div>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <ErrorState message={error} onRetry={() => loadProducts("initial")} />
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <ErrorState message={error} onRetry={() => loadProducts("initial")} />
+  //   );
+  // }
 
   return (
     <div className="space-y-6 lg:space-y-8 min-h-screen">

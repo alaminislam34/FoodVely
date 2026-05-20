@@ -1,5 +1,5 @@
 const RestaurantSkeleton = () => (
-  <div className="animate-pulse max-w-7xl mx-auto">
+  <div className="animate-pulse">
     <div className="flex justify-between items-center mb-10">
       <div className="h-10 w-64 bg-slate-200 rounded-2xl" />
       <div className="flex gap-4">

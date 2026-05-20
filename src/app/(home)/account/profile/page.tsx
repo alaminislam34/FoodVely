@@ -1,32 +1,24 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  AlertCircle,
-  ChevronRight,
-  Clock,
-  CreditCard,
-  Edit3,
-  Heart,
-  MapPin,
-  Package,
-  ShoppingCart,
-  Star,
-} from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { motion } from "motion/react";
 
 // Hooks
 import { useAuth } from "@/module/hooks/useAuth";
 
-// Components
+// New reusable components
+import ProfileHeader from "@/components/profile/ProfileHeader";
+import ActiveOrderCard from "@/components/profile/ActiveOrderCard";
+import FavoritesGrid from "@/components/profile/FavoritesGrid";
+import OrderHistory from "@/components/profile/OrderHistory";
+import ProfileSidebar from "@/components/profile/ProfileSidebar";
+import EmptyState from "@/components/profile/EmptyState";
 import CustomerProfileSkeleton from "./components/Skeleton";
 
 // Types
 import { Product } from "@/types/product";
 
-// --- INTERFACES ---
 interface OrderRecord {
   id: number | string;
   orderNumber?: string;
@@ -37,96 +29,24 @@ interface OrderRecord {
   createdAt?: string;
 }
 
-// --- SUB-COMPONENTS ---
-const SectionHeader = ({
-  title,
-  icon,
-}: {
-  title: string;
-  icon: React.ReactNode;
-}) => (
-  <div className="flex items-center gap-3 mb-6">
-    <div className="p-2 bg-rose-100 text-rose-600 rounded-lg">{icon}</div>
-    <h2 className="text-2xl font-bold text-slate-800">{title}</h2>
-  </div>
-);
-
-const FavoriteItem = ({
-  image,
-  name,
-  rating,
-  href,
-}: {
-  image: string;
-  name: string;
-  rating: number;
-  href: string;
-}) => (
-  <Link
-    href={href}
-    className="bg-white p-4 rounded-3xl border border-rose-50 text-center hover:border-rose-200 transition-colors group block"
-  >
-    <div className="w-16 h-16 mx-auto rounded-2xl overflow-hidden mb-2 bg-slate-100">
-      <img
-        src={image}
-        alt={name}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-      />
-    </div>
-    <p className="font-bold text-sm text-slate-700 leading-tight line-clamp-2">
-      {name}
-    </p>
-    <div className="flex items-center justify-center gap-1 mt-1 text-xs text-orange-500 font-bold">
-      <Star size={10} fill="currentColor" /> {rating.toFixed(1)}
-    </div>
-  </Link>
-);
-
-const CartItemRow = ({
-  name,
-  price,
-  qty,
-}: {
-  name: string;
-  price: number;
-  qty: number;
-}) => (
-  <div className="flex justify-between items-center">
-    <div>
-      <p className="font-bold text-slate-700">{name}</p>
-      <p className="text-xs text-rose-400 font-bold">
-        {qty}x • BDT {price}
-      </p>
-    </div>
-    <span className="text-sm font-bold text-slate-700">
-      BDT {(qty * price).toFixed(2)}
-    </span>
-  </div>
-);
-
-// --- MAIN PAGE ---
 export default function CustomerProfilePage() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams<{ username?: string }>();
 
-  // Custom Hooks
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
 
-  // Local State
   const [fetchingData, setFetchingData] = useState(true);
   const [dataError, setDataError] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<OrderRecord[]>([]);
 
-  // 1. Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       router.replace(`/account/signin?next=${encodeURIComponent(pathname)}`);
     }
   }, [authLoading, isAuthenticated, pathname, router]);
 
-  // 2. Load External Data (Products & Orders)
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -139,7 +59,7 @@ export default function CustomerProfilePage() {
 
         setProducts(Array.isArray(pJson) ? pJson : pJson.products || []);
         setOrders(Array.isArray(oJson) ? oJson : oJson.orders || []);
-      } catch {
+      } catch (e) {
         setDataError("Could not load latest account data.");
       } finally {
         setFetchingData(false);
@@ -148,7 +68,6 @@ export default function CustomerProfilePage() {
     loadData();
   }, []);
 
-  // 3. Optimized Computations
   const username = useMemo(
     () => String(params?.username || user?.name || "customer"),
     [params?.username, user?.name],
@@ -163,225 +82,71 @@ export default function CustomerProfilePage() {
 
   const activeOrder = useMemo(() => {
     const live = orders.find(
-      (o) =>
-        !["delivered", "cancelled"].includes((o.status || "").toLowerCase()),
+      (o) => !["delivered", "cancelled"].includes((o.status || "").toLowerCase()),
     );
     if (!live) return null;
     return {
       id: String(live.orderNumber || live.id),
       label: live.items?.[0]?.foodName || "Your current order",
       eta: live.estimatedDeliveryTime || "15-20 mins",
+      percent: 40,
     };
   }, [orders]);
 
-  const orderHistory = useMemo(() => {
+  const orderSummary = useMemo(() => {
     return [...orders]
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt || 0).getTime() -
-          new Date(a.createdAt || 0).getTime(),
-      )
-      .slice(0, 4)
-      .map((o) => ({
-        id: String(o.orderNumber || o.id),
-        itemCount: o.items?.reduce((s, i) => s + (i.quantity ?? 0), 0) || 1,
-        total: o.total || 0,
-        date: o.createdAt
-          ? new Date(o.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "2-digit",
-              year: "numeric",
-            })
-          : "Recent",
-      }));
+      .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+      .slice(0, 6)
+      .map((o) => ({ id: String(o.orderNumber || o.id), date: o.createdAt, total: o.total || 0, items: o.items?.length || 0, status: o.status || "Delivered" }));
   }, [orders]);
 
-  // Loading States
   if (authLoading || fetchingData) return <CustomerProfileSkeleton />;
   if (!isAuthenticated) return null;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.14),transparent_35%),linear-gradient(to_bottom,#fffaf5_0%,#ffffff_65%)] pb-16">
-      {/* Header / Banner */}
-      <div className="relative w-full border-b border-orange-50 bg-white/60 backdrop-blur">
-        <div className="max-w-360 mx-auto w-11/12 pb-10 pt-8">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col md:flex-row items-center gap-6 translate-y-16"
-          >
-            <div className="relative">
-              <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}`}
-                className="w-40 h-40 rounded-[3rem] border-8 border-white shadow-xl bg-white"
-                alt="Profile"
-              />
-              <button className="absolute bottom-2 right-2 p-2 bg-orange-500 text-white rounded-full shadow-lg">
-                <Edit3 size={18} />
-              </button>
-            </div>
-            <div className="text-center md:text-left">
-              <h1 className="text-4xl font-black text-slate-800">
-                {profileDisplayName}
-              </h1>
-              <p className="text-slate-500 font-medium flex items-center justify-center md:justify-start gap-2">
-                <MapPin size={16} className="text-rose-500" /> Dhaka, Bangladesh
-              </p>
-              <p className="text-sm text-slate-400 mt-1">{user?.email}</p>
-            </div>
-          </motion.div>
+    <div className="min-h-screen bg-slate-50 pb-12 pt-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="-mt-12">
+          <ProfileHeader
+            name={profileDisplayName}
+            email={user?.email}
+            location={"Dhaka, Bangladesh"}
+            avatarSrc={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(username)}`}
+            stats={[{ label: "Orders", value: orders.length }, { label: "Favorites", value: 0 }, { label: "Spent", value: `BDT ${orders.reduce((s, o) => s + (o.total || 0), 0).toFixed(2)}` }]}
+            onEdit={() => router.push('/account/settings')}
+          />
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="max-w-360 mx-auto w-11/12 mt-24 grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div className="lg:col-span-8 space-y-10">
-          {/* Active Order Section */}
-          <div className="bg-white/70 border border-white rounded-[2.5rem] p-8 shadow-xl shadow-rose-100/50 backdrop-blur-md">
-            <SectionHeader title="Active Order" icon={<Package size={22} />} />
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <main className="lg:col-span-8 space-y-6">
             {activeOrder ? (
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-rose-50/50 p-6 rounded-3xl border border-rose-100">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl shadow-sm">
-                    🥡
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-lg">{activeOrder.label}</h4>
-                    <p className="text-rose-500 font-semibold">
-                      On the way • {activeOrder.eta}
-                    </p>
-                  </div>
-                </div>
-                <Link
-                  href={`/account/order_track?order=${activeOrder.id}`}
-                  className="px-6 py-3 bg-rose-500 text-white font-bold rounded-2xl shadow-lg hover:bg-rose-600 transition-all flex items-center gap-2"
-                >
-                  Track Delivery <ChevronRight size={18} />
-                </Link>
-              </div>
+              <ActiveOrderCard id={activeOrder.id} label={activeOrder.label} eta={activeOrder.eta} percent={activeOrder.percent} />
             ) : (
-              <div className="rounded-2xl border border-dashed border-rose-200 bg-white p-6 text-center text-slate-500">
-                No active order.{" "}
-                <Link href="/menu" className="text-rose-600 font-semibold ml-2">
-                  Order something tasty
-                </Link>
-              </div>
+              <EmptyState title="No active deliveries" description="You don’t have an order on the way right now." cta={{ label: 'Browse menu', onClick: () => router.push('/menu') }} />
             )}
-          </div>
 
-          {/* Favorites */}
-          <div>
-            <SectionHeader title="My Favorites" icon={<Heart size={22} />} />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">0</div>
-          </div>
-
-          {/* History */}
-          <div>
-            <SectionHeader title="Order History" icon={<Clock size={22} />} />
-            <div className="space-y-4">
-              {orderHistory.map((o) => (
-                <Link
-                  key={o.id}
-                  href={`/account/orders/${o.id}`}
-                  className="flex items-center justify-between p-5 bg-white border border-rose-50 rounded-2xl hover:shadow-md transition-all"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl opacity-50 font-bold">
-                      #{o.id}
-                    </span>
-                    <div>
-                      <p className="font-bold text-slate-700">
-                        FoodValy • {o.itemCount} items
-                      </p>
-                      <p className="text-sm text-slate-400">{o.date}</p>
-                    </div>
-                  </div>
-                  <div className="font-black text-slate-700">
-                    BDT {o.total.toFixed(2)}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-          {dataError && (
-            <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm flex items-center gap-2">
-              <AlertCircle size={16} />
-              {dataError}
-            </div>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:col-span-4 space-y-8">
-          <div className="sticky top-10 backdrop-blur-xl bg-linear-to-br from-white/90 to-rose-50/90 border border-white rounded-[2.5rem] p-6 shadow-2xl shadow-rose-200/40">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-black text-rose-600 flex items-center gap-2">
-                <ShoppingCart size={22} /> My Bag
-              </h3>
-              <span className="bg-rose-500 text-white text-xs px-2 py-1 rounded-full">
-                0 Items
-              </span>
-            </div>
-            <div className="space-y-4 mb-8">
-              {products.slice(0, 3).map((p) => (
-                <CartItemRow key={p.id} name={p.name} price={p.price} qty={1} />
-              ))}
-            </div>
-            <div className="border-t border-rose-100 pt-4 space-y-2">
-              <div className="flex justify-between text-lg font-black text-slate-800">
-                <span>Total</span>
-                <span>BDT 0.00</span>
+            <section aria-labelledby="favorites-heading">
+              <div className="flex items-center justify-between mb-3">
+                <h2 id="favorites-heading" className="text-lg font-semibold text-slate-800">Favorites</h2>
+                <Link href="/menu" className="text-sm text-rose-600">Manage</Link>
               </div>
-            </div>
-            <Link
-              href={"/menu"}
-              className="block w-full mt-6 py-4 text-center bg-linear-to-r from-rose-500 to-orange-500 text-white font-black rounded-2xl shadow-xl transition-all uppercase tracking-wider"
-            >
-              {"Browse Menu"}
-            </Link>
-          </div>
+              <FavoritesGrid items={[]} />
+            </section>
 
-          <div className="bg-white border border-rose-50 rounded-4xl p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="font-bold">Payment Method</h4>
-              <Link
-                href="/account/payment-methods"
-                className="text-xs font-semibold text-rose-600"
-              >
-                Manage
-              </Link>
-            </div>
-            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-              <CreditCard size={20} className="text-slate-400" />
-              <span className="text-sm font-medium">•••• •••• •••• 4421</span>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 text-center">
-              <div className="rounded-xl bg-rose-50 p-3">
-                <p className="text-xs text-slate-500">Wishlist</p>
-                <p className="text-lg font-black text-rose-600">0</p>
+            <section aria-labelledby="history-heading">
+              <div className="flex items-center justify-between mb-3">
+                <h2 id="history-heading" className="text-lg font-semibold text-slate-800">Order History</h2>
+                <Link href="/account/orders" className="text-sm text-slate-500">See all</Link>
               </div>
-              <div className="rounded-xl bg-amber-50 p-3">
-                <p className="text-xs text-slate-500">Orders</p>
-                <p className="text-lg font-black text-amber-600">
-                  {orders.length}
-                </p>
-              </div>
+              <OrderHistory orders={orderSummary} />
+            </section>
+          </main>
+
+          <aside className="lg:col-span-4">
+            <div className="sticky top-6 space-y-4">
+              <ProfileSidebar cartItems={products.slice(0, 3).map(p => ({ id: p.id, name: p.name, qty: 1, price: p.price }))} payment={{ brand: 'Visa', last4: '4421' }} actions={[{ id: 'addresses', label: 'Addresses', onClick: () => router.push('/account/addresses') }, { id: 'settings', label: 'Settings', onClick: () => router.push('/account/settings') }]} />
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <Link
-                href="/account/addresses"
-                className="text-xs text-center rounded-lg bg-slate-50 py-2 font-semibold text-slate-600 hover:bg-slate-100"
-              >
-                Addresses
-              </Link>
-              <Link
-                href="/account/settings"
-                className="text-xs text-center rounded-lg bg-slate-50 py-2 font-semibold text-slate-600 hover:bg-slate-100"
-              >
-                Settings
-              </Link>
-            </div>
-          </div>
+          </aside>
         </div>
       </div>
     </div>

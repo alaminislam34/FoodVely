@@ -56,7 +56,7 @@ export function ProviderSignupFlow() {
   };
 
   const onSubmit: SubmitHandler<RestaurantFormValues> = async (data) => {
-    console.log(data);
+   
     createRestaurant(data, {
       onSuccess: (res: any) => {
         if (res?.success) {
@@ -66,9 +66,10 @@ export function ProviderSignupFlow() {
       },
       onError: (error: any) => {
         const serverErrors = error?.response?.data?.error?.details;
-
+        console.log(error, "register error");
         if (serverErrors && Array.isArray(serverErrors)) {
           serverErrors.forEach((err: any) => {
+            console.log(err);
             const fieldPath = Array.isArray(err.path) ? err.path[0] : err.path;
 
             setError(fieldPath as keyof RestaurantFormValues, {
@@ -78,7 +79,7 @@ export function ProviderSignupFlow() {
           });
         } else {
           const message = error?.message;
-          toast.error(message);
+          // toast.error(message);
         }
       },
     });

@@ -34,7 +34,7 @@ export const SignUpSchemaValidation = z.object({
     .string()
     .min(8, "Password must be at least 8 characters")
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).*$/,
       "Use uppercase, lowercase, number, and symbol",
     ),
   role: z.enum(["CUSTOMER", "PROVIDER"]).default("CUSTOMER"),
